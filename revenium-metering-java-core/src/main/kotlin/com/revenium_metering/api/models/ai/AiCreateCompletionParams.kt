@@ -71,12 +71,28 @@ private constructor(
     fun costType(): CostType = body.costType()
 
     /**
+     * The input token cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun inputTokenCost(): Double = body.inputTokenCost()
+
+    /**
      * The model used for generating the LLM completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun model(): String = body.model()
+
+    /**
+     * The output token cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun outputTokenCost(): Double = body.outputTokenCost()
 
     /**
      * The number of tokens in the prompt
@@ -135,20 +151,20 @@ private constructor(
     fun stopReason(): StopReason = body.stopReason()
 
     /**
+     * The total cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun totalCost(): Double = body.totalCost()
+
+    /**
      * The total number of tokens
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun totalTokenCount(): Long = body.totalTokenCount()
-
-    /**
-     * The cost associated with the LLM completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun transactionCost(): Double = body.transactionCost()
 
     /**
      * The unique identifier of the LLM completion transaction
@@ -293,11 +309,25 @@ private constructor(
     fun _costType(): JsonField<CostType> = body._costType()
 
     /**
+     * Returns the raw JSON value of [inputTokenCost].
+     *
+     * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _inputTokenCost(): JsonField<Double> = body._inputTokenCost()
+
+    /**
      * Returns the raw JSON value of [model].
      *
      * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _model(): JsonField<String> = body._model()
+
+    /**
+     * Returns the raw JSON value of [outputTokenCost].
+     *
+     * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _outputTokenCost(): JsonField<Double> = body._outputTokenCost()
 
     /**
      * Returns the raw JSON value of [promptTokenCount].
@@ -351,18 +381,18 @@ private constructor(
     fun _stopReason(): JsonField<StopReason> = body._stopReason()
 
     /**
+     * Returns the raw JSON value of [totalCost].
+     *
+     * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _totalCost(): JsonField<Double> = body._totalCost()
+
+    /**
      * Returns the raw JSON value of [totalTokenCount].
      *
      * Unlike [totalTokenCount], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _totalTokenCount(): JsonField<Long> = body._totalTokenCount()
-
-    /**
-     * Returns the raw JSON value of [transactionCost].
-     *
-     * Unlike [transactionCost], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _transactionCost(): JsonField<Double> = body._transactionCost()
 
     /**
      * Returns the raw JSON value of [transactionId].
@@ -482,9 +512,15 @@ private constructor(
         @JsonProperty("costType")
         @ExcludeMissing
         private val costType: JsonField<CostType> = JsonMissing.of(),
+        @JsonProperty("inputTokenCost")
+        @ExcludeMissing
+        private val inputTokenCost: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("model")
         @ExcludeMissing
         private val model: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("outputTokenCost")
+        @ExcludeMissing
+        private val outputTokenCost: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("promptTokenCount")
         @ExcludeMissing
         private val promptTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -506,12 +542,12 @@ private constructor(
         @JsonProperty("stopReason")
         @ExcludeMissing
         private val stopReason: JsonField<StopReason> = JsonMissing.of(),
+        @JsonProperty("totalCost")
+        @ExcludeMissing
+        private val totalCost: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("totalTokenCount")
         @ExcludeMissing
         private val totalTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("transactionCost")
-        @ExcludeMissing
-        private val transactionCost: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("transactionId")
         @ExcludeMissing
         private val transactionId: JsonField<String> = JsonMissing.of(),
@@ -598,6 +634,15 @@ private constructor(
         fun costType(): CostType = costType.getRequired("costType")
 
         /**
+         * The input token cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun inputTokenCost(): Double = inputTokenCost.getRequired("inputTokenCost")
+
+        /**
          * The model used for generating the LLM completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -605,6 +650,15 @@ private constructor(
          *   value).
          */
         fun model(): String = model.getRequired("model")
+
+        /**
+         * The output token cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun outputTokenCost(): Double = outputTokenCost.getRequired("outputTokenCost")
 
         /**
          * The number of tokens in the prompt
@@ -671,6 +725,15 @@ private constructor(
         fun stopReason(): StopReason = stopReason.getRequired("stopReason")
 
         /**
+         * The total cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun totalCost(): Double = totalCost.getRequired("totalCost")
+
+        /**
          * The total number of tokens
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -678,15 +741,6 @@ private constructor(
          *   value).
          */
         fun totalTokenCount(): Long = totalTokenCount.getRequired("totalTokenCount")
-
-        /**
-         * The cost associated with the LLM completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun transactionCost(): Double = transactionCost.getRequired("transactionCost")
 
         /**
          * The unique identifier of the LLM completion transaction
@@ -845,11 +899,31 @@ private constructor(
         @JsonProperty("costType") @ExcludeMissing fun _costType(): JsonField<CostType> = costType
 
         /**
+         * Returns the raw JSON value of [inputTokenCost].
+         *
+         * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("inputTokenCost")
+        @ExcludeMissing
+        fun _inputTokenCost(): JsonField<Double> = inputTokenCost
+
+        /**
          * Returns the raw JSON value of [model].
          *
          * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
+
+        /**
+         * Returns the raw JSON value of [outputTokenCost].
+         *
+         * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("outputTokenCost")
+        @ExcludeMissing
+        fun _outputTokenCost(): JsonField<Double> = outputTokenCost
 
         /**
          * Returns the raw JSON value of [promptTokenCount].
@@ -917,6 +991,13 @@ private constructor(
         fun _stopReason(): JsonField<StopReason> = stopReason
 
         /**
+         * Returns the raw JSON value of [totalCost].
+         *
+         * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("totalCost") @ExcludeMissing fun _totalCost(): JsonField<Double> = totalCost
+
+        /**
          * Returns the raw JSON value of [totalTokenCount].
          *
          * Unlike [totalTokenCount], this method doesn't throw if the JSON field has an unexpected
@@ -925,16 +1006,6 @@ private constructor(
         @JsonProperty("totalTokenCount")
         @ExcludeMissing
         fun _totalTokenCount(): JsonField<Long> = totalTokenCount
-
-        /**
-         * Returns the raw JSON value of [transactionCost].
-         *
-         * Unlike [transactionCost], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("transactionCost")
-        @ExcludeMissing
-        fun _transactionCost(): JsonField<Double> = transactionCost
 
         /**
          * Returns the raw JSON value of [transactionId].
@@ -1051,7 +1122,9 @@ private constructor(
             completionStartTime()
             completionTokenCount()
             costType()
+            inputTokenCost()
             model()
+            outputTokenCost()
             promptTokenCount()
             provider()
             reasoningTokenCount()
@@ -1059,8 +1132,8 @@ private constructor(
             requestTime()
             responseTime()
             stopReason()
+            totalCost()
             totalTokenCount()
-            transactionCost()
             transactionId()
             agent()
             aiProviderKeyName()
@@ -1090,7 +1163,9 @@ private constructor(
              * .completionStartTime()
              * .completionTokenCount()
              * .costType()
+             * .inputTokenCost()
              * .model()
+             * .outputTokenCost()
              * .promptTokenCount()
              * .provider()
              * .reasoningTokenCount()
@@ -1098,8 +1173,8 @@ private constructor(
              * .requestTime()
              * .responseTime()
              * .stopReason()
+             * .totalCost()
              * .totalTokenCount()
-             * .transactionCost()
              * .transactionId()
              * ```
              */
@@ -1114,7 +1189,9 @@ private constructor(
             private var completionStartTime: JsonField<String>? = null
             private var completionTokenCount: JsonField<Long>? = null
             private var costType: JsonField<CostType>? = null
+            private var inputTokenCost: JsonField<Double>? = null
             private var model: JsonField<String>? = null
+            private var outputTokenCost: JsonField<Double>? = null
             private var promptTokenCount: JsonField<Long>? = null
             private var provider: JsonField<String>? = null
             private var reasoningTokenCount: JsonField<Long>? = null
@@ -1122,8 +1199,8 @@ private constructor(
             private var requestTime: JsonField<String>? = null
             private var responseTime: JsonField<String>? = null
             private var stopReason: JsonField<StopReason>? = null
+            private var totalCost: JsonField<Double>? = null
             private var totalTokenCount: JsonField<Long>? = null
-            private var transactionCost: JsonField<Double>? = null
             private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
             private var aiProviderKeyName: JsonField<String> = JsonMissing.of()
@@ -1145,7 +1222,9 @@ private constructor(
                 completionStartTime = body.completionStartTime
                 completionTokenCount = body.completionTokenCount
                 costType = body.costType
+                inputTokenCost = body.inputTokenCost
                 model = body.model
+                outputTokenCost = body.outputTokenCost
                 promptTokenCount = body.promptTokenCount
                 provider = body.provider
                 reasoningTokenCount = body.reasoningTokenCount
@@ -1153,8 +1232,8 @@ private constructor(
                 requestTime = body.requestTime
                 responseTime = body.responseTime
                 stopReason = body.stopReason
+                totalCost = body.totalCost
                 totalTokenCount = body.totalTokenCount
-                transactionCost = body.transactionCost
                 transactionId = body.transactionId
                 agent = body.agent
                 aiProviderKeyName = body.aiProviderKeyName
@@ -1242,6 +1321,21 @@ private constructor(
              */
             fun costType(costType: JsonField<CostType>) = apply { this.costType = costType }
 
+            /** The input token cost associated with the LLM completion */
+            fun inputTokenCost(inputTokenCost: Double) =
+                inputTokenCost(JsonField.of(inputTokenCost))
+
+            /**
+             * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
+                this.inputTokenCost = inputTokenCost
+            }
+
             /** The model used for generating the LLM completion */
             fun model(model: String) = model(JsonField.of(model))
 
@@ -1253,6 +1347,21 @@ private constructor(
              * supported value.
              */
             fun model(model: JsonField<String>) = apply { this.model = model }
+
+            /** The output token cost associated with the LLM completion */
+            fun outputTokenCost(outputTokenCost: Double) =
+                outputTokenCost(JsonField.of(outputTokenCost))
+
+            /**
+             * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
+                this.outputTokenCost = outputTokenCost
+            }
 
             /** The number of tokens in the prompt */
             fun promptTokenCount(promptTokenCount: Long) =
@@ -1356,6 +1465,18 @@ private constructor(
                 this.stopReason = stopReason
             }
 
+            /** The total cost associated with the LLM completion */
+            fun totalCost(totalCost: Double) = totalCost(JsonField.of(totalCost))
+
+            /**
+             * Sets [Builder.totalCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun totalCost(totalCost: JsonField<Double>) = apply { this.totalCost = totalCost }
+
             /** The total number of tokens */
             fun totalTokenCount(totalTokenCount: Long) =
                 totalTokenCount(JsonField.of(totalTokenCount))
@@ -1369,21 +1490,6 @@ private constructor(
              */
             fun totalTokenCount(totalTokenCount: JsonField<Long>) = apply {
                 this.totalTokenCount = totalTokenCount
-            }
-
-            /** The cost associated with the LLM completion */
-            fun transactionCost(transactionCost: Double) =
-                transactionCost(JsonField.of(transactionCost))
-
-            /**
-             * Sets [Builder.transactionCost] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.transactionCost] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun transactionCost(transactionCost: JsonField<Double>) = apply {
-                this.transactionCost = transactionCost
             }
 
             /** The unique identifier of the LLM completion transaction */
@@ -1591,7 +1697,9 @@ private constructor(
                     checkRequired("completionStartTime", completionStartTime),
                     checkRequired("completionTokenCount", completionTokenCount),
                     checkRequired("costType", costType),
+                    checkRequired("inputTokenCost", inputTokenCost),
                     checkRequired("model", model),
+                    checkRequired("outputTokenCost", outputTokenCost),
                     checkRequired("promptTokenCount", promptTokenCount),
                     checkRequired("provider", provider),
                     checkRequired("reasoningTokenCount", reasoningTokenCount),
@@ -1599,8 +1707,8 @@ private constructor(
                     checkRequired("requestTime", requestTime),
                     checkRequired("responseTime", responseTime),
                     checkRequired("stopReason", stopReason),
+                    checkRequired("totalCost", totalCost),
                     checkRequired("totalTokenCount", totalTokenCount),
-                    checkRequired("transactionCost", transactionCost),
                     checkRequired("transactionId", transactionId),
                     agent,
                     aiProviderKeyName,
@@ -1622,17 +1730,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && audioTokenCount == other.audioTokenCount && cachedTokenCount == other.cachedTokenCount && completionStartTime == other.completionStartTime && completionTokenCount == other.completionTokenCount && costType == other.costType && model == other.model && promptTokenCount == other.promptTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionCost == other.transactionCost && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && organizationId == other.organizationId && productId == other.productId && sourceId == other.sourceId && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && audioTokenCount == other.audioTokenCount && cachedTokenCount == other.cachedTokenCount && completionStartTime == other.completionStartTime && completionTokenCount == other.completionTokenCount && costType == other.costType && inputTokenCost == other.inputTokenCost && model == other.model && outputTokenCost == other.outputTokenCost && promptTokenCount == other.promptTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalCost == other.totalCost && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && organizationId == other.organizationId && productId == other.productId && sourceId == other.sourceId && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(audioTokenCount, cachedTokenCount, completionStartTime, completionTokenCount, costType, model, promptTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionCost, transactionId, agent, aiProviderKeyName, apiKey, organizationId, productId, sourceId, subscriberIdentity, subscriptionId, taskId, taskType, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(audioTokenCount, cachedTokenCount, completionStartTime, completionTokenCount, costType, inputTokenCost, model, outputTokenCost, promptTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalCost, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, organizationId, productId, sourceId, subscriberIdentity, subscriptionId, taskId, taskType, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{audioTokenCount=$audioTokenCount, cachedTokenCount=$cachedTokenCount, completionStartTime=$completionStartTime, completionTokenCount=$completionTokenCount, costType=$costType, model=$model, promptTokenCount=$promptTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionCost=$transactionCost, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{audioTokenCount=$audioTokenCount, cachedTokenCount=$cachedTokenCount, completionStartTime=$completionStartTime, completionTokenCount=$completionTokenCount, costType=$costType, inputTokenCost=$inputTokenCost, model=$model, outputTokenCost=$outputTokenCost, promptTokenCount=$promptTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalCost=$totalCost, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1649,7 +1757,9 @@ private constructor(
          * .completionStartTime()
          * .completionTokenCount()
          * .costType()
+         * .inputTokenCost()
          * .model()
+         * .outputTokenCost()
          * .promptTokenCount()
          * .provider()
          * .reasoningTokenCount()
@@ -1657,8 +1767,8 @@ private constructor(
          * .requestTime()
          * .responseTime()
          * .stopReason()
+         * .totalCost()
          * .totalTokenCount()
-         * .transactionCost()
          * .transactionId()
          * ```
          */
@@ -1754,6 +1864,20 @@ private constructor(
          */
         fun costType(costType: JsonField<CostType>) = apply { body.costType(costType) }
 
+        /** The input token cost associated with the LLM completion */
+        fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
+
+        /**
+         * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
+            body.inputTokenCost(inputTokenCost)
+        }
+
         /** The model used for generating the LLM completion */
         fun model(model: String) = apply { body.model(model) }
 
@@ -1764,6 +1888,22 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun model(model: JsonField<String>) = apply { body.model(model) }
+
+        /** The output token cost associated with the LLM completion */
+        fun outputTokenCost(outputTokenCost: Double) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
+
+        /**
+         * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
 
         /** The number of tokens in the prompt */
         fun promptTokenCount(promptTokenCount: Long) = apply {
@@ -1863,6 +2003,18 @@ private constructor(
          */
         fun stopReason(stopReason: JsonField<StopReason>) = apply { body.stopReason(stopReason) }
 
+        /** The total cost associated with the LLM completion */
+        fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
+
+        /**
+         * Sets [Builder.totalCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
+
         /** The total number of tokens */
         fun totalTokenCount(totalTokenCount: Long) = apply { body.totalTokenCount(totalTokenCount) }
 
@@ -1875,22 +2027,6 @@ private constructor(
          */
         fun totalTokenCount(totalTokenCount: JsonField<Long>) = apply {
             body.totalTokenCount(totalTokenCount)
-        }
-
-        /** The cost associated with the LLM completion */
-        fun transactionCost(transactionCost: Double) = apply {
-            body.transactionCost(transactionCost)
-        }
-
-        /**
-         * Sets [Builder.transactionCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.transactionCost] with a well-typed [Double] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun transactionCost(transactionCost: JsonField<Double>) = apply {
-            body.transactionCost(transactionCost)
         }
 
         /** The unique identifier of the LLM completion transaction */
