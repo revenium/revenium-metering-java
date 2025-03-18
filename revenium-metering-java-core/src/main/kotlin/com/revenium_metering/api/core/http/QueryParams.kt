@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.revenium_metering.api.core.http
 
 import com.revenium_metering.api.core.toImmutable
