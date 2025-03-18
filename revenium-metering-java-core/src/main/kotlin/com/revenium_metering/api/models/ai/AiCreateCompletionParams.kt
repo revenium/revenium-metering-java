@@ -1690,6 +1690,35 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .audioTokenCount()
+             * .cachedTokenCount()
+             * .completionStartTime()
+             * .completionTokenCount()
+             * .costType()
+             * .inputTokenCost()
+             * .model()
+             * .outputTokenCost()
+             * .promptTokenCount()
+             * .provider()
+             * .reasoningTokenCount()
+             * .requestDuration()
+             * .requestTime()
+             * .responseTime()
+             * .stopReason()
+             * .totalCost()
+             * .totalTokenCount()
+             * .transactionId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Body =
                 Body(
                     checkRequired("audioTokenCount", audioTokenCount),
@@ -2319,6 +2348,35 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [AiCreateCompletionParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .audioTokenCount()
+         * .cachedTokenCount()
+         * .completionStartTime()
+         * .completionTokenCount()
+         * .costType()
+         * .inputTokenCost()
+         * .model()
+         * .outputTokenCost()
+         * .promptTokenCount()
+         * .provider()
+         * .reasoningTokenCount()
+         * .requestDuration()
+         * .requestTime()
+         * .responseTime()
+         * .stopReason()
+         * .totalCost()
+         * .totalTokenCount()
+         * .transactionId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): AiCreateCompletionParams =
             AiCreateCompletionParams(
                 body.build(),
