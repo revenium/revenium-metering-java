@@ -149,6 +149,11 @@ class ReveniumMeteringOkHttpClientAsync private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
+        /**
+         * Returns an immutable instance of [ReveniumMeteringClientAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): ReveniumMeteringClientAsync =
             ReveniumMeteringClientAsyncImpl(
                 clientOptions

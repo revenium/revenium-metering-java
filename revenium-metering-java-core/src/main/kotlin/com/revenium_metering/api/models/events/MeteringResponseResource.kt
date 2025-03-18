@@ -308,6 +308,21 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MeteringResponseResource].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .label()
+         * .object_()
+         * .signature()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MeteringResponseResource =
             MeteringResponseResource(
                 checkRequired("id", id),
@@ -380,6 +395,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [_Links].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): _Links = _Links(additionalProperties.toImmutable())
         }
 
