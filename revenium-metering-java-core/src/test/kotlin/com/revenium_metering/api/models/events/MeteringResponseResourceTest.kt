@@ -11,7 +11,7 @@ internal class MeteringResponseResourceTest {
 
     @Disabled("skipped: tests are disabled for the time being")
     @Test
-    fun createMeteringResponseResource() {
+    fun create() {
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
@@ -41,7 +41,7 @@ internal class MeteringResponseResourceTest {
                 .created("2025-03-02T15:04:05Z")
                 .updated("2025-03-02T15:04:06Z")
                 .build()
-        assertThat(meteringResponseResource).isNotNull
+
         assertThat(meteringResponseResource.id()).isEqualTo("abc123")
         assertThat(meteringResponseResource.label()).isEqualTo("Metering Response")
         assertThat(meteringResponseResource.object_()).isEqualTo("metering")
