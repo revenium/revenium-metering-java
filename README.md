@@ -43,15 +43,15 @@ import com.revenium_metering.api.models.events.MeteringResponseResource;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .cacheCreationTokenCount(1300L)
-    .cacheReadTokenCount(1300L)
+    .audioTokenCount(150L)
+    .cachedTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
+    .completionTokenCount(150L)
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCost(12.34)
-    .inputTokenCount(50L)
     .model("gpt4")
     .outputTokenCost(12.34)
-    .outputTokenCount(150L)
+    .promptTokenCount(50L)
     .provider("OpenAI")
     .reasoningTokenCount(1300L)
     .requestDuration(1000L)
@@ -140,15 +140,15 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .cacheCreationTokenCount(1300L)
-    .cacheReadTokenCount(1300L)
+    .audioTokenCount(150L)
+    .cachedTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
+    .completionTokenCount(150L)
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCost(12.34)
-    .inputTokenCount(50L)
     .model("gpt4")
     .outputTokenCost(12.34)
-    .outputTokenCount(150L)
+    .promptTokenCount(50L)
     .provider("OpenAI")
     .reasoningTokenCount(1300L)
     .requestDuration(1000L)
@@ -175,15 +175,15 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClientAsync client = ReveniumMeteringOkHttpClientAsync.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .cacheCreationTokenCount(1300L)
-    .cacheReadTokenCount(1300L)
+    .audioTokenCount(150L)
+    .cachedTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
+    .completionTokenCount(150L)
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCost(12.34)
-    .inputTokenCount(50L)
     .model("gpt4")
     .outputTokenCost(12.34)
-    .outputTokenCount(150L)
+    .promptTokenCount(50L)
     .provider("OpenAI")
     .reasoningTokenCount(1300L)
     .requestDuration(1000L)
@@ -212,15 +212,15 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .cacheCreationTokenCount(1300L)
-    .cacheReadTokenCount(1300L)
+    .audioTokenCount(150L)
+    .cachedTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
+    .completionTokenCount(150L)
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCost(12.34)
-    .inputTokenCount(50L)
     .model("gpt4")
     .outputTokenCost(12.34)
-    .outputTokenCount(150L)
+    .promptTokenCount(50L)
     .provider("OpenAI")
     .reasoningTokenCount(1300L)
     .requestDuration(1000L)
@@ -387,15 +387,15 @@ To set a documented parameter or property to an undocumented or not yet supporte
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .cacheCreationTokenCount(1300L)
-    .cacheReadTokenCount(1300L)
+    .audioTokenCount(150L)
+    .cachedTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
+    .completionTokenCount(150L)
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCost(12.34)
-    .inputTokenCount(50L)
     .model("gpt4")
     .outputTokenCost(12.34)
-    .outputTokenCount(150L)
+    .promptTokenCount(50L)
     .provider("OpenAI")
     .reasoningTokenCount(1300L)
     .requestDuration(1000L)
@@ -485,19 +485,19 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 import com.revenium_metering.api.core.JsonField;
 import java.util.Optional;
 
-JsonField<Long> cacheCreationTokenCount = client.ai().createCompletion(params)._cacheCreationTokenCount();
+JsonField<Long> audioTokenCount = client.ai().createCompletion(params)._audioTokenCount();
 
-if (cacheCreationTokenCount.isMissing()) {
+if (audioTokenCount.isMissing()) {
   // The property is absent from the JSON response
-} else if (cacheCreationTokenCount.isNull()) {
+} else if (audioTokenCount.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = cacheCreationTokenCount.asString();
+  Optional<String> jsonString = audioTokenCount.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = cacheCreationTokenCount.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = audioTokenCount.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
