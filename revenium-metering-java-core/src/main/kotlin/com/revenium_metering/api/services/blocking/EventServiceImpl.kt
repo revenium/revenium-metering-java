@@ -3,6 +3,7 @@
 package com.revenium_metering.api.services.blocking
 
 import com.revenium_metering.api.core.ClientOptions
+import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.handlers.errorHandler
 import com.revenium_metering.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.core.http.json
 import com.revenium_metering.api.core.http.parseable
 import com.revenium_metering.api.core.prepare
-import com.revenium_metering.api.errors.ReveniumMeteringError
 import com.revenium_metering.api.models.events.EventCreateParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
 
@@ -37,8 +37,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         EventService.WithRawResponse {
 
-        private val errorHandler: Handler<ReveniumMeteringError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)

@@ -1,23 +1,17 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.revenium_metering.api.errors
 
+import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.http.Headers
 
 abstract class ReveniumMeteringServiceException
-@JvmOverloads
-constructor(
-    private val statusCode: Int,
-    private val headers: Headers,
-    private val body: String,
-    private val error: ReveniumMeteringError,
-    message: String = "$statusCode: $error",
-    cause: Throwable? = null,
-) : ReveniumMeteringException(message, cause) {
+protected constructor(message: String, cause: Throwable? = null) :
+    ReveniumMeteringException(message, cause) {
 
-    fun statusCode(): Int = statusCode
+    abstract fun statusCode(): Int
 
-    fun headers(): Headers = headers
+    abstract fun headers(): Headers
 
-    fun body(): String = body
-
-    fun error(): ReveniumMeteringError = error
+    abstract fun body(): JsonValue
 }
