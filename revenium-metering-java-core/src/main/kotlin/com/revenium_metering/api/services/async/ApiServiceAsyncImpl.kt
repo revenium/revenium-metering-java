@@ -3,6 +3,7 @@
 package com.revenium_metering.api.services.async
 
 import com.revenium_metering.api.core.ClientOptions
+import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.handlers.errorHandler
 import com.revenium_metering.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.core.http.json
 import com.revenium_metering.api.core.http.parseable
 import com.revenium_metering.api.core.prepareAsync
-import com.revenium_metering.api.errors.ReveniumMeteringError
 import com.revenium_metering.api.models.apis.ApiMeterRequestParams
 import com.revenium_metering.api.models.apis.ApiMeterResponseParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
@@ -46,8 +46,7 @@ class ApiServiceAsyncImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ApiServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<ReveniumMeteringError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val meterRequestHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)
