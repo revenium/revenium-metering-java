@@ -31,20 +31,20 @@ private constructor(
 ) : Params {
 
     /**
-     * The number of audio tokens in the completion
+     * The number of cached creation tokens in the completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun audioTokenCount(): Long = body.audioTokenCount()
+    fun cacheCreationTokenCount(): Long = body.cacheCreationTokenCount()
 
     /**
-     * The number of cached tokens in the completion
+     * The number of cached read tokens in the completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun cachedTokenCount(): Long = body.cachedTokenCount()
+    fun cacheReadTokenCount(): Long = body.cacheReadTokenCount()
 
     /**
      * Time to first token for streaming requests
@@ -53,14 +53,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun completionStartTime(): String = body.completionStartTime()
-
-    /**
-     * The number of tokens in the completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun completionTokenCount(): Long = body.completionTokenCount()
 
     /**
      * Cost type for the completion
@@ -79,6 +71,14 @@ private constructor(
     fun inputTokenCost(): Double = body.inputTokenCost()
 
     /**
+     * The count of consumed input tokens
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun inputTokenCount(): Long = body.inputTokenCount()
+
+    /**
      * The model used for generating the LLM completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
@@ -95,12 +95,12 @@ private constructor(
     fun outputTokenCost(): Double = body.outputTokenCost()
 
     /**
-     * The number of tokens in the prompt
+     * The count of consumed output tokens
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun promptTokenCount(): Long = body.promptTokenCount()
+    fun outputTokenCount(): Long = body.outputTokenCount()
 
     /**
      * Vendor providing the LLM completion service
@@ -271,19 +271,20 @@ private constructor(
     fun traceId(): Optional<String> = body.traceId()
 
     /**
-     * Returns the raw JSON value of [audioTokenCount].
+     * Returns the raw JSON value of [cacheCreationTokenCount].
      *
-     * Unlike [audioTokenCount], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
-    fun _audioTokenCount(): JsonField<Long> = body._audioTokenCount()
+    fun _cacheCreationTokenCount(): JsonField<Long> = body._cacheCreationTokenCount()
 
     /**
-     * Returns the raw JSON value of [cachedTokenCount].
+     * Returns the raw JSON value of [cacheReadTokenCount].
      *
-     * Unlike [cachedTokenCount], this method doesn't throw if the JSON field has an unexpected
+     * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
-    fun _cachedTokenCount(): JsonField<Long> = body._cachedTokenCount()
+    fun _cacheReadTokenCount(): JsonField<Long> = body._cacheReadTokenCount()
 
     /**
      * Returns the raw JSON value of [completionStartTime].
@@ -292,14 +293,6 @@ private constructor(
      * type.
      */
     fun _completionStartTime(): JsonField<String> = body._completionStartTime()
-
-    /**
-     * Returns the raw JSON value of [completionTokenCount].
-     *
-     * Unlike [completionTokenCount], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _completionTokenCount(): JsonField<Long> = body._completionTokenCount()
 
     /**
      * Returns the raw JSON value of [costType].
@@ -316,6 +309,13 @@ private constructor(
     fun _inputTokenCost(): JsonField<Double> = body._inputTokenCost()
 
     /**
+     * Returns the raw JSON value of [inputTokenCount].
+     *
+     * Unlike [inputTokenCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _inputTokenCount(): JsonField<Long> = body._inputTokenCount()
+
+    /**
      * Returns the raw JSON value of [model].
      *
      * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
@@ -330,12 +330,12 @@ private constructor(
     fun _outputTokenCost(): JsonField<Double> = body._outputTokenCost()
 
     /**
-     * Returns the raw JSON value of [promptTokenCount].
+     * Returns the raw JSON value of [outputTokenCount].
      *
-     * Unlike [promptTokenCount], this method doesn't throw if the JSON field has an unexpected
+     * Unlike [outputTokenCount], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
-    fun _promptTokenCount(): JsonField<Long> = body._promptTokenCount()
+    fun _outputTokenCount(): JsonField<Long> = body._outputTokenCount()
 
     /**
      * Returns the raw JSON value of [provider].
@@ -497,33 +497,33 @@ private constructor(
     class Body
     @JsonCreator
     private constructor(
-        @JsonProperty("audioTokenCount")
+        @JsonProperty("cacheCreationTokenCount")
         @ExcludeMissing
-        private val audioTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("cachedTokenCount")
+        private val cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("cacheReadTokenCount")
         @ExcludeMissing
-        private val cachedTokenCount: JsonField<Long> = JsonMissing.of(),
+        private val cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("completionStartTime")
         @ExcludeMissing
         private val completionStartTime: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("completionTokenCount")
-        @ExcludeMissing
-        private val completionTokenCount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("costType")
         @ExcludeMissing
         private val costType: JsonField<CostType> = JsonMissing.of(),
         @JsonProperty("inputTokenCost")
         @ExcludeMissing
         private val inputTokenCost: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("inputTokenCount")
+        @ExcludeMissing
+        private val inputTokenCount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("model")
         @ExcludeMissing
         private val model: JsonField<String> = JsonMissing.of(),
         @JsonProperty("outputTokenCost")
         @ExcludeMissing
         private val outputTokenCost: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("promptTokenCount")
+        @JsonProperty("outputTokenCount")
         @ExcludeMissing
-        private val promptTokenCount: JsonField<Long> = JsonMissing.of(),
+        private val outputTokenCount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("provider")
         @ExcludeMissing
         private val provider: JsonField<String> = JsonMissing.of(),
@@ -589,22 +589,23 @@ private constructor(
     ) {
 
         /**
-         * The number of audio tokens in the completion
+         * The number of cached creation tokens in the completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun audioTokenCount(): Long = audioTokenCount.getRequired("audioTokenCount")
+        fun cacheCreationTokenCount(): Long =
+            cacheCreationTokenCount.getRequired("cacheCreationTokenCount")
 
         /**
-         * The number of cached tokens in the completion
+         * The number of cached read tokens in the completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun cachedTokenCount(): Long = cachedTokenCount.getRequired("cachedTokenCount")
+        fun cacheReadTokenCount(): Long = cacheReadTokenCount.getRequired("cacheReadTokenCount")
 
         /**
          * Time to first token for streaming requests
@@ -614,15 +615,6 @@ private constructor(
          *   value).
          */
         fun completionStartTime(): String = completionStartTime.getRequired("completionStartTime")
-
-        /**
-         * The number of tokens in the completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun completionTokenCount(): Long = completionTokenCount.getRequired("completionTokenCount")
 
         /**
          * Cost type for the completion
@@ -643,6 +635,15 @@ private constructor(
         fun inputTokenCost(): Double = inputTokenCost.getRequired("inputTokenCost")
 
         /**
+         * The count of consumed input tokens
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun inputTokenCount(): Long = inputTokenCount.getRequired("inputTokenCount")
+
+        /**
          * The model used for generating the LLM completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -661,13 +662,13 @@ private constructor(
         fun outputTokenCost(): Double = outputTokenCost.getRequired("outputTokenCost")
 
         /**
-         * The number of tokens in the prompt
+         * The count of consumed output tokens
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun promptTokenCount(): Long = promptTokenCount.getRequired("promptTokenCount")
+        fun outputTokenCount(): Long = outputTokenCount.getRequired("outputTokenCount")
 
         /**
          * Vendor providing the LLM completion service
@@ -852,24 +853,24 @@ private constructor(
         fun traceId(): Optional<String> = Optional.ofNullable(traceId.getNullable("traceId"))
 
         /**
-         * Returns the raw JSON value of [audioTokenCount].
+         * Returns the raw JSON value of [cacheCreationTokenCount].
          *
-         * Unlike [audioTokenCount], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
-        @JsonProperty("audioTokenCount")
+        @JsonProperty("cacheCreationTokenCount")
         @ExcludeMissing
-        fun _audioTokenCount(): JsonField<Long> = audioTokenCount
+        fun _cacheCreationTokenCount(): JsonField<Long> = cacheCreationTokenCount
 
         /**
-         * Returns the raw JSON value of [cachedTokenCount].
+         * Returns the raw JSON value of [cacheReadTokenCount].
          *
-         * Unlike [cachedTokenCount], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
-        @JsonProperty("cachedTokenCount")
+        @JsonProperty("cacheReadTokenCount")
         @ExcludeMissing
-        fun _cachedTokenCount(): JsonField<Long> = cachedTokenCount
+        fun _cacheReadTokenCount(): JsonField<Long> = cacheReadTokenCount
 
         /**
          * Returns the raw JSON value of [completionStartTime].
@@ -880,16 +881,6 @@ private constructor(
         @JsonProperty("completionStartTime")
         @ExcludeMissing
         fun _completionStartTime(): JsonField<String> = completionStartTime
-
-        /**
-         * Returns the raw JSON value of [completionTokenCount].
-         *
-         * Unlike [completionTokenCount], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("completionTokenCount")
-        @ExcludeMissing
-        fun _completionTokenCount(): JsonField<Long> = completionTokenCount
 
         /**
          * Returns the raw JSON value of [costType].
@@ -909,6 +900,16 @@ private constructor(
         fun _inputTokenCost(): JsonField<Double> = inputTokenCost
 
         /**
+         * Returns the raw JSON value of [inputTokenCount].
+         *
+         * Unlike [inputTokenCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("inputTokenCount")
+        @ExcludeMissing
+        fun _inputTokenCount(): JsonField<Long> = inputTokenCount
+
+        /**
          * Returns the raw JSON value of [model].
          *
          * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
@@ -926,14 +927,14 @@ private constructor(
         fun _outputTokenCost(): JsonField<Double> = outputTokenCost
 
         /**
-         * Returns the raw JSON value of [promptTokenCount].
+         * Returns the raw JSON value of [outputTokenCount].
          *
-         * Unlike [promptTokenCount], this method doesn't throw if the JSON field has an unexpected
+         * Unlike [outputTokenCount], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
-        @JsonProperty("promptTokenCount")
+        @JsonProperty("outputTokenCount")
         @ExcludeMissing
-        fun _promptTokenCount(): JsonField<Long> = promptTokenCount
+        fun _outputTokenCount(): JsonField<Long> = outputTokenCount
 
         /**
          * Returns the raw JSON value of [provider].
@@ -1117,15 +1118,15 @@ private constructor(
                 return@apply
             }
 
-            audioTokenCount()
-            cachedTokenCount()
+            cacheCreationTokenCount()
+            cacheReadTokenCount()
             completionStartTime()
-            completionTokenCount()
             costType()
             inputTokenCost()
+            inputTokenCount()
             model()
             outputTokenCost()
-            promptTokenCount()
+            outputTokenCount()
             provider()
             reasoningTokenCount()
             requestDuration()
@@ -1158,15 +1159,15 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .audioTokenCount()
-             * .cachedTokenCount()
+             * .cacheCreationTokenCount()
+             * .cacheReadTokenCount()
              * .completionStartTime()
-             * .completionTokenCount()
              * .costType()
              * .inputTokenCost()
+             * .inputTokenCount()
              * .model()
              * .outputTokenCost()
-             * .promptTokenCount()
+             * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
              * .requestDuration()
@@ -1184,15 +1185,15 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var audioTokenCount: JsonField<Long>? = null
-            private var cachedTokenCount: JsonField<Long>? = null
+            private var cacheCreationTokenCount: JsonField<Long>? = null
+            private var cacheReadTokenCount: JsonField<Long>? = null
             private var completionStartTime: JsonField<String>? = null
-            private var completionTokenCount: JsonField<Long>? = null
             private var costType: JsonField<CostType>? = null
             private var inputTokenCost: JsonField<Double>? = null
+            private var inputTokenCount: JsonField<Long>? = null
             private var model: JsonField<String>? = null
             private var outputTokenCost: JsonField<Double>? = null
-            private var promptTokenCount: JsonField<Long>? = null
+            private var outputTokenCount: JsonField<Long>? = null
             private var provider: JsonField<String>? = null
             private var reasoningTokenCount: JsonField<Long>? = null
             private var requestDuration: JsonField<Long>? = null
@@ -1217,15 +1218,15 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
-                audioTokenCount = body.audioTokenCount
-                cachedTokenCount = body.cachedTokenCount
+                cacheCreationTokenCount = body.cacheCreationTokenCount
+                cacheReadTokenCount = body.cacheReadTokenCount
                 completionStartTime = body.completionStartTime
-                completionTokenCount = body.completionTokenCount
                 costType = body.costType
                 inputTokenCost = body.inputTokenCost
+                inputTokenCount = body.inputTokenCount
                 model = body.model
                 outputTokenCost = body.outputTokenCost
-                promptTokenCount = body.promptTokenCount
+                outputTokenCount = body.outputTokenCount
                 provider = body.provider
                 reasoningTokenCount = body.reasoningTokenCount
                 requestDuration = body.requestDuration
@@ -1249,34 +1250,34 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The number of audio tokens in the completion */
-            fun audioTokenCount(audioTokenCount: Long) =
-                audioTokenCount(JsonField.of(audioTokenCount))
+            /** The number of cached creation tokens in the completion */
+            fun cacheCreationTokenCount(cacheCreationTokenCount: Long) =
+                cacheCreationTokenCount(JsonField.of(cacheCreationTokenCount))
 
             /**
-             * Sets [Builder.audioTokenCount] to an arbitrary JSON value.
+             * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.audioTokenCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun audioTokenCount(audioTokenCount: JsonField<Long>) = apply {
-                this.audioTokenCount = audioTokenCount
+            fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
+                this.cacheCreationTokenCount = cacheCreationTokenCount
             }
 
-            /** The number of cached tokens in the completion */
-            fun cachedTokenCount(cachedTokenCount: Long) =
-                cachedTokenCount(JsonField.of(cachedTokenCount))
+            /** The number of cached read tokens in the completion */
+            fun cacheReadTokenCount(cacheReadTokenCount: Long) =
+                cacheReadTokenCount(JsonField.of(cacheReadTokenCount))
 
             /**
-             * Sets [Builder.cachedTokenCount] to an arbitrary JSON value.
+             * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.cachedTokenCount] with a well-typed [Long] value
+             * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun cachedTokenCount(cachedTokenCount: JsonField<Long>) = apply {
-                this.cachedTokenCount = cachedTokenCount
+            fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
+                this.cacheReadTokenCount = cacheReadTokenCount
             }
 
             /** Time to first token for streaming requests */
@@ -1292,21 +1293,6 @@ private constructor(
              */
             fun completionStartTime(completionStartTime: JsonField<String>) = apply {
                 this.completionStartTime = completionStartTime
-            }
-
-            /** The number of tokens in the completion */
-            fun completionTokenCount(completionTokenCount: Long) =
-                completionTokenCount(JsonField.of(completionTokenCount))
-
-            /**
-             * Sets [Builder.completionTokenCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.completionTokenCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun completionTokenCount(completionTokenCount: JsonField<Long>) = apply {
-                this.completionTokenCount = completionTokenCount
             }
 
             /** Cost type for the completion */
@@ -1336,6 +1322,21 @@ private constructor(
                 this.inputTokenCost = inputTokenCost
             }
 
+            /** The count of consumed input tokens */
+            fun inputTokenCount(inputTokenCount: Long) =
+                inputTokenCount(JsonField.of(inputTokenCount))
+
+            /**
+             * Sets [Builder.inputTokenCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.inputTokenCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun inputTokenCount(inputTokenCount: JsonField<Long>) = apply {
+                this.inputTokenCount = inputTokenCount
+            }
+
             /** The model used for generating the LLM completion */
             fun model(model: String) = model(JsonField.of(model))
 
@@ -1363,19 +1364,19 @@ private constructor(
                 this.outputTokenCost = outputTokenCost
             }
 
-            /** The number of tokens in the prompt */
-            fun promptTokenCount(promptTokenCount: Long) =
-                promptTokenCount(JsonField.of(promptTokenCount))
+            /** The count of consumed output tokens */
+            fun outputTokenCount(outputTokenCount: Long) =
+                outputTokenCount(JsonField.of(outputTokenCount))
 
             /**
-             * Sets [Builder.promptTokenCount] to an arbitrary JSON value.
+             * Sets [Builder.outputTokenCount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.promptTokenCount] with a well-typed [Long] value
+             * You should usually call [Builder.outputTokenCount] with a well-typed [Long] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun promptTokenCount(promptTokenCount: JsonField<Long>) = apply {
-                this.promptTokenCount = promptTokenCount
+            fun outputTokenCount(outputTokenCount: JsonField<Long>) = apply {
+                this.outputTokenCount = outputTokenCount
             }
 
             /** Vendor providing the LLM completion service */
@@ -1697,15 +1698,15 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .audioTokenCount()
-             * .cachedTokenCount()
+             * .cacheCreationTokenCount()
+             * .cacheReadTokenCount()
              * .completionStartTime()
-             * .completionTokenCount()
              * .costType()
              * .inputTokenCost()
+             * .inputTokenCount()
              * .model()
              * .outputTokenCost()
-             * .promptTokenCount()
+             * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
              * .requestDuration()
@@ -1721,15 +1722,15 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("audioTokenCount", audioTokenCount),
-                    checkRequired("cachedTokenCount", cachedTokenCount),
+                    checkRequired("cacheCreationTokenCount", cacheCreationTokenCount),
+                    checkRequired("cacheReadTokenCount", cacheReadTokenCount),
                     checkRequired("completionStartTime", completionStartTime),
-                    checkRequired("completionTokenCount", completionTokenCount),
                     checkRequired("costType", costType),
                     checkRequired("inputTokenCost", inputTokenCost),
+                    checkRequired("inputTokenCount", inputTokenCount),
                     checkRequired("model", model),
                     checkRequired("outputTokenCost", outputTokenCost),
-                    checkRequired("promptTokenCount", promptTokenCount),
+                    checkRequired("outputTokenCount", outputTokenCount),
                     checkRequired("provider", provider),
                     checkRequired("reasoningTokenCount", reasoningTokenCount),
                     checkRequired("requestDuration", requestDuration),
@@ -1759,17 +1760,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && audioTokenCount == other.audioTokenCount && cachedTokenCount == other.cachedTokenCount && completionStartTime == other.completionStartTime && completionTokenCount == other.completionTokenCount && costType == other.costType && inputTokenCost == other.inputTokenCost && model == other.model && outputTokenCost == other.outputTokenCost && promptTokenCount == other.promptTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalCost == other.totalCost && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && organizationId == other.organizationId && productId == other.productId && sourceId == other.sourceId && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCost == other.inputTokenCost && inputTokenCount == other.inputTokenCount && model == other.model && outputTokenCost == other.outputTokenCost && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalCost == other.totalCost && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && organizationId == other.organizationId && productId == other.productId && sourceId == other.sourceId && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(audioTokenCount, cachedTokenCount, completionStartTime, completionTokenCount, costType, inputTokenCost, model, outputTokenCost, promptTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalCost, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, organizationId, productId, sourceId, subscriberIdentity, subscriptionId, taskId, taskType, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCost, inputTokenCount, model, outputTokenCost, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalCost, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, organizationId, productId, sourceId, subscriberIdentity, subscriptionId, taskId, taskType, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{audioTokenCount=$audioTokenCount, cachedTokenCount=$cachedTokenCount, completionStartTime=$completionStartTime, completionTokenCount=$completionTokenCount, costType=$costType, inputTokenCost=$inputTokenCost, model=$model, outputTokenCost=$outputTokenCost, promptTokenCount=$promptTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalCost=$totalCost, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCost=$inputTokenCost, inputTokenCount=$inputTokenCount, model=$model, outputTokenCost=$outputTokenCost, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalCost=$totalCost, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1781,15 +1782,15 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .audioTokenCount()
-         * .cachedTokenCount()
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
          * .completionStartTime()
-         * .completionTokenCount()
          * .costType()
          * .inputTokenCost()
+         * .inputTokenCount()
          * .model()
          * .outputTokenCost()
-         * .promptTokenCount()
+         * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
          * .requestDuration()
@@ -1819,34 +1820,36 @@ private constructor(
             additionalQueryParams = aiCreateCompletionParams.additionalQueryParams.toBuilder()
         }
 
-        /** The number of audio tokens in the completion */
-        fun audioTokenCount(audioTokenCount: Long) = apply { body.audioTokenCount(audioTokenCount) }
-
-        /**
-         * Sets [Builder.audioTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.audioTokenCount] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun audioTokenCount(audioTokenCount: JsonField<Long>) = apply {
-            body.audioTokenCount(audioTokenCount)
-        }
-
-        /** The number of cached tokens in the completion */
-        fun cachedTokenCount(cachedTokenCount: Long) = apply {
-            body.cachedTokenCount(cachedTokenCount)
+        /** The number of cached creation tokens in the completion */
+        fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
         }
 
         /**
-         * Sets [Builder.cachedTokenCount] to an arbitrary JSON value.
+         * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.cachedTokenCount] with a well-typed [Long] value
+         * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun cachedTokenCount(cachedTokenCount: JsonField<Long>) = apply {
-            body.cachedTokenCount(cachedTokenCount)
+        fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /** The number of cached read tokens in the completion */
+        fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
+        }
+
+        /**
+         * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
         }
 
         /** Time to first token for streaming requests */
@@ -1863,22 +1866,6 @@ private constructor(
          */
         fun completionStartTime(completionStartTime: JsonField<String>) = apply {
             body.completionStartTime(completionStartTime)
-        }
-
-        /** The number of tokens in the completion */
-        fun completionTokenCount(completionTokenCount: Long) = apply {
-            body.completionTokenCount(completionTokenCount)
-        }
-
-        /**
-         * Sets [Builder.completionTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.completionTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun completionTokenCount(completionTokenCount: JsonField<Long>) = apply {
-            body.completionTokenCount(completionTokenCount)
         }
 
         /** Cost type for the completion */
@@ -1905,6 +1892,20 @@ private constructor(
          */
         fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
             body.inputTokenCost(inputTokenCost)
+        }
+
+        /** The count of consumed input tokens */
+        fun inputTokenCount(inputTokenCount: Long) = apply { body.inputTokenCount(inputTokenCount) }
+
+        /**
+         * Sets [Builder.inputTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokenCount] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun inputTokenCount(inputTokenCount: JsonField<Long>) = apply {
+            body.inputTokenCount(inputTokenCount)
         }
 
         /** The model used for generating the LLM completion */
@@ -1934,20 +1935,20 @@ private constructor(
             body.outputTokenCost(outputTokenCost)
         }
 
-        /** The number of tokens in the prompt */
-        fun promptTokenCount(promptTokenCount: Long) = apply {
-            body.promptTokenCount(promptTokenCount)
+        /** The count of consumed output tokens */
+        fun outputTokenCount(outputTokenCount: Long) = apply {
+            body.outputTokenCount(outputTokenCount)
         }
 
         /**
-         * Sets [Builder.promptTokenCount] to an arbitrary JSON value.
+         * Sets [Builder.outputTokenCount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.promptTokenCount] with a well-typed [Long] value
+         * You should usually call [Builder.outputTokenCount] with a well-typed [Long] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun promptTokenCount(promptTokenCount: JsonField<Long>) = apply {
-            body.promptTokenCount(promptTokenCount)
+        fun outputTokenCount(outputTokenCount: JsonField<Long>) = apply {
+            body.outputTokenCount(outputTokenCount)
         }
 
         /** Vendor providing the LLM completion service */
@@ -2355,15 +2356,15 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .audioTokenCount()
-         * .cachedTokenCount()
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
          * .completionStartTime()
-         * .completionTokenCount()
          * .costType()
          * .inputTokenCost()
+         * .inputTokenCount()
          * .model()
          * .outputTokenCost()
-         * .promptTokenCount()
+         * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
          * .requestDuration()
