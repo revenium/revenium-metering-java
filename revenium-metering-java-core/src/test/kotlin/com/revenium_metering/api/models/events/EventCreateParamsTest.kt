@@ -2,7 +2,6 @@
 
 package com.revenium_metering.api.models.events
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -39,7 +38,6 @@ internal class EventCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.payload()).isEqualTo("payload")
         assertThat(body.sourceType()).isEqualTo(EventCreateParams.SourceType.UNKNOWN)
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
@@ -62,7 +60,6 @@ internal class EventCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.payload()).isEqualTo("payload")
         assertThat(body.sourceType()).isEqualTo(EventCreateParams.SourceType.UNKNOWN)
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
