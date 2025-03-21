@@ -2,7 +2,6 @@
 
 package com.revenium_metering.api.models.ai
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -83,7 +82,6 @@ internal class AiCreateCompletionParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.cacheCreationTokenCount()).isEqualTo(1300L)
         assertThat(body.cacheReadTokenCount()).isEqualTo(1300L)
         assertThat(body.completionStartTime()).isEqualTo("2025-03-02T15:04:05Z")
@@ -142,7 +140,6 @@ internal class AiCreateCompletionParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.cacheCreationTokenCount()).isEqualTo(1300L)
         assertThat(body.cacheReadTokenCount()).isEqualTo(1300L)
         assertThat(body.completionStartTime()).isEqualTo("2025-03-02T15:04:05Z")
