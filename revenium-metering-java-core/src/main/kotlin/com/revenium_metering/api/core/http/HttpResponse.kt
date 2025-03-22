@@ -1,7 +1,8 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.revenium_metering.api.core.http
 
 import java.io.InputStream
-import java.lang.AutoCloseable
 
 interface HttpResponse : AutoCloseable {
 
