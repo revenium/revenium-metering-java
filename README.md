@@ -251,16 +251,16 @@ The SDK throws custom unchecked exception types:
 
 - [`ReveniumMeteringServiceException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                       |
-  | ------ | ------------------------------- |
-  | 400    | `BadRequestException`           |
-  | 401    | `AuthenticationException`       |
-  | 403    | `PermissionDeniedException`     |
-  | 404    | `NotFoundException`             |
-  | 422    | `UnprocessableEntityException`  |
-  | 429    | `RateLimitException`            |
-  | 5xx    | `InternalServerException`       |
-  | others | `UnexpectedStatusCodeException` |
+  | Status | Exception                                                                                                                                        |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | 400    | [`BadRequestException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/UnexpectedStatusCodeException.kt) |
 
 - [`ReveniumMeteringIoException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringIoException.kt): I/O networking errors.
 
