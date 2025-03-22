@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.revenium_metering.api/revenium-metering-java)](https://central.sonatype.com/artifact/com.revenium_metering.api/revenium-metering-java/0.0.1-alpha.0)
 [![javadoc](https://javadoc.io/badge2/com.revenium_metering.api/revenium-metering-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.revenium_metering.api/revenium-metering-java/0.0.1-alpha.0)
 
-The Revenium Metering Java SDK provides convenient access to the Revenium Metering REST API from applications written in Java.
+The Revenium Metering Java SDK provides convenient access to the [Revenium Metering REST API](https://revenium.io) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -21,9 +21,9 @@ implementation("com.revenium_metering.api:revenium-metering-java:0.0.1-alpha.0")
 
 ```xml
 <dependency>
-    <groupId>com.revenium_metering.api</groupId>
-    <artifactId>revenium-metering-java</artifactId>
-    <version>0.0.1-alpha.0</version>
+  <groupId>com.revenium_metering.api</groupId>
+  <artifactId>revenium-metering-java</artifactId>
+  <version>0.0.1-alpha.0</version>
 </dependency>
 ```
 
