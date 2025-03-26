@@ -10,11 +10,9 @@ import com.revenium_metering.api.core.ExcludeMissing
 import com.revenium_metering.api.core.JsonField
 import com.revenium_metering.api.core.JsonMissing
 import com.revenium_metering.api.core.JsonValue
-import com.revenium_metering.api.core.NoAutoDetect
 import com.revenium_metering.api.core.checkRequired
-import com.revenium_metering.api.core.immutableEmptyMap
-import com.revenium_metering.api.core.toImmutable
 import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
@@ -22,29 +20,28 @@ import java.util.Optional
  * Metering response resource details for the metering API, providing metadata about response
  * creation and validation.
  */
-@NoAutoDetect
 class MeteringResponseResource
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("label") @ExcludeMissing private val label: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("object")
-    @ExcludeMissing
-    private val object_: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("signature")
-    @ExcludeMissing
-    private val signature: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("_links")
-    @ExcludeMissing
-    private val _links: JsonField<_Links> = JsonMissing.of(),
-    @JsonProperty("created")
-    @ExcludeMissing
-    private val created: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("updated")
-    @ExcludeMissing
-    private val updated: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val label: JsonField<String>,
+    private val object_: JsonField<String>,
+    private val signature: JsonField<String>,
+    private val _links: JsonField<_Links>,
+    private val created: JsonField<String>,
+    private val updated: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("label") @ExcludeMissing label: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("object") @ExcludeMissing object_: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("signature") @ExcludeMissing signature: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("_links") @ExcludeMissing _links: JsonField<_Links> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("updated") @ExcludeMissing updated: JsonField<String> = JsonMissing.of(),
+    ) : this(id, label, object_, signature, _links, created, updated, mutableMapOf())
 
     /**
      * Unique identifier for the metering response
@@ -149,26 +146,15 @@ private constructor(
      */
     @JsonProperty("updated") @ExcludeMissing fun _updated(): JsonField<String> = updated
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MeteringResponseResource = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        label()
-        object_()
-        signature()
-        _links().ifPresent { it.validate() }
-        created()
-        updated()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -332,31 +318,41 @@ private constructor(
                 _links,
                 created,
                 updated,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): MeteringResponseResource = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        label()
+        object_()
+        signature()
+        _links().ifPresent { it.validate() }
+        created()
+        updated()
+        validated = true
+    }
+
     class _Links
-    @JsonCreator
-    private constructor(
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-    ) {
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): _Links = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -400,7 +396,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): _Links = _Links(additionalProperties.toImmutable())
+            fun build(): _Links = _Links(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): _Links = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
