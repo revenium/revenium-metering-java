@@ -11,14 +11,12 @@ import com.revenium_metering.api.core.ExcludeMissing
 import com.revenium_metering.api.core.JsonField
 import com.revenium_metering.api.core.JsonMissing
 import com.revenium_metering.api.core.JsonValue
-import com.revenium_metering.api.core.NoAutoDetect
 import com.revenium_metering.api.core.Params
 import com.revenium_metering.api.core.checkRequired
 import com.revenium_metering.api.core.http.Headers
 import com.revenium_metering.api.core.http.QueryParams
-import com.revenium_metering.api.core.immutableEmptyMap
-import com.revenium_metering.api.core.toImmutable
 import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
@@ -486,6 +484,618 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [AiCreateCompletionParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
+         * .completionStartTime()
+         * .costType()
+         * .inputTokenCost()
+         * .inputTokenCount()
+         * .model()
+         * .outputTokenCost()
+         * .outputTokenCount()
+         * .provider()
+         * .reasoningTokenCount()
+         * .requestDuration()
+         * .requestTime()
+         * .responseTime()
+         * .stopReason()
+         * .totalCost()
+         * .totalTokenCount()
+         * .transactionId()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [AiCreateCompletionParams]. */
+    class Builder internal constructor() {
+
+        private var body: Body.Builder = Body.builder()
+        private var additionalHeaders: Headers.Builder = Headers.builder()
+        private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+
+        @JvmSynthetic
+        internal fun from(aiCreateCompletionParams: AiCreateCompletionParams) = apply {
+            body = aiCreateCompletionParams.body.toBuilder()
+            additionalHeaders = aiCreateCompletionParams.additionalHeaders.toBuilder()
+            additionalQueryParams = aiCreateCompletionParams.additionalQueryParams.toBuilder()
+        }
+
+        /** The number of cached creation tokens in the completion */
+        fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /**
+         * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /** The number of cached read tokens in the completion */
+        fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
+        }
+
+        /**
+         * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
+        }
+
+        /** Time to first token for streaming requests */
+        fun completionStartTime(completionStartTime: String) = apply {
+            body.completionStartTime(completionStartTime)
+        }
+
+        /**
+         * Sets [Builder.completionStartTime] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.completionStartTime] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun completionStartTime(completionStartTime: JsonField<String>) = apply {
+            body.completionStartTime(completionStartTime)
+        }
+
+        /** Cost type for the completion */
+        fun costType(costType: CostType) = apply { body.costType(costType) }
+
+        /**
+         * Sets [Builder.costType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.costType] with a well-typed [CostType] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun costType(costType: JsonField<CostType>) = apply { body.costType(costType) }
+
+        /** The input token cost associated with the LLM completion */
+        fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
+
+        /**
+         * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
+            body.inputTokenCost(inputTokenCost)
+        }
+
+        /** The count of consumed input tokens */
+        fun inputTokenCount(inputTokenCount: Long) = apply { body.inputTokenCount(inputTokenCount) }
+
+        /**
+         * Sets [Builder.inputTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokenCount] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun inputTokenCount(inputTokenCount: JsonField<Long>) = apply {
+            body.inputTokenCount(inputTokenCount)
+        }
+
+        /** The model used for generating the LLM completion */
+        fun model(model: String) = apply { body.model(model) }
+
+        /**
+         * Sets [Builder.model] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.model] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun model(model: JsonField<String>) = apply { body.model(model) }
+
+        /** The output token cost associated with the LLM completion */
+        fun outputTokenCost(outputTokenCost: Double) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
+
+        /**
+         * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
+
+        /** The count of consumed output tokens */
+        fun outputTokenCount(outputTokenCount: Long) = apply {
+            body.outputTokenCount(outputTokenCount)
+        }
+
+        /**
+         * Sets [Builder.outputTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.outputTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun outputTokenCount(outputTokenCount: JsonField<Long>) = apply {
+            body.outputTokenCount(outputTokenCount)
+        }
+
+        /** Vendor providing the LLM completion service */
+        fun provider(provider: String) = apply { body.provider(provider) }
+
+        /**
+         * Sets [Builder.provider] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.provider] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun provider(provider: JsonField<String>) = apply { body.provider(provider) }
+
+        /** The number of reasoning tokens in the completion */
+        fun reasoningTokenCount(reasoningTokenCount: Long) = apply {
+            body.reasoningTokenCount(reasoningTokenCount)
+        }
+
+        /**
+         * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
+            body.reasoningTokenCount(reasoningTokenCount)
+        }
+
+        /** The duration of the request in milliseconds */
+        fun requestDuration(requestDuration: Long) = apply { body.requestDuration(requestDuration) }
+
+        /**
+         * Sets [Builder.requestDuration] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.requestDuration] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun requestDuration(requestDuration: JsonField<Long>) = apply {
+            body.requestDuration(requestDuration)
+        }
+
+        /** The timestamp when the request was made */
+        fun requestTime(requestTime: String) = apply { body.requestTime(requestTime) }
+
+        /**
+         * Sets [Builder.requestTime] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.requestTime] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun requestTime(requestTime: JsonField<String>) = apply { body.requestTime(requestTime) }
+
+        /**
+         * The timestamp when the response was generated. If streaming, this is the time to first
+         * token
+         */
+        fun responseTime(responseTime: String) = apply { body.responseTime(responseTime) }
+
+        /**
+         * Sets [Builder.responseTime] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.responseTime] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun responseTime(responseTime: JsonField<String>) = apply {
+            body.responseTime(responseTime)
+        }
+
+        /** The reason for stopping the completion */
+        fun stopReason(stopReason: StopReason) = apply { body.stopReason(stopReason) }
+
+        /**
+         * Sets [Builder.stopReason] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.stopReason] with a well-typed [StopReason] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun stopReason(stopReason: JsonField<StopReason>) = apply { body.stopReason(stopReason) }
+
+        /** The total cost associated with the LLM completion */
+        fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
+
+        /**
+         * Sets [Builder.totalCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
+
+        /** The total number of tokens */
+        fun totalTokenCount(totalTokenCount: Long) = apply { body.totalTokenCount(totalTokenCount) }
+
+        /**
+         * Sets [Builder.totalTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.totalTokenCount] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun totalTokenCount(totalTokenCount: JsonField<Long>) = apply {
+            body.totalTokenCount(totalTokenCount)
+        }
+
+        /** The unique identifier of the LLM completion transaction */
+        fun transactionId(transactionId: String) = apply { body.transactionId(transactionId) }
+
+        /**
+         * Sets [Builder.transactionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.transactionId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun transactionId(transactionId: JsonField<String>) = apply {
+            body.transactionId(transactionId)
+        }
+
+        /** The AI agent that is making the request */
+        fun agent(agent: String) = apply { body.agent(agent) }
+
+        /**
+         * Sets [Builder.agent] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.agent] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
+
+        /** The name (not the value!) of the API key used to access the AI provider */
+        fun aiProviderKeyName(aiProviderKeyName: String) = apply {
+            body.aiProviderKeyName(aiProviderKeyName)
+        }
+
+        /**
+         * Sets [Builder.aiProviderKeyName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.aiProviderKeyName] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun aiProviderKeyName(aiProviderKeyName: JsonField<String>) = apply {
+            body.aiProviderKeyName(aiProviderKeyName)
+        }
+
+        fun apiKey(apiKey: String) = apply { body.apiKey(apiKey) }
+
+        /**
+         * Sets [Builder.apiKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.apiKey] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun apiKey(apiKey: JsonField<String>) = apply { body.apiKey(apiKey) }
+
+        /**
+         * Populate the ID of the subscriber’s organization from your system to allow Revenium to
+         * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
+         * organizationId, Revenium’s reporting will show usage for the entire organization broken
+         * down by user.
+         */
+        fun organizationId(organizationId: String) = apply { body.organizationId(organizationId) }
+
+        /**
+         * Sets [Builder.organizationId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.organizationId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun organizationId(organizationId: JsonField<String>) = apply {
+            body.organizationId(organizationId)
+        }
+
+        /**
+         * Identifier of the product from your own system that you wish to use to correlate usage
+         * between Revenium & your application.
+         */
+        fun productId(productId: String) = apply { body.productId(productId) }
+
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
+
+        /** Identifier of the source to correlate usage between Revenium & your application. */
+        fun sourceId(sourceId: String) = apply { body.sourceId(sourceId) }
+
+        /**
+         * Sets [Builder.sourceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sourceId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun sourceId(sourceId: JsonField<String>) = apply { body.sourceId(sourceId) }
+
+        /**
+         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
+         * costs for individual users. Oftentimes a subscriberId is an email address.
+         */
+        fun subscriberIdentity(subscriberIdentity: String) = apply {
+            body.subscriberIdentity(subscriberIdentity)
+        }
+
+        /**
+         * Sets [Builder.subscriberIdentity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriberIdentity] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriberIdentity(subscriberIdentity: JsonField<String>) = apply {
+            body.subscriberIdentity(subscriberIdentity)
+        }
+
+        /**
+         * Unique identifier of the subscription from your own system that you wish to use to
+         * correlate usage between Revenium & your application.
+         */
+        fun subscriptionId(subscriptionId: String) = apply { body.subscriptionId(subscriptionId) }
+
+        /**
+         * Sets [Builder.subscriptionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriptionId(subscriptionId: JsonField<String>) = apply {
+            body.subscriptionId(subscriptionId)
+        }
+
+        /**
+         * Identifier of the associated task. If you wish to track the costs and performance for a
+         * task that occurs over several prompts, use a consistent task ID for all prompts included
+         * in that task.
+         */
+        fun taskId(taskId: String) = apply { body.taskId(taskId) }
+
+        /**
+         * Sets [Builder.taskId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taskId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun taskId(taskId: JsonField<String>) = apply { body.taskId(taskId) }
+
+        /**
+         * If you wish to track the costs or performance of a specific task and compare the values
+         * over time or compare the performance across AI models or vendors, use a consistent
+         * taskType for all related tasks.
+         */
+        fun taskType(taskType: String) = apply { body.taskType(taskType) }
+
+        /**
+         * Sets [Builder.taskType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taskType] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun taskType(taskType: JsonField<String>) = apply { body.taskType(taskType) }
+
+        /** Trace multiple LLM calls belonging to same overall request */
+        fun traceId(traceId: String) = apply { body.traceId(traceId) }
+
+        /**
+         * Sets [Builder.traceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.traceId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun traceId(traceId: JsonField<String>) = apply { body.traceId(traceId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
+
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
+
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
+
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
+
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
+
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
+
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
+
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
+
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
+
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
+
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
+
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
+
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
+
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
+
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
+
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
+
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
+
+        fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
+
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
+
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
+
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
+
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
+
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
+
+        /**
+         * Returns an immutable instance of [AiCreateCompletionParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
+         * .completionStartTime()
+         * .costType()
+         * .inputTokenCost()
+         * .inputTokenCount()
+         * .model()
+         * .outputTokenCost()
+         * .outputTokenCount()
+         * .provider()
+         * .reasoningTokenCount()
+         * .requestDuration()
+         * .requestTime()
+         * .responseTime()
+         * .stopReason()
+         * .totalCost()
+         * .totalTokenCount()
+         * .transactionId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): AiCreateCompletionParams =
+            AiCreateCompletionParams(
+                body.build(),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
+    }
+
     @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
@@ -493,100 +1103,151 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     /** The AI completion metadata */
-    @NoAutoDetect
     class Body
-    @JsonCreator
     private constructor(
-        @JsonProperty("cacheCreationTokenCount")
-        @ExcludeMissing
-        private val cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("cacheReadTokenCount")
-        @ExcludeMissing
-        private val cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("completionStartTime")
-        @ExcludeMissing
-        private val completionStartTime: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("costType")
-        @ExcludeMissing
-        private val costType: JsonField<CostType> = JsonMissing.of(),
-        @JsonProperty("inputTokenCost")
-        @ExcludeMissing
-        private val inputTokenCost: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("inputTokenCount")
-        @ExcludeMissing
-        private val inputTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("model")
-        @ExcludeMissing
-        private val model: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("outputTokenCost")
-        @ExcludeMissing
-        private val outputTokenCost: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("outputTokenCount")
-        @ExcludeMissing
-        private val outputTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("provider")
-        @ExcludeMissing
-        private val provider: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("reasoningTokenCount")
-        @ExcludeMissing
-        private val reasoningTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("requestDuration")
-        @ExcludeMissing
-        private val requestDuration: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("requestTime")
-        @ExcludeMissing
-        private val requestTime: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("responseTime")
-        @ExcludeMissing
-        private val responseTime: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("stopReason")
-        @ExcludeMissing
-        private val stopReason: JsonField<StopReason> = JsonMissing.of(),
-        @JsonProperty("totalCost")
-        @ExcludeMissing
-        private val totalCost: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("totalTokenCount")
-        @ExcludeMissing
-        private val totalTokenCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("transactionId")
-        @ExcludeMissing
-        private val transactionId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("agent")
-        @ExcludeMissing
-        private val agent: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("aiProviderKeyName")
-        @ExcludeMissing
-        private val aiProviderKeyName: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("apiKey")
-        @ExcludeMissing
-        private val apiKey: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("organizationId")
-        @ExcludeMissing
-        private val organizationId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("productId")
-        @ExcludeMissing
-        private val productId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("sourceId")
-        @ExcludeMissing
-        private val sourceId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("subscriberIdentity")
-        @ExcludeMissing
-        private val subscriberIdentity: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("subscriptionId")
-        @ExcludeMissing
-        private val subscriptionId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("taskId")
-        @ExcludeMissing
-        private val taskId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("taskType")
-        @ExcludeMissing
-        private val taskType: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("traceId")
-        @ExcludeMissing
-        private val traceId: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val cacheCreationTokenCount: JsonField<Long>,
+        private val cacheReadTokenCount: JsonField<Long>,
+        private val completionStartTime: JsonField<String>,
+        private val costType: JsonField<CostType>,
+        private val inputTokenCost: JsonField<Double>,
+        private val inputTokenCount: JsonField<Long>,
+        private val model: JsonField<String>,
+        private val outputTokenCost: JsonField<Double>,
+        private val outputTokenCount: JsonField<Long>,
+        private val provider: JsonField<String>,
+        private val reasoningTokenCount: JsonField<Long>,
+        private val requestDuration: JsonField<Long>,
+        private val requestTime: JsonField<String>,
+        private val responseTime: JsonField<String>,
+        private val stopReason: JsonField<StopReason>,
+        private val totalCost: JsonField<Double>,
+        private val totalTokenCount: JsonField<Long>,
+        private val transactionId: JsonField<String>,
+        private val agent: JsonField<String>,
+        private val aiProviderKeyName: JsonField<String>,
+        private val apiKey: JsonField<String>,
+        private val organizationId: JsonField<String>,
+        private val productId: JsonField<String>,
+        private val sourceId: JsonField<String>,
+        private val subscriberIdentity: JsonField<String>,
+        private val subscriptionId: JsonField<String>,
+        private val taskId: JsonField<String>,
+        private val taskType: JsonField<String>,
+        private val traceId: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("cacheCreationTokenCount")
+            @ExcludeMissing
+            cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("cacheReadTokenCount")
+            @ExcludeMissing
+            cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("completionStartTime")
+            @ExcludeMissing
+            completionStartTime: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("costType")
+            @ExcludeMissing
+            costType: JsonField<CostType> = JsonMissing.of(),
+            @JsonProperty("inputTokenCost")
+            @ExcludeMissing
+            inputTokenCost: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("inputTokenCount")
+            @ExcludeMissing
+            inputTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("model") @ExcludeMissing model: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("outputTokenCost")
+            @ExcludeMissing
+            outputTokenCost: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("outputTokenCount")
+            @ExcludeMissing
+            outputTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("provider")
+            @ExcludeMissing
+            provider: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("reasoningTokenCount")
+            @ExcludeMissing
+            reasoningTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("requestDuration")
+            @ExcludeMissing
+            requestDuration: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("requestTime")
+            @ExcludeMissing
+            requestTime: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("responseTime")
+            @ExcludeMissing
+            responseTime: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("stopReason")
+            @ExcludeMissing
+            stopReason: JsonField<StopReason> = JsonMissing.of(),
+            @JsonProperty("totalCost")
+            @ExcludeMissing
+            totalCost: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("totalTokenCount")
+            @ExcludeMissing
+            totalTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("transactionId")
+            @ExcludeMissing
+            transactionId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("agent") @ExcludeMissing agent: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aiProviderKeyName")
+            @ExcludeMissing
+            aiProviderKeyName: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("apiKey") @ExcludeMissing apiKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("organizationId")
+            @ExcludeMissing
+            organizationId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("productId")
+            @ExcludeMissing
+            productId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("sourceId")
+            @ExcludeMissing
+            sourceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("subscriberIdentity")
+            @ExcludeMissing
+            subscriberIdentity: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("subscriptionId")
+            @ExcludeMissing
+            subscriptionId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("taskId") @ExcludeMissing taskId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("taskType")
+            @ExcludeMissing
+            taskType: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("traceId") @ExcludeMissing traceId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            cacheCreationTokenCount,
+            cacheReadTokenCount,
+            completionStartTime,
+            costType,
+            inputTokenCost,
+            inputTokenCount,
+            model,
+            outputTokenCost,
+            outputTokenCount,
+            provider,
+            reasoningTokenCount,
+            requestDuration,
+            requestTime,
+            responseTime,
+            stopReason,
+            totalCost,
+            totalTokenCount,
+            transactionId,
+            agent,
+            aiProviderKeyName,
+            apiKey,
+            organizationId,
+            productId,
+            sourceId,
+            subscriberIdentity,
+            subscriptionId,
+            taskId,
+            taskType,
+            traceId,
+            mutableMapOf(),
+        )
 
         /**
          * The number of cached creation tokens in the completion
@@ -1107,48 +1768,15 @@ private constructor(
          */
         @JsonProperty("traceId") @ExcludeMissing fun _traceId(): JsonField<String> = traceId
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            cacheCreationTokenCount()
-            cacheReadTokenCount()
-            completionStartTime()
-            costType()
-            inputTokenCost()
-            inputTokenCount()
-            model()
-            outputTokenCost()
-            outputTokenCount()
-            provider()
-            reasoningTokenCount()
-            requestDuration()
-            requestTime()
-            responseTime()
-            stopReason()
-            totalCost()
-            totalTokenCount()
-            transactionId()
-            agent()
-            aiProviderKeyName()
-            apiKey()
-            organizationId()
-            productId()
-            sourceId()
-            subscriberIdentity()
-            subscriptionId()
-            taskId()
-            taskType()
-            traceId()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1751,8 +2379,47 @@ private constructor(
                     taskId,
                     taskType,
                     traceId,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            cacheCreationTokenCount()
+            cacheReadTokenCount()
+            completionStartTime()
+            costType()
+            inputTokenCost()
+            inputTokenCount()
+            model()
+            outputTokenCost()
+            outputTokenCount()
+            provider()
+            reasoningTokenCount()
+            requestDuration()
+            requestTime()
+            responseTime()
+            stopReason()
+            totalCost()
+            totalTokenCount()
+            transactionId()
+            agent()
+            aiProviderKeyName()
+            apiKey()
+            organizationId()
+            productId()
+            sourceId()
+            subscriberIdentity()
+            subscriptionId()
+            taskId()
+            taskType()
+            traceId()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1771,619 +2438,6 @@ private constructor(
 
         override fun toString() =
             "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCost=$inputTokenCost, inputTokenCount=$inputTokenCount, model=$model, outputTokenCost=$outputTokenCost, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalCost=$totalCost, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
-    }
-
-    fun toBuilder() = Builder().from(this)
-
-    companion object {
-
-        /**
-         * Returns a mutable builder for constructing an instance of [AiCreateCompletionParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .cacheCreationTokenCount()
-         * .cacheReadTokenCount()
-         * .completionStartTime()
-         * .costType()
-         * .inputTokenCost()
-         * .inputTokenCount()
-         * .model()
-         * .outputTokenCost()
-         * .outputTokenCount()
-         * .provider()
-         * .reasoningTokenCount()
-         * .requestDuration()
-         * .requestTime()
-         * .responseTime()
-         * .stopReason()
-         * .totalCost()
-         * .totalTokenCount()
-         * .transactionId()
-         * ```
-         */
-        @JvmStatic fun builder() = Builder()
-    }
-
-    /** A builder for [AiCreateCompletionParams]. */
-    @NoAutoDetect
-    class Builder internal constructor() {
-
-        private var body: Body.Builder = Body.builder()
-        private var additionalHeaders: Headers.Builder = Headers.builder()
-        private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-
-        @JvmSynthetic
-        internal fun from(aiCreateCompletionParams: AiCreateCompletionParams) = apply {
-            body = aiCreateCompletionParams.body.toBuilder()
-            additionalHeaders = aiCreateCompletionParams.additionalHeaders.toBuilder()
-            additionalQueryParams = aiCreateCompletionParams.additionalQueryParams.toBuilder()
-        }
-
-        /** The number of cached creation tokens in the completion */
-        fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
-            body.cacheCreationTokenCount(cacheCreationTokenCount)
-        }
-
-        /**
-         * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
-            body.cacheCreationTokenCount(cacheCreationTokenCount)
-        }
-
-        /** The number of cached read tokens in the completion */
-        fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
-            body.cacheReadTokenCount(cacheReadTokenCount)
-        }
-
-        /**
-         * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
-            body.cacheReadTokenCount(cacheReadTokenCount)
-        }
-
-        /** Time to first token for streaming requests */
-        fun completionStartTime(completionStartTime: String) = apply {
-            body.completionStartTime(completionStartTime)
-        }
-
-        /**
-         * Sets [Builder.completionStartTime] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.completionStartTime] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun completionStartTime(completionStartTime: JsonField<String>) = apply {
-            body.completionStartTime(completionStartTime)
-        }
-
-        /** Cost type for the completion */
-        fun costType(costType: CostType) = apply { body.costType(costType) }
-
-        /**
-         * Sets [Builder.costType] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.costType] with a well-typed [CostType] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun costType(costType: JsonField<CostType>) = apply { body.costType(costType) }
-
-        /** The input token cost associated with the LLM completion */
-        fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
-
-        /**
-         * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
-            body.inputTokenCost(inputTokenCost)
-        }
-
-        /** The count of consumed input tokens */
-        fun inputTokenCount(inputTokenCount: Long) = apply { body.inputTokenCount(inputTokenCount) }
-
-        /**
-         * Sets [Builder.inputTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.inputTokenCount] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun inputTokenCount(inputTokenCount: JsonField<Long>) = apply {
-            body.inputTokenCount(inputTokenCount)
-        }
-
-        /** The model used for generating the LLM completion */
-        fun model(model: String) = apply { body.model(model) }
-
-        /**
-         * Sets [Builder.model] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.model] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun model(model: JsonField<String>) = apply { body.model(model) }
-
-        /** The output token cost associated with the LLM completion */
-        fun outputTokenCost(outputTokenCost: Double) = apply {
-            body.outputTokenCost(outputTokenCost)
-        }
-
-        /**
-         * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
-            body.outputTokenCost(outputTokenCost)
-        }
-
-        /** The count of consumed output tokens */
-        fun outputTokenCount(outputTokenCount: Long) = apply {
-            body.outputTokenCount(outputTokenCount)
-        }
-
-        /**
-         * Sets [Builder.outputTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.outputTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun outputTokenCount(outputTokenCount: JsonField<Long>) = apply {
-            body.outputTokenCount(outputTokenCount)
-        }
-
-        /** Vendor providing the LLM completion service */
-        fun provider(provider: String) = apply { body.provider(provider) }
-
-        /**
-         * Sets [Builder.provider] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.provider] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun provider(provider: JsonField<String>) = apply { body.provider(provider) }
-
-        /** The number of reasoning tokens in the completion */
-        fun reasoningTokenCount(reasoningTokenCount: Long) = apply {
-            body.reasoningTokenCount(reasoningTokenCount)
-        }
-
-        /**
-         * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
-            body.reasoningTokenCount(reasoningTokenCount)
-        }
-
-        /** The duration of the request in milliseconds */
-        fun requestDuration(requestDuration: Long) = apply { body.requestDuration(requestDuration) }
-
-        /**
-         * Sets [Builder.requestDuration] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.requestDuration] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun requestDuration(requestDuration: JsonField<Long>) = apply {
-            body.requestDuration(requestDuration)
-        }
-
-        /** The timestamp when the request was made */
-        fun requestTime(requestTime: String) = apply { body.requestTime(requestTime) }
-
-        /**
-         * Sets [Builder.requestTime] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.requestTime] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun requestTime(requestTime: JsonField<String>) = apply { body.requestTime(requestTime) }
-
-        /**
-         * The timestamp when the response was generated. If streaming, this is the time to first
-         * token
-         */
-        fun responseTime(responseTime: String) = apply { body.responseTime(responseTime) }
-
-        /**
-         * Sets [Builder.responseTime] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.responseTime] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun responseTime(responseTime: JsonField<String>) = apply {
-            body.responseTime(responseTime)
-        }
-
-        /** The reason for stopping the completion */
-        fun stopReason(stopReason: StopReason) = apply { body.stopReason(stopReason) }
-
-        /**
-         * Sets [Builder.stopReason] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.stopReason] with a well-typed [StopReason] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun stopReason(stopReason: JsonField<StopReason>) = apply { body.stopReason(stopReason) }
-
-        /** The total cost associated with the LLM completion */
-        fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
-
-        /**
-         * Sets [Builder.totalCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
-
-        /** The total number of tokens */
-        fun totalTokenCount(totalTokenCount: Long) = apply { body.totalTokenCount(totalTokenCount) }
-
-        /**
-         * Sets [Builder.totalTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.totalTokenCount] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun totalTokenCount(totalTokenCount: JsonField<Long>) = apply {
-            body.totalTokenCount(totalTokenCount)
-        }
-
-        /** The unique identifier of the LLM completion transaction */
-        fun transactionId(transactionId: String) = apply { body.transactionId(transactionId) }
-
-        /**
-         * Sets [Builder.transactionId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.transactionId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun transactionId(transactionId: JsonField<String>) = apply {
-            body.transactionId(transactionId)
-        }
-
-        /** The AI agent that is making the request */
-        fun agent(agent: String) = apply { body.agent(agent) }
-
-        /**
-         * Sets [Builder.agent] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.agent] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
-
-        /** The name (not the value!) of the API key used to access the AI provider */
-        fun aiProviderKeyName(aiProviderKeyName: String) = apply {
-            body.aiProviderKeyName(aiProviderKeyName)
-        }
-
-        /**
-         * Sets [Builder.aiProviderKeyName] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.aiProviderKeyName] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun aiProviderKeyName(aiProviderKeyName: JsonField<String>) = apply {
-            body.aiProviderKeyName(aiProviderKeyName)
-        }
-
-        fun apiKey(apiKey: String) = apply { body.apiKey(apiKey) }
-
-        /**
-         * Sets [Builder.apiKey] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.apiKey] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun apiKey(apiKey: JsonField<String>) = apply { body.apiKey(apiKey) }
-
-        /**
-         * Populate the ID of the subscriber’s organization from your system to allow Revenium to
-         * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
-         * organizationId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         */
-        fun organizationId(organizationId: String) = apply { body.organizationId(organizationId) }
-
-        /**
-         * Sets [Builder.organizationId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.organizationId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun organizationId(organizationId: JsonField<String>) = apply {
-            body.organizationId(organizationId)
-        }
-
-        /**
-         * Identifier of the product from your own system that you wish to use to correlate usage
-         * between Revenium & your application.
-         */
-        fun productId(productId: String) = apply { body.productId(productId) }
-
-        /**
-         * Sets [Builder.productId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.productId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
-
-        /** Identifier of the source to correlate usage between Revenium & your application. */
-        fun sourceId(sourceId: String) = apply { body.sourceId(sourceId) }
-
-        /**
-         * Sets [Builder.sourceId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.sourceId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun sourceId(sourceId: JsonField<String>) = apply { body.sourceId(sourceId) }
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. Oftentimes a subscriberId is an email address.
-         */
-        fun subscriberIdentity(subscriberIdentity: String) = apply {
-            body.subscriberIdentity(subscriberIdentity)
-        }
-
-        /**
-         * Sets [Builder.subscriberIdentity] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberIdentity] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun subscriberIdentity(subscriberIdentity: JsonField<String>) = apply {
-            body.subscriberIdentity(subscriberIdentity)
-        }
-
-        /**
-         * Unique identifier of the subscription from your own system that you wish to use to
-         * correlate usage between Revenium & your application.
-         */
-        fun subscriptionId(subscriptionId: String) = apply { body.subscriptionId(subscriptionId) }
-
-        /**
-         * Sets [Builder.subscriptionId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriptionId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun subscriptionId(subscriptionId: JsonField<String>) = apply {
-            body.subscriptionId(subscriptionId)
-        }
-
-        /**
-         * Identifier of the associated task. If you wish to track the costs and performance for a
-         * task that occurs over several prompts, use a consistent task ID for all prompts included
-         * in that task.
-         */
-        fun taskId(taskId: String) = apply { body.taskId(taskId) }
-
-        /**
-         * Sets [Builder.taskId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.taskId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun taskId(taskId: JsonField<String>) = apply { body.taskId(taskId) }
-
-        /**
-         * If you wish to track the costs or performance of a specific task and compare the values
-         * over time or compare the performance across AI models or vendors, use a consistent
-         * taskType for all related tasks.
-         */
-        fun taskType(taskType: String) = apply { body.taskType(taskType) }
-
-        /**
-         * Sets [Builder.taskType] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.taskType] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun taskType(taskType: JsonField<String>) = apply { body.taskType(taskType) }
-
-        /** Trace multiple LLM calls belonging to same overall request */
-        fun traceId(traceId: String) = apply { body.traceId(traceId) }
-
-        /**
-         * Sets [Builder.traceId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.traceId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun traceId(traceId: JsonField<String>) = apply { body.traceId(traceId) }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
-
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
-
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
-
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
-
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
-
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
-
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
-
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
-
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
-
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
-
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
-
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
-
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
-
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
-
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
-
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
-
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
-
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
-
-        fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
-
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
-
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
-
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
-
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
-
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
-
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
-
-        /**
-         * Returns an immutable instance of [AiCreateCompletionParams].
-         *
-         * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .cacheCreationTokenCount()
-         * .cacheReadTokenCount()
-         * .completionStartTime()
-         * .costType()
-         * .inputTokenCost()
-         * .inputTokenCount()
-         * .model()
-         * .outputTokenCost()
-         * .outputTokenCount()
-         * .provider()
-         * .reasoningTokenCount()
-         * .requestDuration()
-         * .requestTime()
-         * .responseTime()
-         * .stopReason()
-         * .totalCost()
-         * .totalTokenCount()
-         * .transactionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
-         */
-        fun build(): AiCreateCompletionParams =
-            AiCreateCompletionParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
     }
 
     /** Cost type for the completion */
