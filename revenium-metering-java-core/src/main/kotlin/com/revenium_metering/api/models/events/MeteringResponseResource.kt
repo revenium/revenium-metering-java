@@ -11,6 +11,7 @@ import com.revenium_metering.api.core.JsonField
 import com.revenium_metering.api.core.JsonMissing
 import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.checkRequired
+import com.revenium_metering.api.core.toImmutable
 import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
 import java.util.Collections
 import java.util.Objects
@@ -340,19 +341,15 @@ private constructor(
     }
 
     class _Links
-    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-        @JsonCreator private constructor() : this(mutableMapOf())
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
 
@@ -396,7 +393,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): _Links = _Links(additionalProperties.toMutableMap())
+            fun build(): _Links = _Links(additionalProperties.toImmutable())
         }
 
         private var validated: Boolean = false
