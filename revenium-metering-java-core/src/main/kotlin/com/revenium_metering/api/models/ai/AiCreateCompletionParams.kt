@@ -61,20 +61,20 @@ private constructor(
     fun costType(): CostType = body.costType()
 
     /**
-     * The input token cost associated with the LLM completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun inputTokenCost(): Double = body.inputTokenCost()
-
-    /**
      * The count of consumed input tokens
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun inputTokenCount(): Long = body.inputTokenCount()
+
+    /**
+     * Indicates if the completion was streamed
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun isStreamed(): Boolean = body.isStreamed()
 
     /**
      * The model used for generating the LLM completion
@@ -85,12 +85,12 @@ private constructor(
     fun model(): String = body.model()
 
     /**
-     * The output token cost associated with the LLM completion
+     * The source of the AI model used for the completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun outputTokenCost(): Double = body.outputTokenCost()
+    fun modelSource(): String = body.modelSource()
 
     /**
      * The count of consumed output tokens
@@ -149,14 +149,6 @@ private constructor(
     fun stopReason(): StopReason = body.stopReason()
 
     /**
-     * The total cost associated with the LLM completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun totalCost(): Double = body.totalCost()
-
-    /**
      * The total number of tokens
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
@@ -195,6 +187,22 @@ private constructor(
     fun apiKey(): Optional<String> = body.apiKey()
 
     /**
+     * The input token cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun inputTokenCost(): Optional<Double> = body.inputTokenCost()
+
+    /**
+     * The type of operation performed
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun operationType(): Optional<OperationType> = body.operationType()
+
+    /**
      * Populate the ID of the subscriber’s organization from your system to allow Revenium to track
      * usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
      * organizationId, Revenium’s reporting will show usage for the entire organization broken down
@@ -206,6 +214,14 @@ private constructor(
     fun organizationId(): Optional<String> = body.organizationId()
 
     /**
+     * The output token cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun outputTokenCost(): Optional<Double> = body.outputTokenCost()
+
+    /**
      * Identifier of the product from your own system that you wish to use to correlate usage
      * between Revenium & your application.
      *
@@ -215,12 +231,12 @@ private constructor(
     fun productId(): Optional<String> = body.productId()
 
     /**
-     * Identifier of the source to correlate usage between Revenium & your application.
+     * The quality score of the response
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun sourceId(): Optional<String> = body.sourceId()
+    fun responseQualityScore(): Optional<Double> = body.responseQualityScore()
 
     /**
      * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
@@ -259,6 +275,22 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun taskType(): Optional<String> = body.taskType()
+
+    /**
+     * The time to first token in milliseconds
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun timeToFirstToken(): Optional<Long> = body.timeToFirstToken()
+
+    /**
+     * The total cost associated with the LLM completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun totalCost(): Optional<Double> = body.totalCost()
 
     /**
      * Trace multiple LLM calls belonging to same overall request
@@ -300,18 +332,18 @@ private constructor(
     fun _costType(): JsonField<CostType> = body._costType()
 
     /**
-     * Returns the raw JSON value of [inputTokenCost].
-     *
-     * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _inputTokenCost(): JsonField<Double> = body._inputTokenCost()
-
-    /**
      * Returns the raw JSON value of [inputTokenCount].
      *
      * Unlike [inputTokenCount], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _inputTokenCount(): JsonField<Long> = body._inputTokenCount()
+
+    /**
+     * Returns the raw JSON value of [isStreamed].
+     *
+     * Unlike [isStreamed], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _isStreamed(): JsonField<Boolean> = body._isStreamed()
 
     /**
      * Returns the raw JSON value of [model].
@@ -321,11 +353,11 @@ private constructor(
     fun _model(): JsonField<String> = body._model()
 
     /**
-     * Returns the raw JSON value of [outputTokenCost].
+     * Returns the raw JSON value of [modelSource].
      *
-     * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _outputTokenCost(): JsonField<Double> = body._outputTokenCost()
+    fun _modelSource(): JsonField<String> = body._modelSource()
 
     /**
      * Returns the raw JSON value of [outputTokenCount].
@@ -379,13 +411,6 @@ private constructor(
     fun _stopReason(): JsonField<StopReason> = body._stopReason()
 
     /**
-     * Returns the raw JSON value of [totalCost].
-     *
-     * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _totalCost(): JsonField<Double> = body._totalCost()
-
-    /**
      * Returns the raw JSON value of [totalTokenCount].
      *
      * Unlike [totalTokenCount], this method doesn't throw if the JSON field has an unexpected type.
@@ -422,11 +447,32 @@ private constructor(
     fun _apiKey(): JsonField<String> = body._apiKey()
 
     /**
+     * Returns the raw JSON value of [inputTokenCost].
+     *
+     * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _inputTokenCost(): JsonField<Double> = body._inputTokenCost()
+
+    /**
+     * Returns the raw JSON value of [operationType].
+     *
+     * Unlike [operationType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _operationType(): JsonField<OperationType> = body._operationType()
+
+    /**
      * Returns the raw JSON value of [organizationId].
      *
      * Unlike [organizationId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _organizationId(): JsonField<String> = body._organizationId()
+
+    /**
+     * Returns the raw JSON value of [outputTokenCost].
+     *
+     * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _outputTokenCost(): JsonField<Double> = body._outputTokenCost()
 
     /**
      * Returns the raw JSON value of [productId].
@@ -436,11 +482,12 @@ private constructor(
     fun _productId(): JsonField<String> = body._productId()
 
     /**
-     * Returns the raw JSON value of [sourceId].
+     * Returns the raw JSON value of [responseQualityScore].
      *
-     * Unlike [sourceId], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [responseQualityScore], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
-    fun _sourceId(): JsonField<String> = body._sourceId()
+    fun _responseQualityScore(): JsonField<Double> = body._responseQualityScore()
 
     /**
      * Returns the raw JSON value of [subscriberIdentity].
@@ -472,6 +519,21 @@ private constructor(
     fun _taskType(): JsonField<String> = body._taskType()
 
     /**
+     * Returns the raw JSON value of [timeToFirstToken].
+     *
+     * Unlike [timeToFirstToken], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _timeToFirstToken(): JsonField<Long> = body._timeToFirstToken()
+
+    /**
+     * Returns the raw JSON value of [totalCost].
+     *
+     * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _totalCost(): JsonField<Double> = body._totalCost()
+
+    /**
      * Returns the raw JSON value of [traceId].
      *
      * Unlike [traceId], this method doesn't throw if the JSON field has an unexpected type.
@@ -497,10 +559,10 @@ private constructor(
          * .cacheReadTokenCount()
          * .completionStartTime()
          * .costType()
-         * .inputTokenCost()
          * .inputTokenCount()
+         * .isStreamed()
          * .model()
-         * .outputTokenCost()
+         * .modelSource()
          * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
@@ -508,7 +570,6 @@ private constructor(
          * .requestTime()
          * .responseTime()
          * .stopReason()
-         * .totalCost()
          * .totalTokenCount()
          * .transactionId()
          * ```
@@ -590,20 +651,6 @@ private constructor(
          */
         fun costType(costType: JsonField<CostType>) = apply { body.costType(costType) }
 
-        /** The input token cost associated with the LLM completion */
-        fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
-
-        /**
-         * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
-            body.inputTokenCost(inputTokenCost)
-        }
-
         /** The count of consumed input tokens */
         fun inputTokenCount(inputTokenCount: Long) = apply { body.inputTokenCount(inputTokenCount) }
 
@@ -618,6 +665,18 @@ private constructor(
             body.inputTokenCount(inputTokenCount)
         }
 
+        /** Indicates if the completion was streamed */
+        fun isStreamed(isStreamed: Boolean) = apply { body.isStreamed(isStreamed) }
+
+        /**
+         * Sets [Builder.isStreamed] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isStreamed] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun isStreamed(isStreamed: JsonField<Boolean>) = apply { body.isStreamed(isStreamed) }
+
         /** The model used for generating the LLM completion */
         fun model(model: String) = apply { body.model(model) }
 
@@ -629,21 +688,17 @@ private constructor(
          */
         fun model(model: JsonField<String>) = apply { body.model(model) }
 
-        /** The output token cost associated with the LLM completion */
-        fun outputTokenCost(outputTokenCost: Double) = apply {
-            body.outputTokenCost(outputTokenCost)
-        }
+        /** The source of the AI model used for the completion */
+        fun modelSource(modelSource: String) = apply { body.modelSource(modelSource) }
 
         /**
-         * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+         * Sets [Builder.modelSource] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.modelSource] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
-            body.outputTokenCost(outputTokenCost)
-        }
+        fun modelSource(modelSource: JsonField<String>) = apply { body.modelSource(modelSource) }
 
         /** The count of consumed output tokens */
         fun outputTokenCount(outputTokenCount: Long) = apply {
@@ -743,18 +798,6 @@ private constructor(
          */
         fun stopReason(stopReason: JsonField<StopReason>) = apply { body.stopReason(stopReason) }
 
-        /** The total cost associated with the LLM completion */
-        fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
-
-        /**
-         * Sets [Builder.totalCost] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
-
         /** The total number of tokens */
         fun totalTokenCount(totalTokenCount: Long) = apply { body.totalTokenCount(totalTokenCount) }
 
@@ -820,6 +863,36 @@ private constructor(
          */
         fun apiKey(apiKey: JsonField<String>) = apply { body.apiKey(apiKey) }
 
+        /** The input token cost associated with the LLM completion */
+        fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
+
+        /**
+         * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
+            body.inputTokenCost(inputTokenCost)
+        }
+
+        /** The type of operation performed */
+        fun operationType(operationType: OperationType) = apply {
+            body.operationType(operationType)
+        }
+
+        /**
+         * Sets [Builder.operationType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.operationType] with a well-typed [OperationType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun operationType(operationType: JsonField<OperationType>) = apply {
+            body.operationType(operationType)
+        }
+
         /**
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
@@ -839,6 +912,22 @@ private constructor(
             body.organizationId(organizationId)
         }
 
+        /** The output token cost associated with the LLM completion */
+        fun outputTokenCost(outputTokenCost: Double) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
+
+        /**
+         * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
+            body.outputTokenCost(outputTokenCost)
+        }
+
         /**
          * Identifier of the product from your own system that you wish to use to correlate usage
          * between Revenium & your application.
@@ -854,16 +943,21 @@ private constructor(
          */
         fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
-        /** Identifier of the source to correlate usage between Revenium & your application. */
-        fun sourceId(sourceId: String) = apply { body.sourceId(sourceId) }
+        /** The quality score of the response */
+        fun responseQualityScore(responseQualityScore: Double) = apply {
+            body.responseQualityScore(responseQualityScore)
+        }
 
         /**
-         * Sets [Builder.sourceId] to an arbitrary JSON value.
+         * Sets [Builder.responseQualityScore] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.sourceId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.responseQualityScore] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun sourceId(sourceId: JsonField<String>) = apply { body.sourceId(sourceId) }
+        fun responseQualityScore(responseQualityScore: JsonField<Double>) = apply {
+            body.responseQualityScore(responseQualityScore)
+        }
 
         /**
          * Populate the ID of the subscriber from your system to allow Revenium to track usage &
@@ -930,6 +1024,34 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun taskType(taskType: JsonField<String>) = apply { body.taskType(taskType) }
+
+        /** The time to first token in milliseconds */
+        fun timeToFirstToken(timeToFirstToken: Long) = apply {
+            body.timeToFirstToken(timeToFirstToken)
+        }
+
+        /**
+         * Sets [Builder.timeToFirstToken] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timeToFirstToken] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun timeToFirstToken(timeToFirstToken: JsonField<Long>) = apply {
+            body.timeToFirstToken(timeToFirstToken)
+        }
+
+        /** The total cost associated with the LLM completion */
+        fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
+
+        /**
+         * Sets [Builder.totalCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
 
         /** Trace multiple LLM calls belonging to same overall request */
         fun traceId(traceId: String) = apply { body.traceId(traceId) }
@@ -1070,10 +1192,10 @@ private constructor(
          * .cacheReadTokenCount()
          * .completionStartTime()
          * .costType()
-         * .inputTokenCost()
          * .inputTokenCount()
+         * .isStreamed()
          * .model()
-         * .outputTokenCost()
+         * .modelSource()
          * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
@@ -1081,7 +1203,6 @@ private constructor(
          * .requestTime()
          * .responseTime()
          * .stopReason()
-         * .totalCost()
          * .totalTokenCount()
          * .transactionId()
          * ```
@@ -1109,10 +1230,10 @@ private constructor(
         private val cacheReadTokenCount: JsonField<Long>,
         private val completionStartTime: JsonField<String>,
         private val costType: JsonField<CostType>,
-        private val inputTokenCost: JsonField<Double>,
         private val inputTokenCount: JsonField<Long>,
+        private val isStreamed: JsonField<Boolean>,
         private val model: JsonField<String>,
-        private val outputTokenCost: JsonField<Double>,
+        private val modelSource: JsonField<String>,
         private val outputTokenCount: JsonField<Long>,
         private val provider: JsonField<String>,
         private val reasoningTokenCount: JsonField<Long>,
@@ -1120,19 +1241,23 @@ private constructor(
         private val requestTime: JsonField<String>,
         private val responseTime: JsonField<String>,
         private val stopReason: JsonField<StopReason>,
-        private val totalCost: JsonField<Double>,
         private val totalTokenCount: JsonField<Long>,
         private val transactionId: JsonField<String>,
         private val agent: JsonField<String>,
         private val aiProviderKeyName: JsonField<String>,
         private val apiKey: JsonField<String>,
+        private val inputTokenCost: JsonField<Double>,
+        private val operationType: JsonField<OperationType>,
         private val organizationId: JsonField<String>,
+        private val outputTokenCost: JsonField<Double>,
         private val productId: JsonField<String>,
-        private val sourceId: JsonField<String>,
+        private val responseQualityScore: JsonField<Double>,
         private val subscriberIdentity: JsonField<String>,
         private val subscriptionId: JsonField<String>,
         private val taskId: JsonField<String>,
         private val taskType: JsonField<String>,
+        private val timeToFirstToken: JsonField<Long>,
+        private val totalCost: JsonField<Double>,
         private val traceId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -1151,16 +1276,16 @@ private constructor(
             @JsonProperty("costType")
             @ExcludeMissing
             costType: JsonField<CostType> = JsonMissing.of(),
-            @JsonProperty("inputTokenCost")
-            @ExcludeMissing
-            inputTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("inputTokenCount")
             @ExcludeMissing
             inputTokenCount: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("model") @ExcludeMissing model: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("outputTokenCost")
+            @JsonProperty("isStreamed")
             @ExcludeMissing
-            outputTokenCost: JsonField<Double> = JsonMissing.of(),
+            isStreamed: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("model") @ExcludeMissing model: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("modelSource")
+            @ExcludeMissing
+            modelSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("outputTokenCount")
             @ExcludeMissing
             outputTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -1182,9 +1307,6 @@ private constructor(
             @JsonProperty("stopReason")
             @ExcludeMissing
             stopReason: JsonField<StopReason> = JsonMissing.of(),
-            @JsonProperty("totalCost")
-            @ExcludeMissing
-            totalCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("totalTokenCount")
             @ExcludeMissing
             totalTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -1196,15 +1318,24 @@ private constructor(
             @ExcludeMissing
             aiProviderKeyName: JsonField<String> = JsonMissing.of(),
             @JsonProperty("apiKey") @ExcludeMissing apiKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("inputTokenCost")
+            @ExcludeMissing
+            inputTokenCost: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("operationType")
+            @ExcludeMissing
+            operationType: JsonField<OperationType> = JsonMissing.of(),
             @JsonProperty("organizationId")
             @ExcludeMissing
             organizationId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("outputTokenCost")
+            @ExcludeMissing
+            outputTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("productId")
             @ExcludeMissing
             productId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("sourceId")
+            @JsonProperty("responseQualityScore")
             @ExcludeMissing
-            sourceId: JsonField<String> = JsonMissing.of(),
+            responseQualityScore: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("subscriberIdentity")
             @ExcludeMissing
             subscriberIdentity: JsonField<String> = JsonMissing.of(),
@@ -1215,16 +1346,22 @@ private constructor(
             @JsonProperty("taskType")
             @ExcludeMissing
             taskType: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("timeToFirstToken")
+            @ExcludeMissing
+            timeToFirstToken: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("totalCost")
+            @ExcludeMissing
+            totalCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("traceId") @ExcludeMissing traceId: JsonField<String> = JsonMissing.of(),
         ) : this(
             cacheCreationTokenCount,
             cacheReadTokenCount,
             completionStartTime,
             costType,
-            inputTokenCost,
             inputTokenCount,
+            isStreamed,
             model,
-            outputTokenCost,
+            modelSource,
             outputTokenCount,
             provider,
             reasoningTokenCount,
@@ -1232,19 +1369,23 @@ private constructor(
             requestTime,
             responseTime,
             stopReason,
-            totalCost,
             totalTokenCount,
             transactionId,
             agent,
             aiProviderKeyName,
             apiKey,
+            inputTokenCost,
+            operationType,
             organizationId,
+            outputTokenCost,
             productId,
-            sourceId,
+            responseQualityScore,
             subscriberIdentity,
             subscriptionId,
             taskId,
             taskType,
+            timeToFirstToken,
+            totalCost,
             traceId,
             mutableMapOf(),
         )
@@ -1287,15 +1428,6 @@ private constructor(
         fun costType(): CostType = costType.getRequired("costType")
 
         /**
-         * The input token cost associated with the LLM completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun inputTokenCost(): Double = inputTokenCost.getRequired("inputTokenCost")
-
-        /**
          * The count of consumed input tokens
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -1303,6 +1435,15 @@ private constructor(
          *   value).
          */
         fun inputTokenCount(): Long = inputTokenCount.getRequired("inputTokenCount")
+
+        /**
+         * Indicates if the completion was streamed
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun isStreamed(): Boolean = isStreamed.getRequired("isStreamed")
 
         /**
          * The model used for generating the LLM completion
@@ -1314,13 +1455,13 @@ private constructor(
         fun model(): String = model.getRequired("model")
 
         /**
-         * The output token cost associated with the LLM completion
+         * The source of the AI model used for the completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun outputTokenCost(): Double = outputTokenCost.getRequired("outputTokenCost")
+        fun modelSource(): String = modelSource.getRequired("modelSource")
 
         /**
          * The count of consumed output tokens
@@ -1387,15 +1528,6 @@ private constructor(
         fun stopReason(): StopReason = stopReason.getRequired("stopReason")
 
         /**
-         * The total cost associated with the LLM completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun totalCost(): Double = totalCost.getRequired("totalCost")
-
-        /**
          * The total number of tokens
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -1437,6 +1569,24 @@ private constructor(
         fun apiKey(): Optional<String> = Optional.ofNullable(apiKey.getNullable("apiKey"))
 
         /**
+         * The input token cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun inputTokenCost(): Optional<Double> =
+            Optional.ofNullable(inputTokenCost.getNullable("inputTokenCost"))
+
+        /**
+         * The type of operation performed
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun operationType(): Optional<OperationType> =
+            Optional.ofNullable(operationType.getNullable("operationType"))
+
+        /**
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
          * organizationId, Revenium’s reporting will show usage for the entire organization broken
@@ -1449,6 +1599,15 @@ private constructor(
             Optional.ofNullable(organizationId.getNullable("organizationId"))
 
         /**
+         * The output token cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun outputTokenCost(): Optional<Double> =
+            Optional.ofNullable(outputTokenCost.getNullable("outputTokenCost"))
+
+        /**
          * Identifier of the product from your own system that you wish to use to correlate usage
          * between Revenium & your application.
          *
@@ -1458,12 +1617,13 @@ private constructor(
         fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("productId"))
 
         /**
-         * Identifier of the source to correlate usage between Revenium & your application.
+         * The quality score of the response
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun sourceId(): Optional<String> = Optional.ofNullable(sourceId.getNullable("sourceId"))
+        fun responseQualityScore(): Optional<Double> =
+            Optional.ofNullable(responseQualityScore.getNullable("responseQualityScore"))
 
         /**
          * Populate the ID of the subscriber from your system to allow Revenium to track usage &
@@ -1504,6 +1664,23 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun taskType(): Optional<String> = Optional.ofNullable(taskType.getNullable("taskType"))
+
+        /**
+         * The time to first token in milliseconds
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun timeToFirstToken(): Optional<Long> =
+            Optional.ofNullable(timeToFirstToken.getNullable("timeToFirstToken"))
+
+        /**
+         * The total cost associated with the LLM completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun totalCost(): Optional<Double> = Optional.ofNullable(totalCost.getNullable("totalCost"))
 
         /**
          * Trace multiple LLM calls belonging to same overall request
@@ -1551,16 +1728,6 @@ private constructor(
         @JsonProperty("costType") @ExcludeMissing fun _costType(): JsonField<CostType> = costType
 
         /**
-         * Returns the raw JSON value of [inputTokenCost].
-         *
-         * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("inputTokenCost")
-        @ExcludeMissing
-        fun _inputTokenCost(): JsonField<Double> = inputTokenCost
-
-        /**
          * Returns the raw JSON value of [inputTokenCount].
          *
          * Unlike [inputTokenCount], this method doesn't throw if the JSON field has an unexpected
@@ -1571,6 +1738,15 @@ private constructor(
         fun _inputTokenCount(): JsonField<Long> = inputTokenCount
 
         /**
+         * Returns the raw JSON value of [isStreamed].
+         *
+         * Unlike [isStreamed], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("isStreamed")
+        @ExcludeMissing
+        fun _isStreamed(): JsonField<Boolean> = isStreamed
+
+        /**
          * Returns the raw JSON value of [model].
          *
          * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
@@ -1578,14 +1754,13 @@ private constructor(
         @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
 
         /**
-         * Returns the raw JSON value of [outputTokenCost].
+         * Returns the raw JSON value of [modelSource].
          *
-         * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("outputTokenCost")
+        @JsonProperty("modelSource")
         @ExcludeMissing
-        fun _outputTokenCost(): JsonField<Double> = outputTokenCost
+        fun _modelSource(): JsonField<String> = modelSource
 
         /**
          * Returns the raw JSON value of [outputTokenCount].
@@ -1653,13 +1828,6 @@ private constructor(
         fun _stopReason(): JsonField<StopReason> = stopReason
 
         /**
-         * Returns the raw JSON value of [totalCost].
-         *
-         * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("totalCost") @ExcludeMissing fun _totalCost(): JsonField<Double> = totalCost
-
-        /**
          * Returns the raw JSON value of [totalTokenCount].
          *
          * Unlike [totalTokenCount], this method doesn't throw if the JSON field has an unexpected
@@ -1704,6 +1872,26 @@ private constructor(
         @JsonProperty("apiKey") @ExcludeMissing fun _apiKey(): JsonField<String> = apiKey
 
         /**
+         * Returns the raw JSON value of [inputTokenCost].
+         *
+         * Unlike [inputTokenCost], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("inputTokenCost")
+        @ExcludeMissing
+        fun _inputTokenCost(): JsonField<Double> = inputTokenCost
+
+        /**
+         * Returns the raw JSON value of [operationType].
+         *
+         * Unlike [operationType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("operationType")
+        @ExcludeMissing
+        fun _operationType(): JsonField<OperationType> = operationType
+
+        /**
          * Returns the raw JSON value of [organizationId].
          *
          * Unlike [organizationId], this method doesn't throw if the JSON field has an unexpected
@@ -1714,6 +1902,16 @@ private constructor(
         fun _organizationId(): JsonField<String> = organizationId
 
         /**
+         * Returns the raw JSON value of [outputTokenCost].
+         *
+         * Unlike [outputTokenCost], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("outputTokenCost")
+        @ExcludeMissing
+        fun _outputTokenCost(): JsonField<Double> = outputTokenCost
+
+        /**
          * Returns the raw JSON value of [productId].
          *
          * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -1721,11 +1919,14 @@ private constructor(
         @JsonProperty("productId") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
-         * Returns the raw JSON value of [sourceId].
+         * Returns the raw JSON value of [responseQualityScore].
          *
-         * Unlike [sourceId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [responseQualityScore], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
-        @JsonProperty("sourceId") @ExcludeMissing fun _sourceId(): JsonField<String> = sourceId
+        @JsonProperty("responseQualityScore")
+        @ExcludeMissing
+        fun _responseQualityScore(): JsonField<Double> = responseQualityScore
 
         /**
          * Returns the raw JSON value of [subscriberIdentity].
@@ -1762,6 +1963,23 @@ private constructor(
         @JsonProperty("taskType") @ExcludeMissing fun _taskType(): JsonField<String> = taskType
 
         /**
+         * Returns the raw JSON value of [timeToFirstToken].
+         *
+         * Unlike [timeToFirstToken], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("timeToFirstToken")
+        @ExcludeMissing
+        fun _timeToFirstToken(): JsonField<Long> = timeToFirstToken
+
+        /**
+         * Returns the raw JSON value of [totalCost].
+         *
+         * Unlike [totalCost], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("totalCost") @ExcludeMissing fun _totalCost(): JsonField<Double> = totalCost
+
+        /**
          * Returns the raw JSON value of [traceId].
          *
          * Unlike [traceId], this method doesn't throw if the JSON field has an unexpected type.
@@ -1791,10 +2009,10 @@ private constructor(
              * .cacheReadTokenCount()
              * .completionStartTime()
              * .costType()
-             * .inputTokenCost()
              * .inputTokenCount()
+             * .isStreamed()
              * .model()
-             * .outputTokenCost()
+             * .modelSource()
              * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
@@ -1802,7 +2020,6 @@ private constructor(
              * .requestTime()
              * .responseTime()
              * .stopReason()
-             * .totalCost()
              * .totalTokenCount()
              * .transactionId()
              * ```
@@ -1817,10 +2034,10 @@ private constructor(
             private var cacheReadTokenCount: JsonField<Long>? = null
             private var completionStartTime: JsonField<String>? = null
             private var costType: JsonField<CostType>? = null
-            private var inputTokenCost: JsonField<Double>? = null
             private var inputTokenCount: JsonField<Long>? = null
+            private var isStreamed: JsonField<Boolean>? = null
             private var model: JsonField<String>? = null
-            private var outputTokenCost: JsonField<Double>? = null
+            private var modelSource: JsonField<String>? = null
             private var outputTokenCount: JsonField<Long>? = null
             private var provider: JsonField<String>? = null
             private var reasoningTokenCount: JsonField<Long>? = null
@@ -1828,19 +2045,23 @@ private constructor(
             private var requestTime: JsonField<String>? = null
             private var responseTime: JsonField<String>? = null
             private var stopReason: JsonField<StopReason>? = null
-            private var totalCost: JsonField<Double>? = null
             private var totalTokenCount: JsonField<Long>? = null
             private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
             private var aiProviderKeyName: JsonField<String> = JsonMissing.of()
             private var apiKey: JsonField<String> = JsonMissing.of()
+            private var inputTokenCost: JsonField<Double> = JsonMissing.of()
+            private var operationType: JsonField<OperationType> = JsonMissing.of()
             private var organizationId: JsonField<String> = JsonMissing.of()
+            private var outputTokenCost: JsonField<Double> = JsonMissing.of()
             private var productId: JsonField<String> = JsonMissing.of()
-            private var sourceId: JsonField<String> = JsonMissing.of()
+            private var responseQualityScore: JsonField<Double> = JsonMissing.of()
             private var subscriberIdentity: JsonField<String> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var taskId: JsonField<String> = JsonMissing.of()
             private var taskType: JsonField<String> = JsonMissing.of()
+            private var timeToFirstToken: JsonField<Long> = JsonMissing.of()
+            private var totalCost: JsonField<Double> = JsonMissing.of()
             private var traceId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1850,10 +2071,10 @@ private constructor(
                 cacheReadTokenCount = body.cacheReadTokenCount
                 completionStartTime = body.completionStartTime
                 costType = body.costType
-                inputTokenCost = body.inputTokenCost
                 inputTokenCount = body.inputTokenCount
+                isStreamed = body.isStreamed
                 model = body.model
-                outputTokenCost = body.outputTokenCost
+                modelSource = body.modelSource
                 outputTokenCount = body.outputTokenCount
                 provider = body.provider
                 reasoningTokenCount = body.reasoningTokenCount
@@ -1861,19 +2082,23 @@ private constructor(
                 requestTime = body.requestTime
                 responseTime = body.responseTime
                 stopReason = body.stopReason
-                totalCost = body.totalCost
                 totalTokenCount = body.totalTokenCount
                 transactionId = body.transactionId
                 agent = body.agent
                 aiProviderKeyName = body.aiProviderKeyName
                 apiKey = body.apiKey
+                inputTokenCost = body.inputTokenCost
+                operationType = body.operationType
                 organizationId = body.organizationId
+                outputTokenCost = body.outputTokenCost
                 productId = body.productId
-                sourceId = body.sourceId
+                responseQualityScore = body.responseQualityScore
                 subscriberIdentity = body.subscriberIdentity
                 subscriptionId = body.subscriptionId
                 taskId = body.taskId
                 taskType = body.taskType
+                timeToFirstToken = body.timeToFirstToken
+                totalCost = body.totalCost
                 traceId = body.traceId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -1935,21 +2160,6 @@ private constructor(
              */
             fun costType(costType: JsonField<CostType>) = apply { this.costType = costType }
 
-            /** The input token cost associated with the LLM completion */
-            fun inputTokenCost(inputTokenCost: Double) =
-                inputTokenCost(JsonField.of(inputTokenCost))
-
-            /**
-             * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
-                this.inputTokenCost = inputTokenCost
-            }
-
             /** The count of consumed input tokens */
             fun inputTokenCount(inputTokenCount: Long) =
                 inputTokenCount(JsonField.of(inputTokenCount))
@@ -1965,6 +2175,18 @@ private constructor(
                 this.inputTokenCount = inputTokenCount
             }
 
+            /** Indicates if the completion was streamed */
+            fun isStreamed(isStreamed: Boolean) = isStreamed(JsonField.of(isStreamed))
+
+            /**
+             * Sets [Builder.isStreamed] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isStreamed] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun isStreamed(isStreamed: JsonField<Boolean>) = apply { this.isStreamed = isStreamed }
+
             /** The model used for generating the LLM completion */
             fun model(model: String) = model(JsonField.of(model))
 
@@ -1977,19 +2199,18 @@ private constructor(
              */
             fun model(model: JsonField<String>) = apply { this.model = model }
 
-            /** The output token cost associated with the LLM completion */
-            fun outputTokenCost(outputTokenCost: Double) =
-                outputTokenCost(JsonField.of(outputTokenCost))
+            /** The source of the AI model used for the completion */
+            fun modelSource(modelSource: String) = modelSource(JsonField.of(modelSource))
 
             /**
-             * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+             * Sets [Builder.modelSource] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+             * You should usually call [Builder.modelSource] with a well-typed [String] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
-                this.outputTokenCost = outputTokenCost
+            fun modelSource(modelSource: JsonField<String>) = apply {
+                this.modelSource = modelSource
             }
 
             /** The count of consumed output tokens */
@@ -2094,18 +2315,6 @@ private constructor(
                 this.stopReason = stopReason
             }
 
-            /** The total cost associated with the LLM completion */
-            fun totalCost(totalCost: Double) = totalCost(JsonField.of(totalCost))
-
-            /**
-             * Sets [Builder.totalCost] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun totalCost(totalCost: JsonField<Double>) = apply { this.totalCost = totalCost }
-
             /** The total number of tokens */
             fun totalTokenCount(totalTokenCount: Long) =
                 totalTokenCount(JsonField.of(totalTokenCount))
@@ -2173,6 +2382,36 @@ private constructor(
              */
             fun apiKey(apiKey: JsonField<String>) = apply { this.apiKey = apiKey }
 
+            /** The input token cost associated with the LLM completion */
+            fun inputTokenCost(inputTokenCost: Double) =
+                inputTokenCost(JsonField.of(inputTokenCost))
+
+            /**
+             * Sets [Builder.inputTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.inputTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun inputTokenCost(inputTokenCost: JsonField<Double>) = apply {
+                this.inputTokenCost = inputTokenCost
+            }
+
+            /** The type of operation performed */
+            fun operationType(operationType: OperationType) =
+                operationType(JsonField.of(operationType))
+
+            /**
+             * Sets [Builder.operationType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.operationType] with a well-typed [OperationType]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun operationType(operationType: JsonField<OperationType>) = apply {
+                this.operationType = operationType
+            }
+
             /**
              * Populate the ID of the subscriber’s organization from your system to allow Revenium
              * to track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the
@@ -2193,6 +2432,21 @@ private constructor(
                 this.organizationId = organizationId
             }
 
+            /** The output token cost associated with the LLM completion */
+            fun outputTokenCost(outputTokenCost: Double) =
+                outputTokenCost(JsonField.of(outputTokenCost))
+
+            /**
+             * Sets [Builder.outputTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.outputTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun outputTokenCost(outputTokenCost: JsonField<Double>) = apply {
+                this.outputTokenCost = outputTokenCost
+            }
+
             /**
              * Identifier of the product from your own system that you wish to use to correlate
              * usage between Revenium & your application.
@@ -2208,17 +2462,20 @@ private constructor(
              */
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            /** Identifier of the source to correlate usage between Revenium & your application. */
-            fun sourceId(sourceId: String) = sourceId(JsonField.of(sourceId))
+            /** The quality score of the response */
+            fun responseQualityScore(responseQualityScore: Double) =
+                responseQualityScore(JsonField.of(responseQualityScore))
 
             /**
-             * Sets [Builder.sourceId] to an arbitrary JSON value.
+             * Sets [Builder.responseQualityScore] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.sourceId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.responseQualityScore] with a well-typed [Double]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun sourceId(sourceId: JsonField<String>) = apply { this.sourceId = sourceId }
+            fun responseQualityScore(responseQualityScore: JsonField<Double>) = apply {
+                this.responseQualityScore = responseQualityScore
+            }
 
             /**
              * Populate the ID of the subscriber from your system to allow Revenium to track usage &
@@ -2288,6 +2545,33 @@ private constructor(
              */
             fun taskType(taskType: JsonField<String>) = apply { this.taskType = taskType }
 
+            /** The time to first token in milliseconds */
+            fun timeToFirstToken(timeToFirstToken: Long) =
+                timeToFirstToken(JsonField.of(timeToFirstToken))
+
+            /**
+             * Sets [Builder.timeToFirstToken] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeToFirstToken] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun timeToFirstToken(timeToFirstToken: JsonField<Long>) = apply {
+                this.timeToFirstToken = timeToFirstToken
+            }
+
+            /** The total cost associated with the LLM completion */
+            fun totalCost(totalCost: Double) = totalCost(JsonField.of(totalCost))
+
+            /**
+             * Sets [Builder.totalCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.totalCost] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun totalCost(totalCost: JsonField<Double>) = apply { this.totalCost = totalCost }
+
             /** Trace multiple LLM calls belonging to same overall request */
             fun traceId(traceId: String) = traceId(JsonField.of(traceId))
 
@@ -2330,10 +2614,10 @@ private constructor(
              * .cacheReadTokenCount()
              * .completionStartTime()
              * .costType()
-             * .inputTokenCost()
              * .inputTokenCount()
+             * .isStreamed()
              * .model()
-             * .outputTokenCost()
+             * .modelSource()
              * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
@@ -2341,7 +2625,6 @@ private constructor(
              * .requestTime()
              * .responseTime()
              * .stopReason()
-             * .totalCost()
              * .totalTokenCount()
              * .transactionId()
              * ```
@@ -2354,10 +2637,10 @@ private constructor(
                     checkRequired("cacheReadTokenCount", cacheReadTokenCount),
                     checkRequired("completionStartTime", completionStartTime),
                     checkRequired("costType", costType),
-                    checkRequired("inputTokenCost", inputTokenCost),
                     checkRequired("inputTokenCount", inputTokenCount),
+                    checkRequired("isStreamed", isStreamed),
                     checkRequired("model", model),
-                    checkRequired("outputTokenCost", outputTokenCost),
+                    checkRequired("modelSource", modelSource),
                     checkRequired("outputTokenCount", outputTokenCount),
                     checkRequired("provider", provider),
                     checkRequired("reasoningTokenCount", reasoningTokenCount),
@@ -2365,19 +2648,23 @@ private constructor(
                     checkRequired("requestTime", requestTime),
                     checkRequired("responseTime", responseTime),
                     checkRequired("stopReason", stopReason),
-                    checkRequired("totalCost", totalCost),
                     checkRequired("totalTokenCount", totalTokenCount),
                     checkRequired("transactionId", transactionId),
                     agent,
                     aiProviderKeyName,
                     apiKey,
+                    inputTokenCost,
+                    operationType,
                     organizationId,
+                    outputTokenCost,
                     productId,
-                    sourceId,
+                    responseQualityScore,
                     subscriberIdentity,
                     subscriptionId,
                     taskId,
                     taskType,
+                    timeToFirstToken,
+                    totalCost,
                     traceId,
                     additionalProperties.toMutableMap(),
                 )
@@ -2394,10 +2681,10 @@ private constructor(
             cacheReadTokenCount()
             completionStartTime()
             costType()
-            inputTokenCost()
             inputTokenCount()
+            isStreamed()
             model()
-            outputTokenCost()
+            modelSource()
             outputTokenCount()
             provider()
             reasoningTokenCount()
@@ -2405,19 +2692,23 @@ private constructor(
             requestTime()
             responseTime()
             stopReason()
-            totalCost()
             totalTokenCount()
             transactionId()
             agent()
             aiProviderKeyName()
             apiKey()
+            inputTokenCost()
+            operationType()
             organizationId()
+            outputTokenCost()
             productId()
-            sourceId()
+            responseQualityScore()
             subscriberIdentity()
             subscriptionId()
             taskId()
             taskType()
+            timeToFirstToken()
+            totalCost()
             traceId()
             validated = true
         }
@@ -2427,17 +2718,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCost == other.inputTokenCost && inputTokenCount == other.inputTokenCount && model == other.model && outputTokenCost == other.outputTokenCost && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalCost == other.totalCost && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && organizationId == other.organizationId && productId == other.productId && sourceId == other.sourceId && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && modelSource == other.modelSource && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && inputTokenCost == other.inputTokenCost && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCost, inputTokenCount, model, outputTokenCost, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalCost, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, organizationId, productId, sourceId, subscriberIdentity, subscriptionId, taskId, taskType, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, modelSource, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, inputTokenCost, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberIdentity, subscriptionId, taskId, taskType, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCost=$inputTokenCost, inputTokenCount=$inputTokenCount, model=$model, outputTokenCost=$outputTokenCost, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalCost=$totalCost, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, organizationId=$organizationId, productId=$productId, sourceId=$sourceId, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, modelSource=$modelSource, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, inputTokenCost=$inputTokenCost, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
@@ -2661,6 +2952,141 @@ private constructor(
             }
 
             return /* spotless:off */ other is StopReason && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /** The type of operation performed */
+    class OperationType @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val CHAT = of("CHAT")
+
+            @JvmField val GENERATE = of("GENERATE")
+
+            @JvmField val EMBED = of("EMBED")
+
+            @JvmField val CLASSIFY = of("CLASSIFY")
+
+            @JvmField val SUMMARIZE = of("SUMMARIZE")
+
+            @JvmField val TRANSLATE = of("TRANSLATE")
+
+            @JvmField val OTHER = of("OTHER")
+
+            @JvmStatic fun of(value: String) = OperationType(JsonField.of(value))
+        }
+
+        /** An enum containing [OperationType]'s known values. */
+        enum class Known {
+            CHAT,
+            GENERATE,
+            EMBED,
+            CLASSIFY,
+            SUMMARIZE,
+            TRANSLATE,
+            OTHER,
+        }
+
+        /**
+         * An enum containing [OperationType]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [OperationType] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            CHAT,
+            GENERATE,
+            EMBED,
+            CLASSIFY,
+            SUMMARIZE,
+            TRANSLATE,
+            OTHER,
+            /**
+             * An enum member indicating that [OperationType] was instantiated with an unknown
+             * value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                CHAT -> Value.CHAT
+                GENERATE -> Value.GENERATE
+                EMBED -> Value.EMBED
+                CLASSIFY -> Value.CLASSIFY
+                SUMMARIZE -> Value.SUMMARIZE
+                TRANSLATE -> Value.TRANSLATE
+                OTHER -> Value.OTHER
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws ReveniumMeteringInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                CHAT -> Known.CHAT
+                GENERATE -> Known.GENERATE
+                EMBED -> Known.EMBED
+                CLASSIFY -> Known.CLASSIFY
+                SUMMARIZE -> Known.SUMMARIZE
+                TRANSLATE -> Known.TRANSLATE
+                OTHER -> Known.OTHER
+                else -> throw ReveniumMeteringInvalidDataException("Unknown OperationType: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws ReveniumMeteringInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                ReveniumMeteringInvalidDataException("Value is not a String")
+            }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is OperationType && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
