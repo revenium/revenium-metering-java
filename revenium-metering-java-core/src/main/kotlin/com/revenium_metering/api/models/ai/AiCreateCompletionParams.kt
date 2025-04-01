@@ -85,6 +85,14 @@ private constructor(
     fun model(): String = body.model()
 
     /**
+     * The source of the AI model used for the completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun modelSource(): String = body.modelSource()
+
+    /**
      * The count of consumed output tokens
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
@@ -187,22 +195,6 @@ private constructor(
     fun inputTokenCost(): Optional<Double> = body.inputTokenCost()
 
     /**
-     * The latency, in milliseconds, of latency by an AI or API gateway
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun mediationLatency(): Optional<Long> = body.mediationLatency()
-
-    /**
-     * The source of the AI model used for the completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun modelSource(): Optional<String> = body.modelSource()
-
-    /**
      * The type of operation performed
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -265,16 +257,6 @@ private constructor(
     fun subscriptionId(): Optional<String> = body.subscriptionId()
 
     /**
-     * A unique identifier that represents the statistical signature of the language model that
-     * generated a specific chat completion. This fingerprint can be used for model attribution,
-     * debugging, and monitoring model behavior across request
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun systemFingerprint(): Optional<String> = body.systemFingerprint()
-
-    /**
      * Identifier of the associated task. If you wish to track the costs and performance for a task
      * that occurs over several prompts, use a consistent task ID for all prompts included in that
      * task.
@@ -293,14 +275,6 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun taskType(): Optional<String> = body.taskType()
-
-    /**
-     * The temperature setting used for the LLM completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun temperature(): Optional<Double> = body.temperature()
 
     /**
      * The time to first token in milliseconds
@@ -377,6 +351,13 @@ private constructor(
      * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _model(): JsonField<String> = body._model()
+
+    /**
+     * Returns the raw JSON value of [modelSource].
+     *
+     * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _modelSource(): JsonField<String> = body._modelSource()
 
     /**
      * Returns the raw JSON value of [outputTokenCount].
@@ -473,21 +454,6 @@ private constructor(
     fun _inputTokenCost(): JsonField<Double> = body._inputTokenCost()
 
     /**
-     * Returns the raw JSON value of [mediationLatency].
-     *
-     * Unlike [mediationLatency], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _mediationLatency(): JsonField<Long> = body._mediationLatency()
-
-    /**
-     * Returns the raw JSON value of [modelSource].
-     *
-     * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _modelSource(): JsonField<String> = body._modelSource()
-
-    /**
      * Returns the raw JSON value of [operationType].
      *
      * Unlike [operationType], this method doesn't throw if the JSON field has an unexpected type.
@@ -539,14 +505,6 @@ private constructor(
     fun _subscriptionId(): JsonField<String> = body._subscriptionId()
 
     /**
-     * Returns the raw JSON value of [systemFingerprint].
-     *
-     * Unlike [systemFingerprint], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _systemFingerprint(): JsonField<String> = body._systemFingerprint()
-
-    /**
      * Returns the raw JSON value of [taskId].
      *
      * Unlike [taskId], this method doesn't throw if the JSON field has an unexpected type.
@@ -559,13 +517,6 @@ private constructor(
      * Unlike [taskType], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _taskType(): JsonField<String> = body._taskType()
-
-    /**
-     * Returns the raw JSON value of [temperature].
-     *
-     * Unlike [temperature], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _temperature(): JsonField<Double> = body._temperature()
 
     /**
      * Returns the raw JSON value of [timeToFirstToken].
@@ -611,6 +562,7 @@ private constructor(
          * .inputTokenCount()
          * .isStreamed()
          * .model()
+         * .modelSource()
          * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
@@ -735,6 +687,18 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun model(model: JsonField<String>) = apply { body.model(model) }
+
+        /** The source of the AI model used for the completion */
+        fun modelSource(modelSource: String) = apply { body.modelSource(modelSource) }
+
+        /**
+         * Sets [Builder.modelSource] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.modelSource] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun modelSource(modelSource: JsonField<String>) = apply { body.modelSource(modelSource) }
 
         /** The count of consumed output tokens */
         fun outputTokenCount(outputTokenCount: Long) = apply {
@@ -913,34 +877,6 @@ private constructor(
             body.inputTokenCost(inputTokenCost)
         }
 
-        /** The latency, in milliseconds, of latency by an AI or API gateway */
-        fun mediationLatency(mediationLatency: Long) = apply {
-            body.mediationLatency(mediationLatency)
-        }
-
-        /**
-         * Sets [Builder.mediationLatency] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.mediationLatency] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun mediationLatency(mediationLatency: JsonField<Long>) = apply {
-            body.mediationLatency(mediationLatency)
-        }
-
-        /** The source of the AI model used for the completion */
-        fun modelSource(modelSource: String) = apply { body.modelSource(modelSource) }
-
-        /**
-         * Sets [Builder.modelSource] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.modelSource] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun modelSource(modelSource: JsonField<String>) = apply { body.modelSource(modelSource) }
-
         /** The type of operation performed */
         fun operationType(operationType: OperationType) = apply {
             body.operationType(operationType)
@@ -1060,26 +996,6 @@ private constructor(
         }
 
         /**
-         * A unique identifier that represents the statistical signature of the language model that
-         * generated a specific chat completion. This fingerprint can be used for model attribution,
-         * debugging, and monitoring model behavior across request
-         */
-        fun systemFingerprint(systemFingerprint: String) = apply {
-            body.systemFingerprint(systemFingerprint)
-        }
-
-        /**
-         * Sets [Builder.systemFingerprint] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.systemFingerprint] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun systemFingerprint(systemFingerprint: JsonField<String>) = apply {
-            body.systemFingerprint(systemFingerprint)
-        }
-
-        /**
          * Identifier of the associated task. If you wish to track the costs and performance for a
          * task that occurs over several prompts, use a consistent task ID for all prompts included
          * in that task.
@@ -1108,18 +1024,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun taskType(taskType: JsonField<String>) = apply { body.taskType(taskType) }
-
-        /** The temperature setting used for the LLM completion */
-        fun temperature(temperature: Double) = apply { body.temperature(temperature) }
-
-        /**
-         * Sets [Builder.temperature] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.temperature] with a well-typed [Double] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun temperature(temperature: JsonField<Double>) = apply { body.temperature(temperature) }
 
         /** The time to first token in milliseconds */
         fun timeToFirstToken(timeToFirstToken: Long) = apply {
@@ -1291,6 +1195,7 @@ private constructor(
          * .inputTokenCount()
          * .isStreamed()
          * .model()
+         * .modelSource()
          * .outputTokenCount()
          * .provider()
          * .reasoningTokenCount()
@@ -1328,6 +1233,7 @@ private constructor(
         private val inputTokenCount: JsonField<Long>,
         private val isStreamed: JsonField<Boolean>,
         private val model: JsonField<String>,
+        private val modelSource: JsonField<String>,
         private val outputTokenCount: JsonField<Long>,
         private val provider: JsonField<String>,
         private val reasoningTokenCount: JsonField<Long>,
@@ -1341,8 +1247,6 @@ private constructor(
         private val aiProviderKeyName: JsonField<String>,
         private val apiKey: JsonField<String>,
         private val inputTokenCost: JsonField<Double>,
-        private val mediationLatency: JsonField<Long>,
-        private val modelSource: JsonField<String>,
         private val operationType: JsonField<OperationType>,
         private val organizationId: JsonField<String>,
         private val outputTokenCost: JsonField<Double>,
@@ -1350,10 +1254,8 @@ private constructor(
         private val responseQualityScore: JsonField<Double>,
         private val subscriberIdentity: JsonField<String>,
         private val subscriptionId: JsonField<String>,
-        private val systemFingerprint: JsonField<String>,
         private val taskId: JsonField<String>,
         private val taskType: JsonField<String>,
-        private val temperature: JsonField<Double>,
         private val timeToFirstToken: JsonField<Long>,
         private val totalCost: JsonField<Double>,
         private val traceId: JsonField<String>,
@@ -1381,6 +1283,9 @@ private constructor(
             @ExcludeMissing
             isStreamed: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("model") @ExcludeMissing model: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("modelSource")
+            @ExcludeMissing
+            modelSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("outputTokenCount")
             @ExcludeMissing
             outputTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -1416,12 +1321,6 @@ private constructor(
             @JsonProperty("inputTokenCost")
             @ExcludeMissing
             inputTokenCost: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("mediationLatency")
-            @ExcludeMissing
-            mediationLatency: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("modelSource")
-            @ExcludeMissing
-            modelSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("operationType")
             @ExcludeMissing
             operationType: JsonField<OperationType> = JsonMissing.of(),
@@ -1443,16 +1342,10 @@ private constructor(
             @JsonProperty("subscriptionId")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("systemFingerprint")
-            @ExcludeMissing
-            systemFingerprint: JsonField<String> = JsonMissing.of(),
             @JsonProperty("taskId") @ExcludeMissing taskId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("taskType")
             @ExcludeMissing
             taskType: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("temperature")
-            @ExcludeMissing
-            temperature: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("timeToFirstToken")
             @ExcludeMissing
             timeToFirstToken: JsonField<Long> = JsonMissing.of(),
@@ -1468,6 +1361,7 @@ private constructor(
             inputTokenCount,
             isStreamed,
             model,
+            modelSource,
             outputTokenCount,
             provider,
             reasoningTokenCount,
@@ -1481,8 +1375,6 @@ private constructor(
             aiProviderKeyName,
             apiKey,
             inputTokenCost,
-            mediationLatency,
-            modelSource,
             operationType,
             organizationId,
             outputTokenCost,
@@ -1490,10 +1382,8 @@ private constructor(
             responseQualityScore,
             subscriberIdentity,
             subscriptionId,
-            systemFingerprint,
             taskId,
             taskType,
-            temperature,
             timeToFirstToken,
             totalCost,
             traceId,
@@ -1563,6 +1453,15 @@ private constructor(
          *   value).
          */
         fun model(): String = model.getRequired("model")
+
+        /**
+         * The source of the AI model used for the completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun modelSource(): String = modelSource.getRequired("modelSource")
 
         /**
          * The count of consumed output tokens
@@ -1679,24 +1578,6 @@ private constructor(
             Optional.ofNullable(inputTokenCost.getNullable("inputTokenCost"))
 
         /**
-         * The latency, in milliseconds, of latency by an AI or API gateway
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun mediationLatency(): Optional<Long> =
-            Optional.ofNullable(mediationLatency.getNullable("mediationLatency"))
-
-        /**
-         * The source of the AI model used for the completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun modelSource(): Optional<String> =
-            Optional.ofNullable(modelSource.getNullable("modelSource"))
-
-        /**
          * The type of operation performed
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
@@ -1765,17 +1646,6 @@ private constructor(
             Optional.ofNullable(subscriptionId.getNullable("subscriptionId"))
 
         /**
-         * A unique identifier that represents the statistical signature of the language model that
-         * generated a specific chat completion. This fingerprint can be used for model attribution,
-         * debugging, and monitoring model behavior across request
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun systemFingerprint(): Optional<String> =
-            Optional.ofNullable(systemFingerprint.getNullable("systemFingerprint"))
-
-        /**
          * Identifier of the associated task. If you wish to track the costs and performance for a
          * task that occurs over several prompts, use a consistent task ID for all prompts included
          * in that task.
@@ -1794,15 +1664,6 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun taskType(): Optional<String> = Optional.ofNullable(taskType.getNullable("taskType"))
-
-        /**
-         * The temperature setting used for the LLM completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun temperature(): Optional<Double> =
-            Optional.ofNullable(temperature.getNullable("temperature"))
 
         /**
          * The time to first token in milliseconds
@@ -1891,6 +1752,15 @@ private constructor(
          * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
+
+        /**
+         * Returns the raw JSON value of [modelSource].
+         *
+         * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("modelSource")
+        @ExcludeMissing
+        fun _modelSource(): JsonField<String> = modelSource
 
         /**
          * Returns the raw JSON value of [outputTokenCount].
@@ -2012,25 +1882,6 @@ private constructor(
         fun _inputTokenCost(): JsonField<Double> = inputTokenCost
 
         /**
-         * Returns the raw JSON value of [mediationLatency].
-         *
-         * Unlike [mediationLatency], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("mediationLatency")
-        @ExcludeMissing
-        fun _mediationLatency(): JsonField<Long> = mediationLatency
-
-        /**
-         * Returns the raw JSON value of [modelSource].
-         *
-         * Unlike [modelSource], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("modelSource")
-        @ExcludeMissing
-        fun _modelSource(): JsonField<String> = modelSource
-
-        /**
          * Returns the raw JSON value of [operationType].
          *
          * Unlike [operationType], this method doesn't throw if the JSON field has an unexpected
@@ -2098,16 +1949,6 @@ private constructor(
         fun _subscriptionId(): JsonField<String> = subscriptionId
 
         /**
-         * Returns the raw JSON value of [systemFingerprint].
-         *
-         * Unlike [systemFingerprint], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("systemFingerprint")
-        @ExcludeMissing
-        fun _systemFingerprint(): JsonField<String> = systemFingerprint
-
-        /**
          * Returns the raw JSON value of [taskId].
          *
          * Unlike [taskId], this method doesn't throw if the JSON field has an unexpected type.
@@ -2120,15 +1961,6 @@ private constructor(
          * Unlike [taskType], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("taskType") @ExcludeMissing fun _taskType(): JsonField<String> = taskType
-
-        /**
-         * Returns the raw JSON value of [temperature].
-         *
-         * Unlike [temperature], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("temperature")
-        @ExcludeMissing
-        fun _temperature(): JsonField<Double> = temperature
 
         /**
          * Returns the raw JSON value of [timeToFirstToken].
@@ -2180,6 +2012,7 @@ private constructor(
              * .inputTokenCount()
              * .isStreamed()
              * .model()
+             * .modelSource()
              * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
@@ -2204,6 +2037,7 @@ private constructor(
             private var inputTokenCount: JsonField<Long>? = null
             private var isStreamed: JsonField<Boolean>? = null
             private var model: JsonField<String>? = null
+            private var modelSource: JsonField<String>? = null
             private var outputTokenCount: JsonField<Long>? = null
             private var provider: JsonField<String>? = null
             private var reasoningTokenCount: JsonField<Long>? = null
@@ -2217,8 +2051,6 @@ private constructor(
             private var aiProviderKeyName: JsonField<String> = JsonMissing.of()
             private var apiKey: JsonField<String> = JsonMissing.of()
             private var inputTokenCost: JsonField<Double> = JsonMissing.of()
-            private var mediationLatency: JsonField<Long> = JsonMissing.of()
-            private var modelSource: JsonField<String> = JsonMissing.of()
             private var operationType: JsonField<OperationType> = JsonMissing.of()
             private var organizationId: JsonField<String> = JsonMissing.of()
             private var outputTokenCost: JsonField<Double> = JsonMissing.of()
@@ -2226,10 +2058,8 @@ private constructor(
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
             private var subscriberIdentity: JsonField<String> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
-            private var systemFingerprint: JsonField<String> = JsonMissing.of()
             private var taskId: JsonField<String> = JsonMissing.of()
             private var taskType: JsonField<String> = JsonMissing.of()
-            private var temperature: JsonField<Double> = JsonMissing.of()
             private var timeToFirstToken: JsonField<Long> = JsonMissing.of()
             private var totalCost: JsonField<Double> = JsonMissing.of()
             private var traceId: JsonField<String> = JsonMissing.of()
@@ -2244,6 +2074,7 @@ private constructor(
                 inputTokenCount = body.inputTokenCount
                 isStreamed = body.isStreamed
                 model = body.model
+                modelSource = body.modelSource
                 outputTokenCount = body.outputTokenCount
                 provider = body.provider
                 reasoningTokenCount = body.reasoningTokenCount
@@ -2257,8 +2088,6 @@ private constructor(
                 aiProviderKeyName = body.aiProviderKeyName
                 apiKey = body.apiKey
                 inputTokenCost = body.inputTokenCost
-                mediationLatency = body.mediationLatency
-                modelSource = body.modelSource
                 operationType = body.operationType
                 organizationId = body.organizationId
                 outputTokenCost = body.outputTokenCost
@@ -2266,10 +2095,8 @@ private constructor(
                 responseQualityScore = body.responseQualityScore
                 subscriberIdentity = body.subscriberIdentity
                 subscriptionId = body.subscriptionId
-                systemFingerprint = body.systemFingerprint
                 taskId = body.taskId
                 taskType = body.taskType
-                temperature = body.temperature
                 timeToFirstToken = body.timeToFirstToken
                 totalCost = body.totalCost
                 traceId = body.traceId
@@ -2371,6 +2198,20 @@ private constructor(
              * supported value.
              */
             fun model(model: JsonField<String>) = apply { this.model = model }
+
+            /** The source of the AI model used for the completion */
+            fun modelSource(modelSource: String) = modelSource(JsonField.of(modelSource))
+
+            /**
+             * Sets [Builder.modelSource] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.modelSource] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun modelSource(modelSource: JsonField<String>) = apply {
+                this.modelSource = modelSource
+            }
 
             /** The count of consumed output tokens */
             fun outputTokenCount(outputTokenCount: Long) =
@@ -2556,35 +2397,6 @@ private constructor(
                 this.inputTokenCost = inputTokenCost
             }
 
-            /** The latency, in milliseconds, of latency by an AI or API gateway */
-            fun mediationLatency(mediationLatency: Long) =
-                mediationLatency(JsonField.of(mediationLatency))
-
-            /**
-             * Sets [Builder.mediationLatency] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.mediationLatency] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun mediationLatency(mediationLatency: JsonField<Long>) = apply {
-                this.mediationLatency = mediationLatency
-            }
-
-            /** The source of the AI model used for the completion */
-            fun modelSource(modelSource: String) = modelSource(JsonField.of(modelSource))
-
-            /**
-             * Sets [Builder.modelSource] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.modelSource] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun modelSource(modelSource: JsonField<String>) = apply {
-                this.modelSource = modelSource
-            }
-
             /** The type of operation performed */
             fun operationType(operationType: OperationType) =
                 operationType(JsonField.of(operationType))
@@ -2702,25 +2514,6 @@ private constructor(
             }
 
             /**
-             * A unique identifier that represents the statistical signature of the language model
-             * that generated a specific chat completion. This fingerprint can be used for model
-             * attribution, debugging, and monitoring model behavior across request
-             */
-            fun systemFingerprint(systemFingerprint: String) =
-                systemFingerprint(JsonField.of(systemFingerprint))
-
-            /**
-             * Sets [Builder.systemFingerprint] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.systemFingerprint] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun systemFingerprint(systemFingerprint: JsonField<String>) = apply {
-                this.systemFingerprint = systemFingerprint
-            }
-
-            /**
              * Identifier of the associated task. If you wish to track the costs and performance for
              * a task that occurs over several prompts, use a consistent task ID for all prompts
              * included in that task.
@@ -2751,20 +2544,6 @@ private constructor(
              * supported value.
              */
             fun taskType(taskType: JsonField<String>) = apply { this.taskType = taskType }
-
-            /** The temperature setting used for the LLM completion */
-            fun temperature(temperature: Double) = temperature(JsonField.of(temperature))
-
-            /**
-             * Sets [Builder.temperature] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.temperature] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun temperature(temperature: JsonField<Double>) = apply {
-                this.temperature = temperature
-            }
 
             /** The time to first token in milliseconds */
             fun timeToFirstToken(timeToFirstToken: Long) =
@@ -2838,6 +2617,7 @@ private constructor(
              * .inputTokenCount()
              * .isStreamed()
              * .model()
+             * .modelSource()
              * .outputTokenCount()
              * .provider()
              * .reasoningTokenCount()
@@ -2860,6 +2640,7 @@ private constructor(
                     checkRequired("inputTokenCount", inputTokenCount),
                     checkRequired("isStreamed", isStreamed),
                     checkRequired("model", model),
+                    checkRequired("modelSource", modelSource),
                     checkRequired("outputTokenCount", outputTokenCount),
                     checkRequired("provider", provider),
                     checkRequired("reasoningTokenCount", reasoningTokenCount),
@@ -2873,8 +2654,6 @@ private constructor(
                     aiProviderKeyName,
                     apiKey,
                     inputTokenCost,
-                    mediationLatency,
-                    modelSource,
                     operationType,
                     organizationId,
                     outputTokenCost,
@@ -2882,10 +2661,8 @@ private constructor(
                     responseQualityScore,
                     subscriberIdentity,
                     subscriptionId,
-                    systemFingerprint,
                     taskId,
                     taskType,
-                    temperature,
                     timeToFirstToken,
                     totalCost,
                     traceId,
@@ -2907,6 +2684,7 @@ private constructor(
             inputTokenCount()
             isStreamed()
             model()
+            modelSource()
             outputTokenCount()
             provider()
             reasoningTokenCount()
@@ -2920,8 +2698,6 @@ private constructor(
             aiProviderKeyName()
             apiKey()
             inputTokenCost()
-            mediationLatency()
-            modelSource()
             operationType()
             organizationId()
             outputTokenCost()
@@ -2929,10 +2705,8 @@ private constructor(
             responseQualityScore()
             subscriberIdentity()
             subscriptionId()
-            systemFingerprint()
             taskId()
             taskType()
-            temperature()
             timeToFirstToken()
             totalCost()
             traceId()
@@ -2944,17 +2718,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && modelSource == other.modelSource && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && inputTokenCost == other.inputTokenCost && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && taskId == other.taskId && taskType == other.taskType && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberIdentity, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, modelSource, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, inputTokenCost, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberIdentity, subscriptionId, taskId, taskType, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, modelSource=$modelSource, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, inputTokenCost=$inputTokenCost, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, taskId=$taskId, taskType=$taskType, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
