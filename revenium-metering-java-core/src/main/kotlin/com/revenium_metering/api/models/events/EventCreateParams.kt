@@ -19,6 +19,7 @@ import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Meter an event */
 class EventCreateParams
@@ -658,12 +659,34 @@ private constructor(
             }
 
             payload()
-            sourceType()
+            sourceType().validate()
             transactionId()
             sourceId()
             subscriberCredentialId()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (payload.asKnown().isPresent) 1 else 0) +
+                (sourceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (transactionId.asKnown().isPresent) 1 else 0) +
+                (if (sourceId.asKnown().isPresent) 1 else 0) +
+                (if (subscriberCredentialId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -874,6 +897,33 @@ private constructor(
             _value().asString().orElseThrow {
                 ReveniumMeteringInvalidDataException("Value is not a String")
             }
+
+        private var validated: Boolean = false
+
+        fun validate(): SourceType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
