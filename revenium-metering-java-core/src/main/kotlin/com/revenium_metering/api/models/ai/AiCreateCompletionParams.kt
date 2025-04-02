@@ -19,6 +19,7 @@ import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Record the details of an LLM completion */
 class AiCreateCompletionParams
@@ -2903,7 +2904,7 @@ private constructor(
             cacheCreationTokenCount()
             cacheReadTokenCount()
             completionStartTime()
-            costType()
+            costType().validate()
             inputTokenCount()
             isStreamed()
             model()
@@ -2913,7 +2914,7 @@ private constructor(
             requestDuration()
             requestTime()
             responseTime()
-            stopReason()
+            stopReason().validate()
             totalTokenCount()
             transactionId()
             agent()
@@ -2922,7 +2923,7 @@ private constructor(
             inputTokenCost()
             mediationLatency()
             modelSource()
-            operationType()
+            operationType().ifPresent { it.validate() }
             organizationId()
             outputTokenCost()
             productId()
@@ -2938,6 +2939,59 @@ private constructor(
             traceId()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (cacheCreationTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (cacheReadTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (completionStartTime.asKnown().isPresent) 1 else 0) +
+                (costType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (inputTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (isStreamed.asKnown().isPresent) 1 else 0) +
+                (if (model.asKnown().isPresent) 1 else 0) +
+                (if (outputTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (provider.asKnown().isPresent) 1 else 0) +
+                (if (reasoningTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (requestDuration.asKnown().isPresent) 1 else 0) +
+                (if (requestTime.asKnown().isPresent) 1 else 0) +
+                (if (responseTime.asKnown().isPresent) 1 else 0) +
+                (stopReason.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (totalTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (transactionId.asKnown().isPresent) 1 else 0) +
+                (if (agent.asKnown().isPresent) 1 else 0) +
+                (if (aiProviderKeyName.asKnown().isPresent) 1 else 0) +
+                (if (apiKey.asKnown().isPresent) 1 else 0) +
+                (if (inputTokenCost.asKnown().isPresent) 1 else 0) +
+                (if (mediationLatency.asKnown().isPresent) 1 else 0) +
+                (if (modelSource.asKnown().isPresent) 1 else 0) +
+                (operationType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (organizationId.asKnown().isPresent) 1 else 0) +
+                (if (outputTokenCost.asKnown().isPresent) 1 else 0) +
+                (if (productId.asKnown().isPresent) 1 else 0) +
+                (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
+                (if (subscriberIdentity.asKnown().isPresent) 1 else 0) +
+                (if (subscriptionId.asKnown().isPresent) 1 else 0) +
+                (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
+                (if (taskId.asKnown().isPresent) 1 else 0) +
+                (if (taskType.asKnown().isPresent) 1 else 0) +
+                (if (temperature.asKnown().isPresent) 1 else 0) +
+                (if (timeToFirstToken.asKnown().isPresent) 1 else 0) +
+                (if (totalCost.asKnown().isPresent) 1 else 0) +
+                (if (traceId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -3038,6 +3092,33 @@ private constructor(
             _value().asString().orElseThrow {
                 ReveniumMeteringInvalidDataException("Value is not a String")
             }
+
+        private var validated: Boolean = false
+
+        fun validate(): CostType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -3171,6 +3252,33 @@ private constructor(
             _value().asString().orElseThrow {
                 ReveniumMeteringInvalidDataException("Value is not a String")
             }
+
+        private var validated: Boolean = false
+
+        fun validate(): StopReason = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -3306,6 +3414,33 @@ private constructor(
             _value().asString().orElseThrow {
                 ReveniumMeteringInvalidDataException("Value is not a String")
             }
+
+        private var validated: Boolean = false
+
+        fun validate(): OperationType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
