@@ -225,6 +225,20 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [transactionId]
+         * - [contentType]
+         * - [credential]
+         * - [method]
+         * - [remoteHost]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * A client-supplied unique identifier used to correlate request and response pairs across
          * /meter/v2/apis/requests and /meter/v2/apis/response endpoints. Must be consistent between
          * related API calls to ensure proper usage tracking and analytics.
@@ -503,7 +517,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

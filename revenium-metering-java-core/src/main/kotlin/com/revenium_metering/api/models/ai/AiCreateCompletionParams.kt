@@ -640,6 +640,20 @@ private constructor(
             additionalQueryParams = aiCreateCompletionParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [cacheCreationTokenCount]
+         * - [cacheReadTokenCount]
+         * - [completionStartTime]
+         * - [costType]
+         * - [inputTokenCount]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The number of cached creation tokens in the completion */
         fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
             body.cacheCreationTokenCount(cacheCreationTokenCount)
@@ -1313,7 +1327,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

@@ -147,6 +147,20 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [payload]
+         * - [sourceType]
+         * - [transactionId]
+         * - [sourceId]
+         * - [subscriberCredentialId]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The rating payload as a JSON object. For example, if you are sending key value pairs of
          * 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the payload
          * would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not already
@@ -355,7 +369,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
