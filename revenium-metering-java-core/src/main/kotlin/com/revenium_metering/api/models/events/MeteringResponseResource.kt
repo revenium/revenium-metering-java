@@ -81,7 +81,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun _links(): Optional<_Links> = Optional.ofNullable(_links.getNullable("_links"))
+    fun _links(): Optional<_Links> = _links.getOptional("_links")
 
     /**
      * ISO8601 formatted timestamp when the response was created
@@ -89,7 +89,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun created(): Optional<String> = Optional.ofNullable(created.getNullable("created"))
+    fun created(): Optional<String> = created.getOptional("created")
 
     /**
      * ISO8601 formatted timestamp when the response was last updated
@@ -97,7 +97,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun updated(): Optional<String> = Optional.ofNullable(updated.getNullable("updated"))
+    fun updated(): Optional<String> = updated.getOptional("updated")
 
     /**
      * Returns the raw JSON value of [id].

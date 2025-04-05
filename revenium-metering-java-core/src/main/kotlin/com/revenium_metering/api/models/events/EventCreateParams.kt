@@ -447,7 +447,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun sourceId(): Optional<String> = Optional.ofNullable(sourceId.getNullable("sourceId"))
+        fun sourceId(): Optional<String> = sourceId.getOptional("sourceId")
 
         /**
          * The unique identifier of the credential
@@ -456,7 +456,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun subscriberCredentialId(): Optional<String> =
-            Optional.ofNullable(subscriberCredentialId.getNullable("subscriberCredentialId"))
+            subscriberCredentialId.getOptional("subscriberCredentialId")
 
         /**
          * Returns the raw JSON value of [payload].

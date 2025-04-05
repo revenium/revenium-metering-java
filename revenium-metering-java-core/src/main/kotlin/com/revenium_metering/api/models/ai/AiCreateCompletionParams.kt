@@ -1667,7 +1667,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun agent(): Optional<String> = Optional.ofNullable(agent.getNullable("agent"))
+        fun agent(): Optional<String> = agent.getOptional("agent")
 
         /**
          * The name (not the value!) of the API key used to access the AI provider
@@ -1676,13 +1676,13 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun aiProviderKeyName(): Optional<String> =
-            Optional.ofNullable(aiProviderKeyName.getNullable("aiProviderKeyName"))
+            aiProviderKeyName.getOptional("aiProviderKeyName")
 
         /**
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun apiKey(): Optional<String> = Optional.ofNullable(apiKey.getNullable("apiKey"))
+        fun apiKey(): Optional<String> = apiKey.getOptional("apiKey")
 
         /**
          * The input token cost associated with the LLM completion
@@ -1690,8 +1690,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun inputTokenCost(): Optional<Double> =
-            Optional.ofNullable(inputTokenCost.getNullable("inputTokenCost"))
+        fun inputTokenCost(): Optional<Double> = inputTokenCost.getOptional("inputTokenCost")
 
         /**
          * The latency, in milliseconds, of latency by an AI or API gateway
@@ -1699,8 +1698,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun mediationLatency(): Optional<Long> =
-            Optional.ofNullable(mediationLatency.getNullable("mediationLatency"))
+        fun mediationLatency(): Optional<Long> = mediationLatency.getOptional("mediationLatency")
 
         /**
          * The source of the AI model used for the completion
@@ -1708,8 +1706,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun modelSource(): Optional<String> =
-            Optional.ofNullable(modelSource.getNullable("modelSource"))
+        fun modelSource(): Optional<String> = modelSource.getOptional("modelSource")
 
         /**
          * The type of operation performed
@@ -1717,8 +1714,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun operationType(): Optional<OperationType> =
-            Optional.ofNullable(operationType.getNullable("operationType"))
+        fun operationType(): Optional<OperationType> = operationType.getOptional("operationType")
 
         /**
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
@@ -1729,8 +1725,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun organizationId(): Optional<String> =
-            Optional.ofNullable(organizationId.getNullable("organizationId"))
+        fun organizationId(): Optional<String> = organizationId.getOptional("organizationId")
 
         /**
          * The output token cost associated with the LLM completion
@@ -1738,8 +1733,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun outputTokenCost(): Optional<Double> =
-            Optional.ofNullable(outputTokenCost.getNullable("outputTokenCost"))
+        fun outputTokenCost(): Optional<Double> = outputTokenCost.getOptional("outputTokenCost")
 
         /**
          * Identifier of the product from your own system that you wish to use to correlate usage
@@ -1748,7 +1742,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("productId"))
+        fun productId(): Optional<String> = productId.getOptional("productId")
 
         /**
          * The quality score of the response
@@ -1757,7 +1751,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun responseQualityScore(): Optional<Double> =
-            Optional.ofNullable(responseQualityScore.getNullable("responseQualityScore"))
+            responseQualityScore.getOptional("responseQualityScore")
 
         /**
          * Populate the ID of the subscriber from your system to allow Revenium to track usage &
@@ -1767,7 +1761,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun subscriberIdentity(): Optional<String> =
-            Optional.ofNullable(subscriberIdentity.getNullable("subscriberIdentity"))
+            subscriberIdentity.getOptional("subscriberIdentity")
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -1776,8 +1770,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriptionId(): Optional<String> =
-            Optional.ofNullable(subscriptionId.getNullable("subscriptionId"))
+        fun subscriptionId(): Optional<String> = subscriptionId.getOptional("subscriptionId")
 
         /**
          * A unique identifier that represents the statistical signature of the language model that
@@ -1788,7 +1781,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun systemFingerprint(): Optional<String> =
-            Optional.ofNullable(systemFingerprint.getNullable("systemFingerprint"))
+            systemFingerprint.getOptional("systemFingerprint")
 
         /**
          * Identifier of the associated task. If you wish to track the costs and performance for a
@@ -1798,7 +1791,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun taskId(): Optional<String> = Optional.ofNullable(taskId.getNullable("taskId"))
+        fun taskId(): Optional<String> = taskId.getOptional("taskId")
 
         /**
          * If you wish to track the costs or performance of a specific task and compare the values
@@ -1808,7 +1801,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun taskType(): Optional<String> = Optional.ofNullable(taskType.getNullable("taskType"))
+        fun taskType(): Optional<String> = taskType.getOptional("taskType")
 
         /**
          * The temperature setting used for the LLM completion
@@ -1816,8 +1809,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun temperature(): Optional<Double> =
-            Optional.ofNullable(temperature.getNullable("temperature"))
+        fun temperature(): Optional<Double> = temperature.getOptional("temperature")
 
         /**
          * The time to first token in milliseconds
@@ -1825,8 +1817,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun timeToFirstToken(): Optional<Long> =
-            Optional.ofNullable(timeToFirstToken.getNullable("timeToFirstToken"))
+        fun timeToFirstToken(): Optional<Long> = timeToFirstToken.getOptional("timeToFirstToken")
 
         /**
          * The total cost associated with the LLM completion
@@ -1834,7 +1825,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun totalCost(): Optional<Double> = Optional.ofNullable(totalCost.getNullable("totalCost"))
+        fun totalCost(): Optional<Double> = totalCost.getOptional("totalCost")
 
         /**
          * Trace multiple LLM calls belonging to same overall request
@@ -1842,7 +1833,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun traceId(): Optional<String> = Optional.ofNullable(traceId.getNullable("traceId"))
+        fun traceId(): Optional<String> = traceId.getOptional("traceId")
 
         /**
          * Returns the raw JSON value of [cacheCreationTokenCount].
