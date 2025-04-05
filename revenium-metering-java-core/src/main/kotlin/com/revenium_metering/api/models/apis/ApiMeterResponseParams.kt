@@ -502,8 +502,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun backendLatency(): Optional<Double> =
-            Optional.ofNullable(backendLatency.getNullable("backendLatency"))
+        fun backendLatency(): Optional<Double> = backendLatency.getOptional("backendLatency")
 
         /**
          * The content type of the request
@@ -511,8 +510,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun contentType(): Optional<String> =
-            Optional.ofNullable(contentType.getNullable("contentType"))
+        fun contentType(): Optional<String> = contentType.getOptional("contentType")
 
         /**
          * The latency introduced by the gateway in milliseconds
@@ -520,8 +518,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun gatewayLatency(): Optional<Double> =
-            Optional.ofNullable(gatewayLatency.getNullable("gatewayLatency"))
+        fun gatewayLatency(): Optional<Double> = gatewayLatency.getOptional("gatewayLatency")
 
         /**
          * The size of the response message in bytes
@@ -530,7 +527,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun responseMessageSize(): Optional<Long> =
-            Optional.ofNullable(responseMessageSize.getNullable("responseMessageSize"))
+            responseMessageSize.getOptional("responseMessageSize")
 
         /**
          * The total duration of the request processing in milliseconds
@@ -538,8 +535,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun totalDuration(): Optional<Long> =
-            Optional.ofNullable(totalDuration.getNullable("totalDuration"))
+        fun totalDuration(): Optional<Long> = totalDuration.getOptional("totalDuration")
 
         /**
          * Returns the raw JSON value of [responseCode].

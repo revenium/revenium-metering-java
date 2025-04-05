@@ -600,8 +600,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun contentType(): Optional<String> =
-            Optional.ofNullable(contentType.getNullable("contentType"))
+        fun contentType(): Optional<String> = contentType.getOptional("contentType")
 
         /**
          * The unique identifier of the credential
@@ -609,8 +608,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun credential(): Optional<String> =
-            Optional.ofNullable(credential.getNullable("credential"))
+        fun credential(): Optional<String> = credential.getOptional("credential")
 
         /**
          * The HTTP method of the request
@@ -618,7 +616,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun method(): Optional<Method> = Optional.ofNullable(method.getNullable("method"))
+        fun method(): Optional<Method> = method.getOptional("method")
 
         /**
          * The IP address for the origin of the request. Used by Revenium to report API usage by
@@ -627,8 +625,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun remoteHost(): Optional<String> =
-            Optional.ofNullable(remoteHost.getNullable("remoteHost"))
+        fun remoteHost(): Optional<String> = remoteHost.getOptional("remoteHost")
 
         /**
          * The size of the request message in bytes
@@ -637,7 +634,7 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun requestMessageSize(): Optional<Long> =
-            Optional.ofNullable(requestMessageSize.getNullable("requestMessageSize"))
+            requestMessageSize.getOptional("requestMessageSize")
 
         /**
          * Visible in the ‘resource’ field when viewing sources in the revenium application. The
@@ -647,7 +644,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun resource(): Optional<String> = Optional.ofNullable(resource.getNullable("resource"))
+        fun resource(): Optional<String> = resource.getOptional("resource")
 
         /**
          * Sources are typically individual API endpoints. For existing sources, the ID can be found
@@ -657,7 +654,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun sourceId(): Optional<String> = Optional.ofNullable(sourceId.getNullable("sourceId"))
+        fun sourceId(): Optional<String> = sourceId.getOptional("sourceId")
 
         /**
          * Specifies the originating platform or gateway of the metered API traffic. This helps
@@ -667,8 +664,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun sourceType(): Optional<SourceType> =
-            Optional.ofNullable(sourceType.getNullable("sourceType"))
+        fun sourceType(): Optional<SourceType> = sourceType.getOptional("sourceType")
 
         /**
          * The user agent of the request
@@ -676,7 +672,7 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun userAgent(): Optional<String> = Optional.ofNullable(userAgent.getNullable("userAgent"))
+        fun userAgent(): Optional<String> = userAgent.getOptional("userAgent")
 
         /**
          * Returns the raw JSON value of [transactionId].
