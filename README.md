@@ -437,6 +437,34 @@ JsonValue complexValue = JsonValue.from(Map.of(
 ));
 ```
 
+Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
+
+To forcibly omit a required parameter or property, pass [`JsonMissing`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/core/Values.kt):
+
+```java
+import com.revenium_metering.api.core.JsonMissing;
+import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
+
+AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheReadTokenCount(1300L)
+    .completionStartTime("2025-03-02T15:04:05Z")
+    .costType(AiCreateCompletionParams.CostType.AI)
+    .inputTokenCount(50L)
+    .isStreamed(false)
+    .model("gpt4")
+    .outputTokenCount(150L)
+    .provider("OpenAI")
+    .reasoningTokenCount(1300L)
+    .requestDuration(1000L)
+    .requestTime("2025-03-02T15:04:05Z")
+    .responseTime("2025-03-02T15:04:06Z")
+    .stopReason(AiCreateCompletionParams.StopReason.END)
+    .totalTokenCount(200L)
+    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .cacheCreationTokenCount(JsonMissing.of())
+    .build();
+```
+
 ### Response properties
 
 To access undocumented response properties, call the `_additionalProperties()` method:
