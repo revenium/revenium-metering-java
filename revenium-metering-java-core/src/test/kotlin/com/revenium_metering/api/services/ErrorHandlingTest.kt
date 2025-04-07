@@ -91,7 +91,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -100,8 +99,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -155,7 +153,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -164,8 +161,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -219,7 +215,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -228,8 +223,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -283,7 +277,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -292,8 +285,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -347,7 +339,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -356,8 +347,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -411,7 +401,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -420,8 +409,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -475,7 +463,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -484,8 +471,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -539,7 +525,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -548,8 +533,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -601,7 +585,6 @@ internal class ErrorHandlingTest {
                         .agent("Bishop")
                         .aiProviderKeyName("Production Key (OpenAI)")
                         .apiKey("apiKey")
-                        .errorReason("key not allowed to access model")
                         .inputTokenCost(12.34)
                         .mediationLatency(1000L)
                         .modelSource("ANTHROPIC")
@@ -610,8 +593,7 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberEmail("user@example.com")
-                        .subscriberIdentity("asd-123")
+                        .subscriberIdentity("ash@weyland-yutani.co.uk")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
