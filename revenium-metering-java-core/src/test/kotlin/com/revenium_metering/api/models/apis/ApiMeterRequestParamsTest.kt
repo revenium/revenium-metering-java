@@ -22,7 +22,7 @@ internal class ApiMeterRequestParamsTest {
             .requestMessageSize(1024L)
             .resource("https://api.example.com/resource")
             .sourceId("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
-            .sourceType(ApiMeterRequestParams.SourceType.UNKNOWN)
+            .sourceType(ApiMeterRequestParams.SourceType.KONG)
             .userAgent("Mozilla/5.0")
             .build()
     }
@@ -42,7 +42,7 @@ internal class ApiMeterRequestParamsTest {
                 .requestMessageSize(1024L)
                 .resource("https://api.example.com/resource")
                 .sourceId("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
-                .sourceType(ApiMeterRequestParams.SourceType.UNKNOWN)
+                .sourceType(ApiMeterRequestParams.SourceType.KONG)
                 .userAgent("Mozilla/5.0")
                 .build()
 
@@ -59,7 +59,7 @@ internal class ApiMeterRequestParamsTest {
         assertThat(body.requestMessageSize()).contains(1024L)
         assertThat(body.resource()).contains("https://api.example.com/resource")
         assertThat(body.sourceId()).contains("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
-        assertThat(body.sourceType()).contains(ApiMeterRequestParams.SourceType.UNKNOWN)
+        assertThat(body.sourceType()).contains(ApiMeterRequestParams.SourceType.KONG)
         assertThat(body.userAgent()).contains("Mozilla/5.0")
     }
 
