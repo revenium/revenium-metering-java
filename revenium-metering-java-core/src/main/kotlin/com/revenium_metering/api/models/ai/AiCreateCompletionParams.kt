@@ -256,21 +256,21 @@ private constructor(
     fun responseQualityScore(): Optional<Double> = body.responseQualityScore()
 
     /**
-     * The email address of the subscriber
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberEmail(): Optional<String> = body.subscriberEmail()
-
-    /**
      * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
      * for individual users.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun subscriberIdentity(): Optional<String> = body.subscriberIdentity()
+    fun subscriberCredential(): Optional<String> = body.subscriberCredential()
+
+    /**
+     * The email address of the subscriber
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun subscriberEmail(): Optional<String> = body.subscriberEmail()
 
     /**
      * Unique identifier of the subscription from your own system that you wish to use to correlate
@@ -548,19 +548,19 @@ private constructor(
     fun _responseQualityScore(): JsonField<Double> = body._responseQualityScore()
 
     /**
+     * Returns the raw JSON value of [subscriberCredential].
+     *
+     * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
+
+    /**
      * Returns the raw JSON value of [subscriberEmail].
      *
      * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _subscriberEmail(): JsonField<String> = body._subscriberEmail()
-
-    /**
-     * Returns the raw JSON value of [subscriberIdentity].
-     *
-     * Unlike [subscriberIdentity], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _subscriberIdentity(): JsonField<String> = body._subscriberIdentity()
 
     /**
      * Returns the raw JSON value of [subscriptionId].
@@ -1080,6 +1080,25 @@ private constructor(
             body.responseQualityScore(responseQualityScore)
         }
 
+        /**
+         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
+         * costs for individual users.
+         */
+        fun subscriberCredential(subscriberCredential: String) = apply {
+            body.subscriberCredential(subscriberCredential)
+        }
+
+        /**
+         * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriberCredential] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
+            body.subscriberCredential(subscriberCredential)
+        }
+
         /** The email address of the subscriber */
         fun subscriberEmail(subscriberEmail: String) = apply {
             body.subscriberEmail(subscriberEmail)
@@ -1094,25 +1113,6 @@ private constructor(
          */
         fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
             body.subscriberEmail(subscriberEmail)
-        }
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users.
-         */
-        fun subscriberIdentity(subscriberIdentity: String) = apply {
-            body.subscriberIdentity(subscriberIdentity)
-        }
-
-        /**
-         * Sets [Builder.subscriberIdentity] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberIdentity] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun subscriberIdentity(subscriberIdentity: JsonField<String>) = apply {
-            body.subscriberIdentity(subscriberIdentity)
         }
 
         /**
@@ -1422,8 +1422,8 @@ private constructor(
         private val outputTokenCost: JsonField<Double>,
         private val productId: JsonField<String>,
         private val responseQualityScore: JsonField<Double>,
+        private val subscriberCredential: JsonField<String>,
         private val subscriberEmail: JsonField<String>,
-        private val subscriberIdentity: JsonField<String>,
         private val subscriptionId: JsonField<String>,
         private val systemFingerprint: JsonField<String>,
         private val taskId: JsonField<String>,
@@ -1515,12 +1515,12 @@ private constructor(
             @JsonProperty("responseQualityScore")
             @ExcludeMissing
             responseQualityScore: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("subscriberCredential")
+            @ExcludeMissing
+            subscriberCredential: JsonField<String> = JsonMissing.of(),
             @JsonProperty("subscriberEmail")
             @ExcludeMissing
             subscriberEmail: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberIdentity")
-            @ExcludeMissing
-            subscriberIdentity: JsonField<String> = JsonMissing.of(),
             @JsonProperty("subscriptionId")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
@@ -1570,8 +1570,8 @@ private constructor(
             outputTokenCost,
             productId,
             responseQualityScore,
+            subscriberCredential,
             subscriberEmail,
-            subscriberIdentity,
             subscriptionId,
             systemFingerprint,
             taskId,
@@ -1830,22 +1830,22 @@ private constructor(
             responseQualityScore.getOptional("responseQualityScore")
 
         /**
-         * The email address of the subscriber
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberEmail(): Optional<String> = subscriberEmail.getOptional("subscriberEmail")
-
-        /**
          * Populate the ID of the subscriber from your system to allow Revenium to track usage &
          * costs for individual users.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriberIdentity(): Optional<String> =
-            subscriberIdentity.getOptional("subscriberIdentity")
+        fun subscriberCredential(): Optional<String> =
+            subscriberCredential.getOptional("subscriberCredential")
+
+        /**
+         * The email address of the subscriber
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun subscriberEmail(): Optional<String> = subscriberEmail.getOptional("subscriberEmail")
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -2177,6 +2177,16 @@ private constructor(
         fun _responseQualityScore(): JsonField<Double> = responseQualityScore
 
         /**
+         * Returns the raw JSON value of [subscriberCredential].
+         *
+         * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("subscriberCredential")
+        @ExcludeMissing
+        fun _subscriberCredential(): JsonField<String> = subscriberCredential
+
+        /**
          * Returns the raw JSON value of [subscriberEmail].
          *
          * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected
@@ -2185,16 +2195,6 @@ private constructor(
         @JsonProperty("subscriberEmail")
         @ExcludeMissing
         fun _subscriberEmail(): JsonField<String> = subscriberEmail
-
-        /**
-         * Returns the raw JSON value of [subscriberIdentity].
-         *
-         * Unlike [subscriberIdentity], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("subscriberIdentity")
-        @ExcludeMissing
-        fun _subscriberIdentity(): JsonField<String> = subscriberIdentity
 
         /**
          * Returns the raw JSON value of [subscriptionId].
@@ -2334,8 +2334,8 @@ private constructor(
             private var outputTokenCost: JsonField<Double> = JsonMissing.of()
             private var productId: JsonField<String> = JsonMissing.of()
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
+            private var subscriberCredential: JsonField<String> = JsonMissing.of()
             private var subscriberEmail: JsonField<String> = JsonMissing.of()
-            private var subscriberIdentity: JsonField<String> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var systemFingerprint: JsonField<String> = JsonMissing.of()
             private var taskId: JsonField<String> = JsonMissing.of()
@@ -2376,8 +2376,8 @@ private constructor(
                 outputTokenCost = body.outputTokenCost
                 productId = body.productId
                 responseQualityScore = body.responseQualityScore
+                subscriberCredential = body.subscriberCredential
                 subscriberEmail = body.subscriberEmail
-                subscriberIdentity = body.subscriberIdentity
                 subscriptionId = body.subscriptionId
                 systemFingerprint = body.systemFingerprint
                 taskId = body.taskId
@@ -2792,6 +2792,24 @@ private constructor(
                 this.responseQualityScore = responseQualityScore
             }
 
+            /**
+             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
+             * costs for individual users.
+             */
+            fun subscriberCredential(subscriberCredential: String) =
+                subscriberCredential(JsonField.of(subscriberCredential))
+
+            /**
+             * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriberCredential] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
+                this.subscriberCredential = subscriberCredential
+            }
+
             /** The email address of the subscriber */
             fun subscriberEmail(subscriberEmail: String) =
                 subscriberEmail(JsonField.of(subscriberEmail))
@@ -2805,24 +2823,6 @@ private constructor(
              */
             fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
                 this.subscriberEmail = subscriberEmail
-            }
-
-            /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users.
-             */
-            fun subscriberIdentity(subscriberIdentity: String) =
-                subscriberIdentity(JsonField.of(subscriberIdentity))
-
-            /**
-             * Sets [Builder.subscriberIdentity] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberIdentity] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun subscriberIdentity(subscriberIdentity: JsonField<String>) = apply {
-                this.subscriberIdentity = subscriberIdentity
             }
 
             /**
@@ -3023,8 +3023,8 @@ private constructor(
                     outputTokenCost,
                     productId,
                     responseQualityScore,
+                    subscriberCredential,
                     subscriberEmail,
-                    subscriberIdentity,
                     subscriptionId,
                     systemFingerprint,
                     taskId,
@@ -3072,8 +3072,8 @@ private constructor(
             outputTokenCost()
             productId()
             responseQualityScore()
+            subscriberCredential()
             subscriberEmail()
-            subscriberIdentity()
             subscriptionId()
             systemFingerprint()
             taskId()
@@ -3129,8 +3129,8 @@ private constructor(
                 (if (outputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
+                (if (subscriberCredential.asKnown().isPresent) 1 else 0) +
                 (if (subscriberEmail.asKnown().isPresent) 1 else 0) +
-                (if (subscriberIdentity.asKnown().isPresent) 1 else 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
                 (if (taskId.asKnown().isPresent) 1 else 0) +
@@ -3145,17 +3145,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberEmail == other.subscriberEmail && subscriberIdentity == other.subscriberIdentity && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberEmail == other.subscriberEmail && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberEmail, subscriberIdentity, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberCredential, subscriberEmail, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberEmail=$subscriberEmail, subscriberIdentity=$subscriberIdentity, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberEmail=$subscriberEmail, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
