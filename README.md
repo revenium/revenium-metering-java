@@ -39,7 +39,7 @@ import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
-// Configures using the `REVENIUM_METERING_API_KEY` environment variable
+// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
@@ -71,7 +71,7 @@ Configure the client using environment variables:
 import com.revenium_metering.api.client.ReveniumMeteringClient;
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 
-// Configures using the `REVENIUM_METERING_API_KEY` environment variable
+// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 ```
 
@@ -93,7 +93,7 @@ import com.revenium_metering.api.client.ReveniumMeteringClient;
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
-    // Configures using the `REVENIUM_METERING_API_KEY` environment variable
+    // Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build();
@@ -101,9 +101,10 @@ ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter   | Environment variable        | Required | Default value |
-| -------- | --------------------------- | -------- | ------------- |
-| `apiKey` | `REVENIUM_METERING_API_KEY` | true     | -             |
+| Setter    | Environment variable         | Required | Default value                      |
+| --------- | ---------------------------- | -------- | ---------------------------------- |
+| `apiKey`  | `REVENIUM_METERING_API_KEY`  | true     | -                                  |
+| `baseUrl` | `REVENIUM_METERING_BASE_URL` | true     | `"https://api.revenium.io/meter/"` |
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
@@ -134,7 +135,7 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `REVENIUM_METERING_API_KEY` environment variable
+// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
@@ -167,7 +168,7 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `REVENIUM_METERING_API_KEY` environment variable
+// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClientAsync client = ReveniumMeteringOkHttpClientAsync.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
