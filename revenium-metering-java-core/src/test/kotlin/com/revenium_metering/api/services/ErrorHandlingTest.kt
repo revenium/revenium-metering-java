@@ -100,8 +100,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -164,8 +164,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -228,8 +228,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -292,8 +292,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -356,8 +356,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -420,8 +420,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -484,8 +484,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -548,8 +548,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
@@ -610,8 +610,8 @@ internal class ErrorHandlingTest {
                         .outputTokenCost(12.34)
                         .productId("Free Trial")
                         .responseQualityScore(45.0)
-                        .subscriberCredential("asd-123")
                         .subscriberEmail("user@example.com")
+                        .subscriberIdentity("asd-123")
                         .subscriptionId("subscr-456")
                         .systemFingerprint(
                             "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
