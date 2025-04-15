@@ -7,7 +7,7 @@ The Revenium Metering Java SDK provides convenient access to the [Revenium Meter
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [revenium.io](https://revenium.io). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.revenium_metering.api/revenium-metering-java/0.0.1-alpha.0).
+The REST API documentation can be found on [revenium.io](https://revenium.io). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.revenium_metering.api/revenium-metering-java/0.0.1-alpha.0).
 
 ## Installation
 
