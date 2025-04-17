@@ -364,6 +364,42 @@ ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
     .build();
 ```
 
+### Custom HTTP client
+
+The SDK consists of three artifacts:
+
+- `revenium-metering-java-core`
+  - Contains core SDK logic
+  - Does not depend on [OkHttp](https://square.github.io/okhttp)
+  - Exposes [`ReveniumMeteringClient`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClient.kt), [`ReveniumMeteringClientAsync`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientAsync.kt), [`ReveniumMeteringClientImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientImpl.kt), and [`ReveniumMeteringClientAsyncImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientAsyncImpl.kt), all of which can work with any HTTP client
+- `revenium-metering-java-client-okhttp`
+  - Depends on [OkHttp](https://square.github.io/okhttp)
+  - Exposes [`ReveniumMeteringOkHttpClient`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClient.kt) and [`ReveniumMeteringOkHttpClientAsync`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClientAsync.kt), which provide a way to construct [`ReveniumMeteringClientImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientImpl.kt) and [`ReveniumMeteringClientAsyncImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientAsyncImpl.kt), respectively, using OkHttp
+- `revenium-metering-java`
+  - Depends on and exposes the APIs of both `revenium-metering-java-core` and `revenium-metering-java-client-okhttp`
+  - Does not have its own logic
+
+This structure allows replacing the SDK's default HTTP client without pulling in unnecessary dependencies.
+
+#### Customized [`OkHttpClient`](https://square.github.io/okhttp/3.x/okhttp/okhttp3/OkHttpClient.html)
+
+> [!TIP]
+> Try the available [network options](#network-options) before replacing the default client.
+
+To use a customized `OkHttpClient`:
+
+1. Replace your [`revenium-metering-java` dependency](#installation) with `revenium-metering-java-core`
+2. Copy `revenium-metering-java-client-okhttp`'s [`OkHttpClient`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/OkHttpClient.kt) class into your code and customize it
+3. Construct [`ReveniumMeteringClientImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientImpl.kt) or [`ReveniumMeteringClientAsyncImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientAsyncImpl.kt), similarly to [`ReveniumMeteringOkHttpClient`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClient.kt) or [`ReveniumMeteringOkHttpClientAsync`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClientAsync.kt), using your customized client
+
+### Completely custom HTTP client
+
+To use a completely custom HTTP client:
+
+1. Replace your [`revenium-metering-java` dependency](#installation) with `revenium-metering-java-core`
+2. Write a class that implements the [`HttpClient`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/core/http/HttpClient.kt) interface
+3. Construct [`ReveniumMeteringClientImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientImpl.kt) or [`ReveniumMeteringClientAsyncImpl`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/client/ReveniumMeteringClientAsyncImpl.kt), similarly to [`ReveniumMeteringOkHttpClient`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClient.kt) or [`ReveniumMeteringOkHttpClientAsync`](revenium-metering-java-client-okhttp/src/main/kotlin/com/revenium_metering/api/client/okhttp/ReveniumMeteringOkHttpClientAsync.kt), using your new client class
+
 ## Undocumented API functionality
 
 The SDK is typed for convenient usage of the documented API. However, it also supports working with undocumented or not yet supported parts of the API.
