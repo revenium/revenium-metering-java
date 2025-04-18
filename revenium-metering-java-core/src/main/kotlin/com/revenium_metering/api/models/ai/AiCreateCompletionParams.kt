@@ -166,21 +166,7 @@ private constructor(
     fun agent(): Optional<String> = body.agent()
 
     /**
-     * The name (not the value!) of the API key used to access the AI provider
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun aiProviderKeyName(): Optional<String> = body.aiProviderKeyName()
-
-    /**
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun apiKey(): Optional<String> = body.apiKey()
-
-    /**
-     * The reason for stopping the LLM completion
+     * The details of the error that occurred during the LLM completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -263,6 +249,15 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun subscriberCredential(): Optional<String> = body.subscriberCredential()
+
+    /**
+     * Populate the name of the subscriber credential from your system to allow Revenium to track
+     * usage & costs for individual users.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun subscriberCredentialName(): Optional<String> = body.subscriberCredentialName()
 
     /**
      * The email address of the subscriber
@@ -468,21 +463,6 @@ private constructor(
     fun _agent(): JsonField<String> = body._agent()
 
     /**
-     * Returns the raw JSON value of [aiProviderKeyName].
-     *
-     * Unlike [aiProviderKeyName], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _aiProviderKeyName(): JsonField<String> = body._aiProviderKeyName()
-
-    /**
-     * Returns the raw JSON value of [apiKey].
-     *
-     * Unlike [apiKey], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _apiKey(): JsonField<String> = body._apiKey()
-
-    /**
      * Returns the raw JSON value of [errorReason].
      *
      * Unlike [errorReason], this method doesn't throw if the JSON field has an unexpected type.
@@ -554,6 +534,14 @@ private constructor(
      * type.
      */
     fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
+
+    /**
+     * Returns the raw JSON value of [subscriberCredentialName].
+     *
+     * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _subscriberCredentialName(): JsonField<String> = body._subscriberCredentialName()
 
     /**
      * Returns the raw JSON value of [subscriberEmail].
@@ -918,33 +906,7 @@ private constructor(
          */
         fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
 
-        /** The name (not the value!) of the API key used to access the AI provider */
-        fun aiProviderKeyName(aiProviderKeyName: String) = apply {
-            body.aiProviderKeyName(aiProviderKeyName)
-        }
-
-        /**
-         * Sets [Builder.aiProviderKeyName] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.aiProviderKeyName] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun aiProviderKeyName(aiProviderKeyName: JsonField<String>) = apply {
-            body.aiProviderKeyName(aiProviderKeyName)
-        }
-
-        fun apiKey(apiKey: String) = apply { body.apiKey(apiKey) }
-
-        /**
-         * Sets [Builder.apiKey] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.apiKey] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun apiKey(apiKey: JsonField<String>) = apply { body.apiKey(apiKey) }
-
-        /** The reason for stopping the LLM completion */
+        /** The details of the error that occurred during the LLM completion */
         fun errorReason(errorReason: String) = apply { body.errorReason(errorReason) }
 
         /**
@@ -1097,6 +1059,25 @@ private constructor(
          */
         fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
             body.subscriberCredential(subscriberCredential)
+        }
+
+        /**
+         * Populate the name of the subscriber credential from your system to allow Revenium to
+         * track usage & costs for individual users.
+         */
+        fun subscriberCredentialName(subscriberCredentialName: String) = apply {
+            body.subscriberCredentialName(subscriberCredentialName)
+        }
+
+        /**
+         * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
+            body.subscriberCredentialName(subscriberCredentialName)
         }
 
         /** The email address of the subscriber */
@@ -1411,8 +1392,6 @@ private constructor(
         private val totalTokenCount: JsonField<Long>,
         private val transactionId: JsonField<String>,
         private val agent: JsonField<String>,
-        private val aiProviderKeyName: JsonField<String>,
-        private val apiKey: JsonField<String>,
         private val errorReason: JsonField<String>,
         private val inputTokenCost: JsonField<Double>,
         private val mediationLatency: JsonField<Long>,
@@ -1423,6 +1402,7 @@ private constructor(
         private val productId: JsonField<String>,
         private val responseQualityScore: JsonField<Double>,
         private val subscriberCredential: JsonField<String>,
+        private val subscriberCredentialName: JsonField<String>,
         private val subscriberEmail: JsonField<String>,
         private val subscriptionId: JsonField<String>,
         private val systemFingerprint: JsonField<String>,
@@ -1484,10 +1464,6 @@ private constructor(
             @ExcludeMissing
             transactionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("agent") @ExcludeMissing agent: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aiProviderKeyName")
-            @ExcludeMissing
-            aiProviderKeyName: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("apiKey") @ExcludeMissing apiKey: JsonField<String> = JsonMissing.of(),
             @JsonProperty("errorReason")
             @ExcludeMissing
             errorReason: JsonField<String> = JsonMissing.of(),
@@ -1518,6 +1494,9 @@ private constructor(
             @JsonProperty("subscriberCredential")
             @ExcludeMissing
             subscriberCredential: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("subscriberCredentialName")
+            @ExcludeMissing
+            subscriberCredentialName: JsonField<String> = JsonMissing.of(),
             @JsonProperty("subscriberEmail")
             @ExcludeMissing
             subscriberEmail: JsonField<String> = JsonMissing.of(),
@@ -1559,8 +1538,6 @@ private constructor(
             totalTokenCount,
             transactionId,
             agent,
-            aiProviderKeyName,
-            apiKey,
             errorReason,
             inputTokenCost,
             mediationLatency,
@@ -1571,6 +1548,7 @@ private constructor(
             productId,
             responseQualityScore,
             subscriberCredential,
+            subscriberCredentialName,
             subscriberEmail,
             subscriptionId,
             systemFingerprint,
@@ -1738,22 +1716,7 @@ private constructor(
         fun agent(): Optional<String> = agent.getOptional("agent")
 
         /**
-         * The name (not the value!) of the API key used to access the AI provider
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun aiProviderKeyName(): Optional<String> =
-            aiProviderKeyName.getOptional("aiProviderKeyName")
-
-        /**
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun apiKey(): Optional<String> = apiKey.getOptional("apiKey")
-
-        /**
-         * The reason for stopping the LLM completion
+         * The details of the error that occurred during the LLM completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1838,6 +1801,16 @@ private constructor(
          */
         fun subscriberCredential(): Optional<String> =
             subscriberCredential.getOptional("subscriberCredential")
+
+        /**
+         * Populate the name of the subscriber credential from your system to allow Revenium to
+         * track usage & costs for individual users.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun subscriberCredentialName(): Optional<String> =
+            subscriberCredentialName.getOptional("subscriberCredentialName")
 
         /**
          * The email address of the subscriber
@@ -2075,23 +2048,6 @@ private constructor(
         @JsonProperty("agent") @ExcludeMissing fun _agent(): JsonField<String> = agent
 
         /**
-         * Returns the raw JSON value of [aiProviderKeyName].
-         *
-         * Unlike [aiProviderKeyName], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("aiProviderKeyName")
-        @ExcludeMissing
-        fun _aiProviderKeyName(): JsonField<String> = aiProviderKeyName
-
-        /**
-         * Returns the raw JSON value of [apiKey].
-         *
-         * Unlike [apiKey], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("apiKey") @ExcludeMissing fun _apiKey(): JsonField<String> = apiKey
-
-        /**
          * Returns the raw JSON value of [errorReason].
          *
          * Unlike [errorReason], this method doesn't throw if the JSON field has an unexpected type.
@@ -2185,6 +2141,16 @@ private constructor(
         @JsonProperty("subscriberCredential")
         @ExcludeMissing
         fun _subscriberCredential(): JsonField<String> = subscriberCredential
+
+        /**
+         * Returns the raw JSON value of [subscriberCredentialName].
+         *
+         * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("subscriberCredentialName")
+        @ExcludeMissing
+        fun _subscriberCredentialName(): JsonField<String> = subscriberCredentialName
 
         /**
          * Returns the raw JSON value of [subscriberEmail].
@@ -2323,8 +2289,6 @@ private constructor(
             private var totalTokenCount: JsonField<Long>? = null
             private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
-            private var aiProviderKeyName: JsonField<String> = JsonMissing.of()
-            private var apiKey: JsonField<String> = JsonMissing.of()
             private var errorReason: JsonField<String> = JsonMissing.of()
             private var inputTokenCost: JsonField<Double> = JsonMissing.of()
             private var mediationLatency: JsonField<Long> = JsonMissing.of()
@@ -2335,6 +2299,7 @@ private constructor(
             private var productId: JsonField<String> = JsonMissing.of()
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
             private var subscriberCredential: JsonField<String> = JsonMissing.of()
+            private var subscriberCredentialName: JsonField<String> = JsonMissing.of()
             private var subscriberEmail: JsonField<String> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var systemFingerprint: JsonField<String> = JsonMissing.of()
@@ -2365,8 +2330,6 @@ private constructor(
                 totalTokenCount = body.totalTokenCount
                 transactionId = body.transactionId
                 agent = body.agent
-                aiProviderKeyName = body.aiProviderKeyName
-                apiKey = body.apiKey
                 errorReason = body.errorReason
                 inputTokenCost = body.inputTokenCost
                 mediationLatency = body.mediationLatency
@@ -2377,6 +2340,7 @@ private constructor(
                 productId = body.productId
                 responseQualityScore = body.responseQualityScore
                 subscriberCredential = body.subscriberCredential
+                subscriberCredentialName = body.subscriberCredentialName
                 subscriberEmail = body.subscriberEmail
                 subscriptionId = body.subscriptionId
                 systemFingerprint = body.systemFingerprint
@@ -2628,33 +2592,7 @@ private constructor(
              */
             fun agent(agent: JsonField<String>) = apply { this.agent = agent }
 
-            /** The name (not the value!) of the API key used to access the AI provider */
-            fun aiProviderKeyName(aiProviderKeyName: String) =
-                aiProviderKeyName(JsonField.of(aiProviderKeyName))
-
-            /**
-             * Sets [Builder.aiProviderKeyName] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.aiProviderKeyName] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun aiProviderKeyName(aiProviderKeyName: JsonField<String>) = apply {
-                this.aiProviderKeyName = aiProviderKeyName
-            }
-
-            fun apiKey(apiKey: String) = apiKey(JsonField.of(apiKey))
-
-            /**
-             * Sets [Builder.apiKey] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.apiKey] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun apiKey(apiKey: JsonField<String>) = apply { this.apiKey = apiKey }
-
-            /** The reason for stopping the LLM completion */
+            /** The details of the error that occurred during the LLM completion */
             fun errorReason(errorReason: String) = errorReason(JsonField.of(errorReason))
 
             /**
@@ -2808,6 +2746,24 @@ private constructor(
              */
             fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
                 this.subscriberCredential = subscriberCredential
+            }
+
+            /**
+             * Populate the name of the subscriber credential from your system to allow Revenium to
+             * track usage & costs for individual users.
+             */
+            fun subscriberCredentialName(subscriberCredentialName: String) =
+                subscriberCredentialName(JsonField.of(subscriberCredentialName))
+
+            /**
+             * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
+                this.subscriberCredentialName = subscriberCredentialName
             }
 
             /** The email address of the subscriber */
@@ -3012,8 +2968,6 @@ private constructor(
                     checkRequired("totalTokenCount", totalTokenCount),
                     checkRequired("transactionId", transactionId),
                     agent,
-                    aiProviderKeyName,
-                    apiKey,
                     errorReason,
                     inputTokenCost,
                     mediationLatency,
@@ -3024,6 +2978,7 @@ private constructor(
                     productId,
                     responseQualityScore,
                     subscriberCredential,
+                    subscriberCredentialName,
                     subscriberEmail,
                     subscriptionId,
                     systemFingerprint,
@@ -3061,8 +3016,6 @@ private constructor(
             totalTokenCount()
             transactionId()
             agent()
-            aiProviderKeyName()
-            apiKey()
             errorReason()
             inputTokenCost()
             mediationLatency()
@@ -3073,6 +3026,7 @@ private constructor(
             productId()
             responseQualityScore()
             subscriberCredential()
+            subscriberCredentialName()
             subscriberEmail()
             subscriptionId()
             systemFingerprint()
@@ -3118,8 +3072,6 @@ private constructor(
                 (if (totalTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (agent.asKnown().isPresent) 1 else 0) +
-                (if (aiProviderKeyName.asKnown().isPresent) 1 else 0) +
-                (if (apiKey.asKnown().isPresent) 1 else 0) +
                 (if (errorReason.asKnown().isPresent) 1 else 0) +
                 (if (inputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (mediationLatency.asKnown().isPresent) 1 else 0) +
@@ -3130,6 +3082,7 @@ private constructor(
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
                 (if (subscriberCredential.asKnown().isPresent) 1 else 0) +
+                (if (subscriberCredentialName.asKnown().isPresent) 1 else 0) +
                 (if (subscriberEmail.asKnown().isPresent) 1 else 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
@@ -3145,17 +3098,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && aiProviderKeyName == other.aiProviderKeyName && apiKey == other.apiKey && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberEmail == other.subscriberEmail && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberCredentialName == other.subscriberCredentialName && subscriberEmail == other.subscriberEmail && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, aiProviderKeyName, apiKey, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberCredential, subscriberEmail, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberCredential, subscriberCredentialName, subscriberEmail, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, aiProviderKeyName=$aiProviderKeyName, apiKey=$apiKey, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberEmail=$subscriberEmail, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberCredentialName=$subscriberCredentialName, subscriberEmail=$subscriberEmail, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
