@@ -30,6 +30,22 @@ private constructor(
 ) : Params {
 
     /**
+     * The number of cached creation tokens in the completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun cacheCreationTokenCount(): Long = body.cacheCreationTokenCount()
+
+    /**
+     * The number of cached read tokens in the completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun cacheReadTokenCount(): Long = body.cacheReadTokenCount()
+
+    /**
      * Time to first token for streaming requests
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
@@ -86,6 +102,14 @@ private constructor(
     fun provider(): String = body.provider()
 
     /**
+     * The number of reasoning tokens in the completion
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun reasoningTokenCount(): Long = body.reasoningTokenCount()
+
+    /**
      * The duration of the request in milliseconds
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
@@ -140,22 +164,6 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun agent(): Optional<String> = body.agent()
-
-    /**
-     * The number of cached creation tokens in the completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun cacheCreationTokenCount(): Optional<Long> = body.cacheCreationTokenCount()
-
-    /**
-     * The number of cached read tokens in the completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun cacheReadTokenCount(): Optional<Long> = body.cacheReadTokenCount()
 
     /**
      * The details of the error that occurred during the LLM completion
@@ -226,14 +234,6 @@ private constructor(
     fun productId(): Optional<String> = body.productId()
 
     /**
-     * The number of reasoning tokens in the completion
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun reasoningTokenCount(): Optional<Long> = body.reasoningTokenCount()
-
-    /**
      * The quality score of the response
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -268,17 +268,6 @@ private constructor(
     fun subscriberEmail(): Optional<String> = body.subscriberEmail()
 
     /**
-     * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
-     * for individual users. i.e. user-123. If several subscriberCredentials have the same
-     * subscriberId, Revenium’s reporting will show usage for the entire organization broken down by
-     * user.
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberId(): Optional<String> = body.subscriberId()
-
-    /**
      * Unique identifier of the subscription from your own system that you wish to use to correlate
      * usage between Revenium & your application.
      *
@@ -296,6 +285,16 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun systemFingerprint(): Optional<String> = body.systemFingerprint()
+
+    /**
+     * Identifier of the associated task. If you wish to track the costs and performance for a task
+     * that occurs over several prompts, use a consistent task ID for all prompts included in that
+     * task.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun taskId(): Optional<String> = body.taskId()
 
     /**
      * If you wish to track the costs or performance of a specific task and compare the values over
@@ -338,6 +337,22 @@ private constructor(
      *   if the server responded with an unexpected value).
      */
     fun traceId(): Optional<String> = body.traceId()
+
+    /**
+     * Returns the raw JSON value of [cacheCreationTokenCount].
+     *
+     * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _cacheCreationTokenCount(): JsonField<Long> = body._cacheCreationTokenCount()
+
+    /**
+     * Returns the raw JSON value of [cacheReadTokenCount].
+     *
+     * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _cacheReadTokenCount(): JsonField<Long> = body._cacheReadTokenCount()
 
     /**
      * Returns the raw JSON value of [completionStartTime].
@@ -391,6 +406,14 @@ private constructor(
     fun _provider(): JsonField<String> = body._provider()
 
     /**
+     * Returns the raw JSON value of [reasoningTokenCount].
+     *
+     * Unlike [reasoningTokenCount], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _reasoningTokenCount(): JsonField<Long> = body._reasoningTokenCount()
+
+    /**
      * Returns the raw JSON value of [requestDuration].
      *
      * Unlike [requestDuration], this method doesn't throw if the JSON field has an unexpected type.
@@ -438,22 +461,6 @@ private constructor(
      * Unlike [agent], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _agent(): JsonField<String> = body._agent()
-
-    /**
-     * Returns the raw JSON value of [cacheCreationTokenCount].
-     *
-     * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
-     * unexpected type.
-     */
-    fun _cacheCreationTokenCount(): JsonField<Long> = body._cacheCreationTokenCount()
-
-    /**
-     * Returns the raw JSON value of [cacheReadTokenCount].
-     *
-     * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _cacheReadTokenCount(): JsonField<Long> = body._cacheReadTokenCount()
 
     /**
      * Returns the raw JSON value of [errorReason].
@@ -513,14 +520,6 @@ private constructor(
     fun _productId(): JsonField<String> = body._productId()
 
     /**
-     * Returns the raw JSON value of [reasoningTokenCount].
-     *
-     * Unlike [reasoningTokenCount], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _reasoningTokenCount(): JsonField<Long> = body._reasoningTokenCount()
-
-    /**
      * Returns the raw JSON value of [responseQualityScore].
      *
      * Unlike [responseQualityScore], this method doesn't throw if the JSON field has an unexpected
@@ -552,13 +551,6 @@ private constructor(
     fun _subscriberEmail(): JsonField<String> = body._subscriberEmail()
 
     /**
-     * Returns the raw JSON value of [subscriberId].
-     *
-     * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _subscriberId(): JsonField<String> = body._subscriberId()
-
-    /**
      * Returns the raw JSON value of [subscriptionId].
      *
      * Unlike [subscriptionId], this method doesn't throw if the JSON field has an unexpected type.
@@ -572,6 +564,13 @@ private constructor(
      * type.
      */
     fun _systemFingerprint(): JsonField<String> = body._systemFingerprint()
+
+    /**
+     * Returns the raw JSON value of [taskId].
+     *
+     * Unlike [taskId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _taskId(): JsonField<String> = body._taskId()
 
     /**
      * Returns the raw JSON value of [taskType].
@@ -624,6 +623,8 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
          * .completionStartTime()
          * .costType()
          * .inputTokenCount()
@@ -631,6 +632,7 @@ private constructor(
          * .model()
          * .outputTokenCount()
          * .provider()
+         * .reasoningTokenCount()
          * .requestDuration()
          * .requestTime()
          * .responseTime()
@@ -661,14 +663,46 @@ private constructor(
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [cacheCreationTokenCount]
+         * - [cacheReadTokenCount]
          * - [completionStartTime]
          * - [costType]
          * - [inputTokenCount]
-         * - [isStreamed]
-         * - [model]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /** The number of cached creation tokens in the completion */
+        fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /**
+         * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
+            body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /** The number of cached read tokens in the completion */
+        fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
+        }
+
+        /**
+         * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
+            body.cacheReadTokenCount(cacheReadTokenCount)
+        }
 
         /** Time to first token for streaming requests */
         fun completionStartTime(completionStartTime: String) = apply {
@@ -761,6 +795,22 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun provider(provider: JsonField<String>) = apply { body.provider(provider) }
+
+        /** The number of reasoning tokens in the completion */
+        fun reasoningTokenCount(reasoningTokenCount: Long) = apply {
+            body.reasoningTokenCount(reasoningTokenCount)
+        }
+
+        /**
+         * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
+            body.reasoningTokenCount(reasoningTokenCount)
+        }
 
         /** The duration of the request in milliseconds */
         fun requestDuration(requestDuration: Long) = apply { body.requestDuration(requestDuration) }
@@ -855,38 +905,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
-
-        /** The number of cached creation tokens in the completion */
-        fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
-            body.cacheCreationTokenCount(cacheCreationTokenCount)
-        }
-
-        /**
-         * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
-            body.cacheCreationTokenCount(cacheCreationTokenCount)
-        }
-
-        /** The number of cached read tokens in the completion */
-        fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
-            body.cacheReadTokenCount(cacheReadTokenCount)
-        }
-
-        /**
-         * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
-            body.cacheReadTokenCount(cacheReadTokenCount)
-        }
 
         /** The details of the error that occurred during the LLM completion */
         fun errorReason(errorReason: String) = apply { body.errorReason(errorReason) }
@@ -1008,22 +1026,6 @@ private constructor(
          */
         fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
-        /** The number of reasoning tokens in the completion */
-        fun reasoningTokenCount(reasoningTokenCount: Long) = apply {
-            body.reasoningTokenCount(reasoningTokenCount)
-        }
-
-        /**
-         * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
-            body.reasoningTokenCount(reasoningTokenCount)
-        }
-
         /** The quality score of the response */
         fun responseQualityScore(responseQualityScore: Double) = apply {
             body.responseQualityScore(responseQualityScore)
@@ -1095,25 +1097,6 @@ private constructor(
         }
 
         /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         */
-        fun subscriberId(subscriberId: String) = apply { body.subscriberId(subscriberId) }
-
-        /**
-         * Sets [Builder.subscriberId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun subscriberId(subscriberId: JsonField<String>) = apply {
-            body.subscriberId(subscriberId)
-        }
-
-        /**
          * Unique identifier of the subscription from your own system that you wish to use to
          * correlate usage between Revenium & your application.
          */
@@ -1149,6 +1132,21 @@ private constructor(
         fun systemFingerprint(systemFingerprint: JsonField<String>) = apply {
             body.systemFingerprint(systemFingerprint)
         }
+
+        /**
+         * Identifier of the associated task. If you wish to track the costs and performance for a
+         * task that occurs over several prompts, use a consistent task ID for all prompts included
+         * in that task.
+         */
+        fun taskId(taskId: String) = apply { body.taskId(taskId) }
+
+        /**
+         * Sets [Builder.taskId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taskId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun taskId(taskId: JsonField<String>) = apply { body.taskId(taskId) }
 
         /**
          * If you wish to track the costs or performance of a specific task and compare the values
@@ -1340,6 +1338,8 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .cacheCreationTokenCount()
+         * .cacheReadTokenCount()
          * .completionStartTime()
          * .costType()
          * .inputTokenCount()
@@ -1347,6 +1347,7 @@ private constructor(
          * .model()
          * .outputTokenCount()
          * .provider()
+         * .reasoningTokenCount()
          * .requestDuration()
          * .requestTime()
          * .responseTime()
@@ -1374,6 +1375,8 @@ private constructor(
     /** The AI completion metadata */
     class Body
     private constructor(
+        private val cacheCreationTokenCount: JsonField<Long>,
+        private val cacheReadTokenCount: JsonField<Long>,
         private val completionStartTime: JsonField<String>,
         private val costType: JsonField<CostType>,
         private val inputTokenCount: JsonField<Long>,
@@ -1381,6 +1384,7 @@ private constructor(
         private val model: JsonField<String>,
         private val outputTokenCount: JsonField<Long>,
         private val provider: JsonField<String>,
+        private val reasoningTokenCount: JsonField<Long>,
         private val requestDuration: JsonField<Long>,
         private val requestTime: JsonField<String>,
         private val responseTime: JsonField<String>,
@@ -1388,8 +1392,6 @@ private constructor(
         private val totalTokenCount: JsonField<Long>,
         private val transactionId: JsonField<String>,
         private val agent: JsonField<String>,
-        private val cacheCreationTokenCount: JsonField<Long>,
-        private val cacheReadTokenCount: JsonField<Long>,
         private val errorReason: JsonField<String>,
         private val inputTokenCost: JsonField<Double>,
         private val mediationLatency: JsonField<Long>,
@@ -1398,14 +1400,13 @@ private constructor(
         private val organizationId: JsonField<String>,
         private val outputTokenCost: JsonField<Double>,
         private val productId: JsonField<String>,
-        private val reasoningTokenCount: JsonField<Long>,
         private val responseQualityScore: JsonField<Double>,
         private val subscriberCredential: JsonField<String>,
         private val subscriberCredentialName: JsonField<String>,
         private val subscriberEmail: JsonField<String>,
-        private val subscriberId: JsonField<String>,
         private val subscriptionId: JsonField<String>,
         private val systemFingerprint: JsonField<String>,
+        private val taskId: JsonField<String>,
         private val taskType: JsonField<String>,
         private val temperature: JsonField<Double>,
         private val timeToFirstToken: JsonField<Long>,
@@ -1416,6 +1417,12 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("cacheCreationTokenCount")
+            @ExcludeMissing
+            cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("cacheReadTokenCount")
+            @ExcludeMissing
+            cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("completionStartTime")
             @ExcludeMissing
             completionStartTime: JsonField<String> = JsonMissing.of(),
@@ -1435,6 +1442,9 @@ private constructor(
             @JsonProperty("provider")
             @ExcludeMissing
             provider: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("reasoningTokenCount")
+            @ExcludeMissing
+            reasoningTokenCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("requestDuration")
             @ExcludeMissing
             requestDuration: JsonField<Long> = JsonMissing.of(),
@@ -1454,12 +1464,6 @@ private constructor(
             @ExcludeMissing
             transactionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("agent") @ExcludeMissing agent: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("cacheCreationTokenCount")
-            @ExcludeMissing
-            cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("cacheReadTokenCount")
-            @ExcludeMissing
-            cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("errorReason")
             @ExcludeMissing
             errorReason: JsonField<String> = JsonMissing.of(),
@@ -1484,9 +1488,6 @@ private constructor(
             @JsonProperty("productId")
             @ExcludeMissing
             productId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("reasoningTokenCount")
-            @ExcludeMissing
-            reasoningTokenCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("responseQualityScore")
             @ExcludeMissing
             responseQualityScore: JsonField<Double> = JsonMissing.of(),
@@ -1499,15 +1500,13 @@ private constructor(
             @JsonProperty("subscriberEmail")
             @ExcludeMissing
             subscriberEmail: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberId")
-            @ExcludeMissing
-            subscriberId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("subscriptionId")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("systemFingerprint")
             @ExcludeMissing
             systemFingerprint: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("taskId") @ExcludeMissing taskId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("taskType")
             @ExcludeMissing
             taskType: JsonField<String> = JsonMissing.of(),
@@ -1522,6 +1521,8 @@ private constructor(
             totalCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("traceId") @ExcludeMissing traceId: JsonField<String> = JsonMissing.of(),
         ) : this(
+            cacheCreationTokenCount,
+            cacheReadTokenCount,
             completionStartTime,
             costType,
             inputTokenCount,
@@ -1529,6 +1530,7 @@ private constructor(
             model,
             outputTokenCount,
             provider,
+            reasoningTokenCount,
             requestDuration,
             requestTime,
             responseTime,
@@ -1536,8 +1538,6 @@ private constructor(
             totalTokenCount,
             transactionId,
             agent,
-            cacheCreationTokenCount,
-            cacheReadTokenCount,
             errorReason,
             inputTokenCost,
             mediationLatency,
@@ -1546,14 +1546,13 @@ private constructor(
             organizationId,
             outputTokenCost,
             productId,
-            reasoningTokenCount,
             responseQualityScore,
             subscriberCredential,
             subscriberCredentialName,
             subscriberEmail,
-            subscriberId,
             subscriptionId,
             systemFingerprint,
+            taskId,
             taskType,
             temperature,
             timeToFirstToken,
@@ -1561,6 +1560,25 @@ private constructor(
             traceId,
             mutableMapOf(),
         )
+
+        /**
+         * The number of cached creation tokens in the completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun cacheCreationTokenCount(): Long =
+            cacheCreationTokenCount.getRequired("cacheCreationTokenCount")
+
+        /**
+         * The number of cached read tokens in the completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun cacheReadTokenCount(): Long = cacheReadTokenCount.getRequired("cacheReadTokenCount")
 
         /**
          * Time to first token for streaming requests
@@ -1626,6 +1644,15 @@ private constructor(
         fun provider(): String = provider.getRequired("provider")
 
         /**
+         * The number of reasoning tokens in the completion
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun reasoningTokenCount(): Long = reasoningTokenCount.getRequired("reasoningTokenCount")
+
+        /**
          * The duration of the request in milliseconds
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
@@ -1687,24 +1714,6 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun agent(): Optional<String> = agent.getOptional("agent")
-
-        /**
-         * The number of cached creation tokens in the completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun cacheCreationTokenCount(): Optional<Long> =
-            cacheCreationTokenCount.getOptional("cacheCreationTokenCount")
-
-        /**
-         * The number of cached read tokens in the completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun cacheReadTokenCount(): Optional<Long> =
-            cacheReadTokenCount.getOptional("cacheReadTokenCount")
 
         /**
          * The details of the error that occurred during the LLM completion
@@ -1775,15 +1784,6 @@ private constructor(
         fun productId(): Optional<String> = productId.getOptional("productId")
 
         /**
-         * The number of reasoning tokens in the completion
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun reasoningTokenCount(): Optional<Long> =
-            reasoningTokenCount.getOptional("reasoningTokenCount")
-
-        /**
          * The quality score of the response
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
@@ -1821,17 +1821,6 @@ private constructor(
         fun subscriberEmail(): Optional<String> = subscriberEmail.getOptional("subscriberEmail")
 
         /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberId(): Optional<String> = subscriberId.getOptional("subscriberId")
-
-        /**
          * Unique identifier of the subscription from your own system that you wish to use to
          * correlate usage between Revenium & your application.
          *
@@ -1850,6 +1839,16 @@ private constructor(
          */
         fun systemFingerprint(): Optional<String> =
             systemFingerprint.getOptional("systemFingerprint")
+
+        /**
+         * Identifier of the associated task. If you wish to track the costs and performance for a
+         * task that occurs over several prompts, use a consistent task ID for all prompts included
+         * in that task.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun taskId(): Optional<String> = taskId.getOptional("taskId")
 
         /**
          * If you wish to track the costs or performance of a specific task and compare the values
@@ -1892,6 +1891,26 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun traceId(): Optional<String> = traceId.getOptional("traceId")
+
+        /**
+         * Returns the raw JSON value of [cacheCreationTokenCount].
+         *
+         * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheCreationTokenCount")
+        @ExcludeMissing
+        fun _cacheCreationTokenCount(): JsonField<Long> = cacheCreationTokenCount
+
+        /**
+         * Returns the raw JSON value of [cacheReadTokenCount].
+         *
+         * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheReadTokenCount")
+        @ExcludeMissing
+        fun _cacheReadTokenCount(): JsonField<Long> = cacheReadTokenCount
 
         /**
          * Returns the raw JSON value of [completionStartTime].
@@ -1952,6 +1971,16 @@ private constructor(
          * Unlike [provider], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("provider") @ExcludeMissing fun _provider(): JsonField<String> = provider
+
+        /**
+         * Returns the raw JSON value of [reasoningTokenCount].
+         *
+         * Unlike [reasoningTokenCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("reasoningTokenCount")
+        @ExcludeMissing
+        fun _reasoningTokenCount(): JsonField<Long> = reasoningTokenCount
 
         /**
          * Returns the raw JSON value of [requestDuration].
@@ -2017,26 +2046,6 @@ private constructor(
          * Unlike [agent], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("agent") @ExcludeMissing fun _agent(): JsonField<String> = agent
-
-        /**
-         * Returns the raw JSON value of [cacheCreationTokenCount].
-         *
-         * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("cacheCreationTokenCount")
-        @ExcludeMissing
-        fun _cacheCreationTokenCount(): JsonField<Long> = cacheCreationTokenCount
-
-        /**
-         * Returns the raw JSON value of [cacheReadTokenCount].
-         *
-         * Unlike [cacheReadTokenCount], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("cacheReadTokenCount")
-        @ExcludeMissing
-        fun _cacheReadTokenCount(): JsonField<Long> = cacheReadTokenCount
 
         /**
          * Returns the raw JSON value of [errorReason].
@@ -2114,16 +2123,6 @@ private constructor(
         @JsonProperty("productId") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
-         * Returns the raw JSON value of [reasoningTokenCount].
-         *
-         * Unlike [reasoningTokenCount], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("reasoningTokenCount")
-        @ExcludeMissing
-        fun _reasoningTokenCount(): JsonField<Long> = reasoningTokenCount
-
-        /**
          * Returns the raw JSON value of [responseQualityScore].
          *
          * Unlike [responseQualityScore], this method doesn't throw if the JSON field has an
@@ -2164,16 +2163,6 @@ private constructor(
         fun _subscriberEmail(): JsonField<String> = subscriberEmail
 
         /**
-         * Returns the raw JSON value of [subscriberId].
-         *
-         * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriberId")
-        @ExcludeMissing
-        fun _subscriberId(): JsonField<String> = subscriberId
-
-        /**
          * Returns the raw JSON value of [subscriptionId].
          *
          * Unlike [subscriptionId], this method doesn't throw if the JSON field has an unexpected
@@ -2192,6 +2181,13 @@ private constructor(
         @JsonProperty("systemFingerprint")
         @ExcludeMissing
         fun _systemFingerprint(): JsonField<String> = systemFingerprint
+
+        /**
+         * Returns the raw JSON value of [taskId].
+         *
+         * Unlike [taskId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("taskId") @ExcludeMissing fun _taskId(): JsonField<String> = taskId
 
         /**
          * Returns the raw JSON value of [taskType].
@@ -2252,6 +2248,8 @@ private constructor(
              *
              * The following fields are required:
              * ```java
+             * .cacheCreationTokenCount()
+             * .cacheReadTokenCount()
              * .completionStartTime()
              * .costType()
              * .inputTokenCount()
@@ -2259,6 +2257,7 @@ private constructor(
              * .model()
              * .outputTokenCount()
              * .provider()
+             * .reasoningTokenCount()
              * .requestDuration()
              * .requestTime()
              * .responseTime()
@@ -2273,6 +2272,8 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var cacheCreationTokenCount: JsonField<Long>? = null
+            private var cacheReadTokenCount: JsonField<Long>? = null
             private var completionStartTime: JsonField<String>? = null
             private var costType: JsonField<CostType>? = null
             private var inputTokenCount: JsonField<Long>? = null
@@ -2280,6 +2281,7 @@ private constructor(
             private var model: JsonField<String>? = null
             private var outputTokenCount: JsonField<Long>? = null
             private var provider: JsonField<String>? = null
+            private var reasoningTokenCount: JsonField<Long>? = null
             private var requestDuration: JsonField<Long>? = null
             private var requestTime: JsonField<String>? = null
             private var responseTime: JsonField<String>? = null
@@ -2287,8 +2289,6 @@ private constructor(
             private var totalTokenCount: JsonField<Long>? = null
             private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
-            private var cacheCreationTokenCount: JsonField<Long> = JsonMissing.of()
-            private var cacheReadTokenCount: JsonField<Long> = JsonMissing.of()
             private var errorReason: JsonField<String> = JsonMissing.of()
             private var inputTokenCost: JsonField<Double> = JsonMissing.of()
             private var mediationLatency: JsonField<Long> = JsonMissing.of()
@@ -2297,14 +2297,13 @@ private constructor(
             private var organizationId: JsonField<String> = JsonMissing.of()
             private var outputTokenCost: JsonField<Double> = JsonMissing.of()
             private var productId: JsonField<String> = JsonMissing.of()
-            private var reasoningTokenCount: JsonField<Long> = JsonMissing.of()
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
             private var subscriberCredential: JsonField<String> = JsonMissing.of()
             private var subscriberCredentialName: JsonField<String> = JsonMissing.of()
             private var subscriberEmail: JsonField<String> = JsonMissing.of()
-            private var subscriberId: JsonField<String> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var systemFingerprint: JsonField<String> = JsonMissing.of()
+            private var taskId: JsonField<String> = JsonMissing.of()
             private var taskType: JsonField<String> = JsonMissing.of()
             private var temperature: JsonField<Double> = JsonMissing.of()
             private var timeToFirstToken: JsonField<Long> = JsonMissing.of()
@@ -2314,6 +2313,8 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
+                cacheCreationTokenCount = body.cacheCreationTokenCount
+                cacheReadTokenCount = body.cacheReadTokenCount
                 completionStartTime = body.completionStartTime
                 costType = body.costType
                 inputTokenCount = body.inputTokenCount
@@ -2321,6 +2322,7 @@ private constructor(
                 model = body.model
                 outputTokenCount = body.outputTokenCount
                 provider = body.provider
+                reasoningTokenCount = body.reasoningTokenCount
                 requestDuration = body.requestDuration
                 requestTime = body.requestTime
                 responseTime = body.responseTime
@@ -2328,8 +2330,6 @@ private constructor(
                 totalTokenCount = body.totalTokenCount
                 transactionId = body.transactionId
                 agent = body.agent
-                cacheCreationTokenCount = body.cacheCreationTokenCount
-                cacheReadTokenCount = body.cacheReadTokenCount
                 errorReason = body.errorReason
                 inputTokenCost = body.inputTokenCost
                 mediationLatency = body.mediationLatency
@@ -2338,20 +2338,49 @@ private constructor(
                 organizationId = body.organizationId
                 outputTokenCost = body.outputTokenCost
                 productId = body.productId
-                reasoningTokenCount = body.reasoningTokenCount
                 responseQualityScore = body.responseQualityScore
                 subscriberCredential = body.subscriberCredential
                 subscriberCredentialName = body.subscriberCredentialName
                 subscriberEmail = body.subscriberEmail
-                subscriberId = body.subscriberId
                 subscriptionId = body.subscriptionId
                 systemFingerprint = body.systemFingerprint
+                taskId = body.taskId
                 taskType = body.taskType
                 temperature = body.temperature
                 timeToFirstToken = body.timeToFirstToken
                 totalCost = body.totalCost
                 traceId = body.traceId
                 additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** The number of cached creation tokens in the completion */
+            fun cacheCreationTokenCount(cacheCreationTokenCount: Long) =
+                cacheCreationTokenCount(JsonField.of(cacheCreationTokenCount))
+
+            /**
+             * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
+                this.cacheCreationTokenCount = cacheCreationTokenCount
+            }
+
+            /** The number of cached read tokens in the completion */
+            fun cacheReadTokenCount(cacheReadTokenCount: Long) =
+                cacheReadTokenCount(JsonField.of(cacheReadTokenCount))
+
+            /**
+             * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
+                this.cacheReadTokenCount = cacheReadTokenCount
             }
 
             /** Time to first token for streaming requests */
@@ -2446,6 +2475,21 @@ private constructor(
              * supported value.
              */
             fun provider(provider: JsonField<String>) = apply { this.provider = provider }
+
+            /** The number of reasoning tokens in the completion */
+            fun reasoningTokenCount(reasoningTokenCount: Long) =
+                reasoningTokenCount(JsonField.of(reasoningTokenCount))
+
+            /**
+             * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
+                this.reasoningTokenCount = reasoningTokenCount
+            }
 
             /** The duration of the request in milliseconds */
             fun requestDuration(requestDuration: Long) =
@@ -2547,36 +2591,6 @@ private constructor(
              * supported value.
              */
             fun agent(agent: JsonField<String>) = apply { this.agent = agent }
-
-            /** The number of cached creation tokens in the completion */
-            fun cacheCreationTokenCount(cacheCreationTokenCount: Long) =
-                cacheCreationTokenCount(JsonField.of(cacheCreationTokenCount))
-
-            /**
-             * Sets [Builder.cacheCreationTokenCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cacheCreationTokenCount] with a well-typed [Long]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
-                this.cacheCreationTokenCount = cacheCreationTokenCount
-            }
-
-            /** The number of cached read tokens in the completion */
-            fun cacheReadTokenCount(cacheReadTokenCount: Long) =
-                cacheReadTokenCount(JsonField.of(cacheReadTokenCount))
-
-            /**
-             * Sets [Builder.cacheReadTokenCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cacheReadTokenCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cacheReadTokenCount(cacheReadTokenCount: JsonField<Long>) = apply {
-                this.cacheReadTokenCount = cacheReadTokenCount
-            }
 
             /** The details of the error that occurred during the LLM completion */
             fun errorReason(errorReason: String) = errorReason(JsonField.of(errorReason))
@@ -2701,21 +2715,6 @@ private constructor(
              */
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            /** The number of reasoning tokens in the completion */
-            fun reasoningTokenCount(reasoningTokenCount: Long) =
-                reasoningTokenCount(JsonField.of(reasoningTokenCount))
-
-            /**
-             * Sets [Builder.reasoningTokenCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.reasoningTokenCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun reasoningTokenCount(reasoningTokenCount: JsonField<Long>) = apply {
-                this.reasoningTokenCount = reasoningTokenCount
-            }
-
             /** The quality score of the response */
             fun responseQualityScore(responseQualityScore: Double) =
                 responseQualityScore(JsonField.of(responseQualityScore))
@@ -2783,25 +2782,6 @@ private constructor(
             }
 
             /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users. i.e. user-123. If several subscriberCredentials have the
-             * same subscriberId, Revenium’s reporting will show usage for the entire organization
-             * broken down by user.
-             */
-            fun subscriberId(subscriberId: String) = subscriberId(JsonField.of(subscriberId))
-
-            /**
-             * Sets [Builder.subscriberId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun subscriberId(subscriberId: JsonField<String>) = apply {
-                this.subscriberId = subscriberId
-            }
-
-            /**
              * Unique identifier of the subscription from your own system that you wish to use to
              * correlate usage between Revenium & your application.
              */
@@ -2837,6 +2817,22 @@ private constructor(
             fun systemFingerprint(systemFingerprint: JsonField<String>) = apply {
                 this.systemFingerprint = systemFingerprint
             }
+
+            /**
+             * Identifier of the associated task. If you wish to track the costs and performance for
+             * a task that occurs over several prompts, use a consistent task ID for all prompts
+             * included in that task.
+             */
+            fun taskId(taskId: String) = taskId(JsonField.of(taskId))
+
+            /**
+             * Sets [Builder.taskId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taskId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun taskId(taskId: JsonField<String>) = apply { this.taskId = taskId }
 
             /**
              * If you wish to track the costs or performance of a specific task and compare the
@@ -2933,6 +2929,8 @@ private constructor(
              *
              * The following fields are required:
              * ```java
+             * .cacheCreationTokenCount()
+             * .cacheReadTokenCount()
              * .completionStartTime()
              * .costType()
              * .inputTokenCount()
@@ -2940,6 +2938,7 @@ private constructor(
              * .model()
              * .outputTokenCount()
              * .provider()
+             * .reasoningTokenCount()
              * .requestDuration()
              * .requestTime()
              * .responseTime()
@@ -2952,6 +2951,8 @@ private constructor(
              */
             fun build(): Body =
                 Body(
+                    checkRequired("cacheCreationTokenCount", cacheCreationTokenCount),
+                    checkRequired("cacheReadTokenCount", cacheReadTokenCount),
                     checkRequired("completionStartTime", completionStartTime),
                     checkRequired("costType", costType),
                     checkRequired("inputTokenCount", inputTokenCount),
@@ -2959,6 +2960,7 @@ private constructor(
                     checkRequired("model", model),
                     checkRequired("outputTokenCount", outputTokenCount),
                     checkRequired("provider", provider),
+                    checkRequired("reasoningTokenCount", reasoningTokenCount),
                     checkRequired("requestDuration", requestDuration),
                     checkRequired("requestTime", requestTime),
                     checkRequired("responseTime", responseTime),
@@ -2966,8 +2968,6 @@ private constructor(
                     checkRequired("totalTokenCount", totalTokenCount),
                     checkRequired("transactionId", transactionId),
                     agent,
-                    cacheCreationTokenCount,
-                    cacheReadTokenCount,
                     errorReason,
                     inputTokenCost,
                     mediationLatency,
@@ -2976,14 +2976,13 @@ private constructor(
                     organizationId,
                     outputTokenCost,
                     productId,
-                    reasoningTokenCount,
                     responseQualityScore,
                     subscriberCredential,
                     subscriberCredentialName,
                     subscriberEmail,
-                    subscriberId,
                     subscriptionId,
                     systemFingerprint,
+                    taskId,
                     taskType,
                     temperature,
                     timeToFirstToken,
@@ -3000,6 +2999,8 @@ private constructor(
                 return@apply
             }
 
+            cacheCreationTokenCount()
+            cacheReadTokenCount()
             completionStartTime()
             costType().validate()
             inputTokenCount()
@@ -3007,6 +3008,7 @@ private constructor(
             model()
             outputTokenCount()
             provider()
+            reasoningTokenCount()
             requestDuration()
             requestTime()
             responseTime()
@@ -3014,8 +3016,6 @@ private constructor(
             totalTokenCount()
             transactionId()
             agent()
-            cacheCreationTokenCount()
-            cacheReadTokenCount()
             errorReason()
             inputTokenCost()
             mediationLatency()
@@ -3024,14 +3024,13 @@ private constructor(
             organizationId()
             outputTokenCost()
             productId()
-            reasoningTokenCount()
             responseQualityScore()
             subscriberCredential()
             subscriberCredentialName()
             subscriberEmail()
-            subscriberId()
             subscriptionId()
             systemFingerprint()
+            taskId()
             taskType()
             temperature()
             timeToFirstToken()
@@ -3056,13 +3055,16 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (completionStartTime.asKnown().isPresent) 1 else 0) +
+            (if (cacheCreationTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (cacheReadTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (completionStartTime.asKnown().isPresent) 1 else 0) +
                 (costType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (inputTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (isStreamed.asKnown().isPresent) 1 else 0) +
                 (if (model.asKnown().isPresent) 1 else 0) +
                 (if (outputTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (provider.asKnown().isPresent) 1 else 0) +
+                (if (reasoningTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (requestDuration.asKnown().isPresent) 1 else 0) +
                 (if (requestTime.asKnown().isPresent) 1 else 0) +
                 (if (responseTime.asKnown().isPresent) 1 else 0) +
@@ -3070,8 +3072,6 @@ private constructor(
                 (if (totalTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (agent.asKnown().isPresent) 1 else 0) +
-                (if (cacheCreationTokenCount.asKnown().isPresent) 1 else 0) +
-                (if (cacheReadTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (errorReason.asKnown().isPresent) 1 else 0) +
                 (if (inputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (mediationLatency.asKnown().isPresent) 1 else 0) +
@@ -3080,14 +3080,13 @@ private constructor(
                 (if (organizationId.asKnown().isPresent) 1 else 0) +
                 (if (outputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
-                (if (reasoningTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
                 (if (subscriberCredential.asKnown().isPresent) 1 else 0) +
                 (if (subscriberCredentialName.asKnown().isPresent) 1 else 0) +
                 (if (subscriberEmail.asKnown().isPresent) 1 else 0) +
-                (if (subscriberId.asKnown().isPresent) 1 else 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
+                (if (taskId.asKnown().isPresent) 1 else 0) +
                 (if (taskType.asKnown().isPresent) 1 else 0) +
                 (if (temperature.asKnown().isPresent) 1 else 0) +
                 (if (timeToFirstToken.asKnown().isPresent) 1 else 0) +
@@ -3099,17 +3098,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && reasoningTokenCount == other.reasoningTokenCount && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberCredentialName == other.subscriberCredentialName && subscriberEmail == other.subscriberEmail && subscriberId == other.subscriberId && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && reasoningTokenCount == other.reasoningTokenCount && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberCredentialName == other.subscriberCredentialName && subscriberEmail == other.subscriberEmail && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskId == other.taskId && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, cacheCreationTokenCount, cacheReadTokenCount, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, reasoningTokenCount, responseQualityScore, subscriberCredential, subscriberCredentialName, subscriberEmail, subscriberId, subscriptionId, systemFingerprint, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cacheCreationTokenCount, cacheReadTokenCount, completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, reasoningTokenCount, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, responseQualityScore, subscriberCredential, subscriberCredentialName, subscriberEmail, subscriptionId, systemFingerprint, taskId, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, reasoningTokenCount=$reasoningTokenCount, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberCredentialName=$subscriberCredentialName, subscriberEmail=$subscriberEmail, subscriberId=$subscriberId, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, reasoningTokenCount=$reasoningTokenCount, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberCredentialName=$subscriberCredentialName, subscriberEmail=$subscriberEmail, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskId=$taskId, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
