@@ -43,6 +43,8 @@ import com.revenium_metering.api.models.events.MeteringResponseResource;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheCreationTokenCount(1300L)
+    .cacheReadTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
@@ -50,6 +52,7 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
@@ -136,6 +139,8 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheCreationTokenCount(1300L)
+    .cacheReadTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
@@ -143,6 +148,7 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
@@ -166,6 +172,8 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClientAsync client = ReveniumMeteringOkHttpClientAsync.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheCreationTokenCount(1300L)
+    .cacheReadTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
@@ -173,6 +181,7 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
@@ -198,6 +207,8 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheCreationTokenCount(1300L)
+    .cacheReadTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
@@ -205,6 +216,7 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
@@ -415,6 +427,8 @@ To set a documented parameter or property to an undocumented or not yet supporte
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheCreationTokenCount(1300L)
+    .cacheReadTokenCount(1300L)
     .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
@@ -422,6 +436,7 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
@@ -479,19 +494,22 @@ import com.revenium_metering.api.core.JsonMissing;
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .cacheReadTokenCount(1300L)
+    .completionStartTime("2025-03-02T15:04:05Z")
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
     .isStreamed(false)
     .model("gpt4")
     .outputTokenCount(150L)
     .provider("OpenAI")
+    .reasoningTokenCount(1300L)
     .requestDuration(1000L)
     .requestTime("2025-03-02T15:04:05Z")
     .responseTime("2025-03-02T15:04:06Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
     .totalTokenCount(200L)
     .transactionId("123e4567-e89b-12d3-a456-426614174000")
-    .completionStartTime(JsonMissing.of())
+    .cacheCreationTokenCount(JsonMissing.of())
     .build();
 ```
 
@@ -533,19 +551,19 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 import com.revenium_metering.api.core.JsonField;
 import java.util.Optional;
 
-JsonField<String> completionStartTime = client.ai().createCompletion(params)._completionStartTime();
+JsonField<Long> cacheCreationTokenCount = client.ai().createCompletion(params)._cacheCreationTokenCount();
 
-if (completionStartTime.isMissing()) {
+if (cacheCreationTokenCount.isMissing()) {
   // The property is absent from the JSON response
-} else if (completionStartTime.isNull()) {
+} else if (cacheCreationTokenCount.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = completionStartTime.asString();
+  Optional<String> jsonString = cacheCreationTokenCount.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = completionStartTime.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = cacheCreationTokenCount.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
