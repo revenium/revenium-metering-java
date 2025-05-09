@@ -311,7 +311,6 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
 MeteringResponseResource meteringResponseResource = client.ai().createCompletion(
@@ -567,7 +566,6 @@ MeteringResponseResource meteringResponseResource = client.ai().createCompletion
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
 MeteringResponseResource meteringResponseResource = client.ai().createCompletion(
