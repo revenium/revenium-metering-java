@@ -12,7 +12,7 @@ internal class ApiMeterResponseParamsTest {
     @Test
     fun create() {
         ApiMeterResponseParams.builder()
-            .responseCode(200L)
+            .responseCode(200)
             .transactionId("123e4567-e89b-12d3-a456-426614174000")
             .backendLatency(1200.0)
             .contentType("application/json")
@@ -27,7 +27,7 @@ internal class ApiMeterResponseParamsTest {
     fun body() {
         val params =
             ApiMeterResponseParams.builder()
-                .responseCode(200L)
+                .responseCode(200)
                 .transactionId("123e4567-e89b-12d3-a456-426614174000")
                 .backendLatency(1200.0)
                 .contentType("application/json")
@@ -38,7 +38,7 @@ internal class ApiMeterResponseParamsTest {
 
         val body = params._body()
 
-        assertThat(body.responseCode()).isEqualTo(200L)
+        assertThat(body.responseCode()).isEqualTo(200)
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(body.backendLatency()).contains(1200.0)
         assertThat(body.contentType()).contains("application/json")
@@ -52,13 +52,13 @@ internal class ApiMeterResponseParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             ApiMeterResponseParams.builder()
-                .responseCode(200L)
+                .responseCode(200)
                 .transactionId("123e4567-e89b-12d3-a456-426614174000")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.responseCode()).isEqualTo(200L)
+        assertThat(body.responseCode()).isEqualTo(200)
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
     }
 }

@@ -33,7 +33,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun responseCode(): Long = body.responseCode()
+    fun responseCode(): Int = body.responseCode()
 
     /**
      * A client-supplied unique identifier used to correlate request and response pairs across
@@ -90,7 +90,7 @@ private constructor(
      *
      * Unlike [responseCode], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _responseCode(): JsonField<Long> = body._responseCode()
+    fun _responseCode(): JsonField<Int> = body._responseCode()
 
     /**
      * Returns the raw JSON value of [transactionId].
@@ -186,16 +186,16 @@ private constructor(
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** The HTTP status code of the response */
-        fun responseCode(responseCode: Long) = apply { body.responseCode(responseCode) }
+        fun responseCode(responseCode: Int) = apply { body.responseCode(responseCode) }
 
         /**
          * Sets [Builder.responseCode] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.responseCode] with a well-typed [Long] value instead.
+         * You should usually call [Builder.responseCode] with a well-typed [Int] value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun responseCode(responseCode: JsonField<Long>) = apply { body.responseCode(responseCode) }
+        fun responseCode(responseCode: JsonField<Int>) = apply { body.responseCode(responseCode) }
 
         /**
          * A client-supplied unique identifier used to correlate request and response pairs across
@@ -432,7 +432,7 @@ private constructor(
     /** The metadata for the API response */
     class Body
     private constructor(
-        private val responseCode: JsonField<Long>,
+        private val responseCode: JsonField<Int>,
         private val transactionId: JsonField<String>,
         private val backendLatency: JsonField<Double>,
         private val contentType: JsonField<String>,
@@ -446,7 +446,7 @@ private constructor(
         private constructor(
             @JsonProperty("responseCode")
             @ExcludeMissing
-            responseCode: JsonField<Long> = JsonMissing.of(),
+            responseCode: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("transactionId")
             @ExcludeMissing
             transactionId: JsonField<String> = JsonMissing.of(),
@@ -483,7 +483,7 @@ private constructor(
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun responseCode(): Long = responseCode.getRequired("responseCode")
+        fun responseCode(): Int = responseCode.getRequired("responseCode")
 
         /**
          * A client-supplied unique identifier used to correlate request and response pairs across
@@ -545,7 +545,7 @@ private constructor(
          */
         @JsonProperty("responseCode")
         @ExcludeMissing
-        fun _responseCode(): JsonField<Long> = responseCode
+        fun _responseCode(): JsonField<Int> = responseCode
 
         /**
          * Returns the raw JSON value of [transactionId].
@@ -635,7 +635,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var responseCode: JsonField<Long>? = null
+            private var responseCode: JsonField<Int>? = null
             private var transactionId: JsonField<String>? = null
             private var backendLatency: JsonField<Double> = JsonMissing.of()
             private var contentType: JsonField<String> = JsonMissing.of()
@@ -657,16 +657,16 @@ private constructor(
             }
 
             /** The HTTP status code of the response */
-            fun responseCode(responseCode: Long) = responseCode(JsonField.of(responseCode))
+            fun responseCode(responseCode: Int) = responseCode(JsonField.of(responseCode))
 
             /**
              * Sets [Builder.responseCode] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.responseCode] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.responseCode] with a well-typed [Int] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun responseCode(responseCode: JsonField<Long>) = apply {
+            fun responseCode(responseCode: JsonField<Int>) = apply {
                 this.responseCode = responseCode
             }
 
