@@ -412,10 +412,11 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/core/Values.kt) object to its setter:
 
 ```java
+import com.revenium_metering.api.core.JsonValue;
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime(JsonValue.from(42))
     .costType(AiCreateCompletionParams.CostType.AI)
     .inputTokenCount(50L)
     .isStreamed(false)
