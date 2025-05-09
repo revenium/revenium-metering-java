@@ -57,7 +57,7 @@ internal class ApiServiceTest {
         val meteringResponseResource =
             apiService.meterResponse(
                 ApiMeterResponseParams.builder()
-                    .responseCode(200L)
+                    .responseCode(200)
                     .transactionId("123e4567-e89b-12d3-a456-426614174000")
                     .backendLatency(1200.0)
                     .contentType("application/json")
