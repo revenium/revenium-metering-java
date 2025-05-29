@@ -2,7 +2,6 @@
 
 package com.revenium_metering.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams
@@ -34,14 +33,12 @@ interface AiServiceAsync {
          * Returns a raw HTTP response for `post /v2/ai/completions`, but is otherwise the same as
          * [AiServiceAsync.createCompletion].
          */
-        @MustBeClosed
         fun createCompletion(
             params: AiCreateCompletionParams
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             createCompletion(params, RequestOptions.none())
 
         /** @see [createCompletion] */
-        @MustBeClosed
         fun createCompletion(
             params: AiCreateCompletionParams,
             requestOptions: RequestOptions = RequestOptions.none(),

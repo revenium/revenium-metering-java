@@ -2,7 +2,6 @@
 
 package com.revenium_metering.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.models.events.EventCreateParams
@@ -33,14 +32,12 @@ interface EventServiceAsync {
          * Returns a raw HTTP response for `post /v2/events`, but is otherwise the same as
          * [EventServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             params: EventCreateParams
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: EventCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
