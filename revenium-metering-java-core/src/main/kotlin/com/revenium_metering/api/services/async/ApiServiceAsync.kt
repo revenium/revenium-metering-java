@@ -2,7 +2,6 @@
 
 package com.revenium_metering.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.models.apis.ApiMeterRequestParams
@@ -44,14 +43,12 @@ interface ApiServiceAsync {
          * Returns a raw HTTP response for `post /v2/apis/requests`, but is otherwise the same as
          * [ApiServiceAsync.meterRequest].
          */
-        @MustBeClosed
         fun meterRequest(
             params: ApiMeterRequestParams
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             meterRequest(params, RequestOptions.none())
 
         /** @see [meterRequest] */
-        @MustBeClosed
         fun meterRequest(
             params: ApiMeterRequestParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -61,14 +58,12 @@ interface ApiServiceAsync {
          * Returns a raw HTTP response for `post /v2/apis/responses`, but is otherwise the same as
          * [ApiServiceAsync.meterResponse].
          */
-        @MustBeClosed
         fun meterResponse(
             params: ApiMeterResponseParams
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             meterResponse(params, RequestOptions.none())
 
         /** @see [meterResponse] */
-        @MustBeClosed
         fun meterResponse(
             params: ApiMeterResponseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
