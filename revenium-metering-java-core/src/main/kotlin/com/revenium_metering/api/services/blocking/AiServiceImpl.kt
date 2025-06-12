@@ -49,6 +49,7 @@ class AiServiceImpl internal constructor(private val clientOptions: ClientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v2", "ai", "completions")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

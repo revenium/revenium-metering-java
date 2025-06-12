@@ -59,6 +59,7 @@ class ApiServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v2", "apis", "requests")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -90,6 +91,7 @@ class ApiServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v2", "apis", "responses")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
