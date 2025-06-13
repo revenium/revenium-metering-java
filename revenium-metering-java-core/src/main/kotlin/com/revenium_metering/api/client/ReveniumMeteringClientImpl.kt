@@ -10,6 +10,7 @@ import com.revenium_metering.api.services.blocking.ApiService
 import com.revenium_metering.api.services.blocking.ApiServiceImpl
 import com.revenium_metering.api.services.blocking.EventService
 import com.revenium_metering.api.services.blocking.EventServiceImpl
+import java.util.function.Consumer
 
 class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
     ReveniumMeteringClient {
@@ -41,6 +42,9 @@ class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
 
     override fun withRawResponse(): ReveniumMeteringClient.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ReveniumMeteringClient =
+        ReveniumMeteringClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun events(): EventService = events
 
     override fun apis(): ApiService = apis
@@ -63,6 +67,13 @@ class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
         private val ai: AiService.WithRawResponse by lazy {
             AiServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ReveniumMeteringClient.WithRawResponse =
+            ReveniumMeteringClientImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun events(): EventService.WithRawResponse = events
 

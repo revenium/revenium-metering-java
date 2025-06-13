@@ -10,6 +10,7 @@ import com.revenium_metering.api.services.async.ApiServiceAsync
 import com.revenium_metering.api.services.async.ApiServiceAsyncImpl
 import com.revenium_metering.api.services.async.EventServiceAsync
 import com.revenium_metering.api.services.async.EventServiceAsyncImpl
+import java.util.function.Consumer
 
 class ReveniumMeteringClientAsyncImpl(private val clientOptions: ClientOptions) :
     ReveniumMeteringClientAsync {
@@ -41,6 +42,11 @@ class ReveniumMeteringClientAsyncImpl(private val clientOptions: ClientOptions) 
 
     override fun withRawResponse(): ReveniumMeteringClientAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): ReveniumMeteringClientAsync =
+        ReveniumMeteringClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun events(): EventServiceAsync = events
 
     override fun apis(): ApiServiceAsync = apis
@@ -63,6 +69,13 @@ class ReveniumMeteringClientAsyncImpl(private val clientOptions: ClientOptions) 
         private val ai: AiServiceAsync.WithRawResponse by lazy {
             AiServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ReveniumMeteringClientAsync.WithRawResponse =
+            ReveniumMeteringClientAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun events(): EventServiceAsync.WithRawResponse = events
 

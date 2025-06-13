@@ -17,6 +17,7 @@ import com.revenium_metering.api.core.http.parseable
 import com.revenium_metering.api.core.prepare
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
+import java.util.function.Consumer
 
 class AiServiceImpl internal constructor(private val clientOptions: ClientOptions) : AiService {
 
@@ -25,6 +26,9 @@ class AiServiceImpl internal constructor(private val clientOptions: ClientOption
     }
 
     override fun withRawResponse(): AiService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiService =
+        AiServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun createCompletion(
         params: AiCreateCompletionParams,
@@ -37,6 +41,13 @@ class AiServiceImpl internal constructor(private val clientOptions: ClientOption
         AiService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AiService.WithRawResponse =
+            AiServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createCompletionHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)

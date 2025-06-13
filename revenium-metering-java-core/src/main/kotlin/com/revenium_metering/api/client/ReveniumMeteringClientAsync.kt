@@ -2,9 +2,11 @@
 
 package com.revenium_metering.api.client
 
+import com.revenium_metering.api.core.ClientOptions
 import com.revenium_metering.api.services.async.AiServiceAsync
 import com.revenium_metering.api.services.async.ApiServiceAsync
 import com.revenium_metering.api.services.async.EventServiceAsync
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Revenium Metering REST API asynchronously. You can also switch
@@ -35,6 +37,13 @@ interface ReveniumMeteringClientAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): ReveniumMeteringClientAsync
+
     fun events(): EventServiceAsync
 
     fun apis(): ApiServiceAsync
@@ -59,6 +68,15 @@ interface ReveniumMeteringClientAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ReveniumMeteringClientAsync.WithRawResponse
 
         fun events(): EventServiceAsync.WithRawResponse
 

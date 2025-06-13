@@ -3,10 +3,12 @@
 package com.revenium_metering.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.revenium_metering.api.core.ClientOptions
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
+import java.util.function.Consumer
 
 interface AiService {
 
@@ -14,6 +16,13 @@ interface AiService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiService
 
     /** Record the details of an LLM completion */
     fun createCompletion(params: AiCreateCompletionParams): MeteringResponseResource =
@@ -27,6 +36,13 @@ interface AiService {
 
     /** A view of [AiService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v2/ai/completions`, but is otherwise the same as

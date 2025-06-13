@@ -17,6 +17,7 @@ import com.revenium_metering.api.core.http.parseable
 import com.revenium_metering.api.core.prepare
 import com.revenium_metering.api.models.events.EventCreateParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
+import java.util.function.Consumer
 
 class EventServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     EventService {
@@ -26,6 +27,9 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
     }
 
     override fun withRawResponse(): EventService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService =
+        EventServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: EventCreateParams,
@@ -38,6 +42,13 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
         EventService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): EventService.WithRawResponse =
+            EventServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)
