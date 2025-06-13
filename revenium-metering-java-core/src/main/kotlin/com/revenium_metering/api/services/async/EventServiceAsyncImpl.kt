@@ -18,6 +18,7 @@ import com.revenium_metering.api.core.prepareAsync
 import com.revenium_metering.api.models.events.EventCreateParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class EventServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     EventServiceAsync {
@@ -27,6 +28,9 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): EventServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventServiceAsync =
+        EventServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: EventCreateParams,
@@ -39,6 +43,13 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
         EventServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): EventServiceAsync.WithRawResponse =
+            EventServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)

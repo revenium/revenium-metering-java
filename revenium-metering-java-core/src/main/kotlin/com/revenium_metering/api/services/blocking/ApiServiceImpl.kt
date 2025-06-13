@@ -18,6 +18,7 @@ import com.revenium_metering.api.core.prepare
 import com.revenium_metering.api.models.apis.ApiMeterRequestParams
 import com.revenium_metering.api.models.apis.ApiMeterResponseParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
+import java.util.function.Consumer
 
 class ApiServiceImpl internal constructor(private val clientOptions: ClientOptions) : ApiService {
 
@@ -26,6 +27,9 @@ class ApiServiceImpl internal constructor(private val clientOptions: ClientOptio
     }
 
     override fun withRawResponse(): ApiService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ApiService =
+        ApiServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun meterRequest(
         params: ApiMeterRequestParams,
@@ -45,6 +49,13 @@ class ApiServiceImpl internal constructor(private val clientOptions: ClientOptio
         ApiService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ApiService.WithRawResponse =
+            ApiServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val meterRequestHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)

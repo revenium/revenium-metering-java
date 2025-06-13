@@ -2,11 +2,13 @@
 
 package com.revenium_metering.api.services.async
 
+import com.revenium_metering.api.core.ClientOptions
 import com.revenium_metering.api.core.RequestOptions
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams
 import com.revenium_metering.api.models.events.MeteringResponseResource
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface AiServiceAsync {
 
@@ -14,6 +16,13 @@ interface AiServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiServiceAsync
 
     /** Record the details of an LLM completion */
     fun createCompletion(
@@ -28,6 +37,13 @@ interface AiServiceAsync {
 
     /** A view of [AiServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v2/ai/completions`, but is otherwise the same as
