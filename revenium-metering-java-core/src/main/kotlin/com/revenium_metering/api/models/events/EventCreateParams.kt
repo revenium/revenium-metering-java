@@ -15,7 +15,6 @@ import com.revenium_metering.api.core.Params
 import com.revenium_metering.api.core.checkRequired
 import com.revenium_metering.api.core.http.Headers
 import com.revenium_metering.api.core.http.QueryParams
-import com.revenium_metering.api.core.toImmutable
 import com.revenium_metering.api.errors.ReveniumMeteringInvalidDataException
 import java.util.Collections
 import java.util.Objects
@@ -40,7 +39,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun payload(): Payload = body.payload()
+    fun payload(): String = body.payload()
 
     /**
      * the source type
@@ -72,14 +71,14 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun subscriberCredential(): Optional<String> = body.subscriberCredential()
+    fun subscriberCredentialId(): Optional<String> = body.subscriberCredentialId()
 
     /**
      * Returns the raw JSON value of [payload].
      *
      * Unlike [payload], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _payload(): JsonField<Payload> = body._payload()
+    fun _payload(): JsonField<String> = body._payload()
 
     /**
      * Returns the raw JSON value of [sourceType].
@@ -103,12 +102,12 @@ private constructor(
     fun _sourceId(): JsonField<String> = body._sourceId()
 
     /**
-     * Returns the raw JSON value of [subscriberCredential].
+     * Returns the raw JSON value of [subscriberCredentialId].
      *
-     * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [subscriberCredentialId], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
-    fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
+    fun _subscriberCredentialId(): JsonField<String> = body._subscriberCredentialId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -156,7 +155,7 @@ private constructor(
          * - [sourceType]
          * - [transactionId]
          * - [sourceId]
-         * - [subscriberCredential]
+         * - [subscriberCredentialId]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -168,15 +167,15 @@ private constructor(
          * exist in Revenium, each key you send will be configured as a metering element on the
          * relevant data source.
          */
-        fun payload(payload: Payload) = apply { body.payload(payload) }
+        fun payload(payload: String) = apply { body.payload(payload) }
 
         /**
          * Sets [Builder.payload] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.payload] with a well-typed [Payload] value instead. This
+         * You should usually call [Builder.payload] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun payload(payload: JsonField<Payload>) = apply { body.payload(payload) }
+        fun payload(payload: JsonField<String>) = apply { body.payload(payload) }
 
         /** the source type */
         fun sourceType(sourceType: SourceType) = apply { body.sourceType(sourceType) }
@@ -216,19 +215,19 @@ private constructor(
         fun sourceId(sourceId: JsonField<String>) = apply { body.sourceId(sourceId) }
 
         /** The unique identifier of the credential */
-        fun subscriberCredential(subscriberCredential: String) = apply {
-            body.subscriberCredential(subscriberCredential)
+        fun subscriberCredentialId(subscriberCredentialId: String) = apply {
+            body.subscriberCredentialId(subscriberCredentialId)
         }
 
         /**
-         * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+         * Sets [Builder.subscriberCredentialId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriberCredential] with a well-typed [String] value
+         * You should usually call [Builder.subscriberCredentialId] with a well-typed [String] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-            body.subscriberCredential(subscriberCredential)
+        fun subscriberCredentialId(subscriberCredentialId: JsonField<String>) = apply {
+            body.subscriberCredentialId(subscriberCredentialId)
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -379,17 +378,17 @@ private constructor(
     /** The metering event */
     class Body
     private constructor(
-        private val payload: JsonField<Payload>,
+        private val payload: JsonField<String>,
         private val sourceType: JsonField<SourceType>,
         private val transactionId: JsonField<String>,
         private val sourceId: JsonField<String>,
-        private val subscriberCredential: JsonField<String>,
+        private val subscriberCredentialId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("payload") @ExcludeMissing payload: JsonField<Payload> = JsonMissing.of(),
+            @JsonProperty("payload") @ExcludeMissing payload: JsonField<String> = JsonMissing.of(),
             @JsonProperty("sourceType")
             @ExcludeMissing
             sourceType: JsonField<SourceType> = JsonMissing.of(),
@@ -399,10 +398,17 @@ private constructor(
             @JsonProperty("sourceId")
             @ExcludeMissing
             sourceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberCredential")
+            @JsonProperty("subscriberCredentialId")
             @ExcludeMissing
-            subscriberCredential: JsonField<String> = JsonMissing.of(),
-        ) : this(payload, sourceType, transactionId, sourceId, subscriberCredential, mutableMapOf())
+            subscriberCredentialId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            payload,
+            sourceType,
+            transactionId,
+            sourceId,
+            subscriberCredentialId,
+            mutableMapOf(),
+        )
 
         /**
          * The rating payload as a JSON object. For example, if you are sending key value pairs of
@@ -415,7 +421,7 @@ private constructor(
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun payload(): Payload = payload.getRequired("payload")
+        fun payload(): String = payload.getRequired("payload")
 
         /**
          * the source type
@@ -449,15 +455,15 @@ private constructor(
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriberCredential(): Optional<String> =
-            subscriberCredential.getOptional("subscriberCredential")
+        fun subscriberCredentialId(): Optional<String> =
+            subscriberCredentialId.getOptional("subscriberCredentialId")
 
         /**
          * Returns the raw JSON value of [payload].
          *
          * Unlike [payload], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("payload") @ExcludeMissing fun _payload(): JsonField<Payload> = payload
+        @JsonProperty("payload") @ExcludeMissing fun _payload(): JsonField<String> = payload
 
         /**
          * Returns the raw JSON value of [sourceType].
@@ -486,14 +492,14 @@ private constructor(
         @JsonProperty("sourceId") @ExcludeMissing fun _sourceId(): JsonField<String> = sourceId
 
         /**
-         * Returns the raw JSON value of [subscriberCredential].
+         * Returns the raw JSON value of [subscriberCredentialId].
          *
-         * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an
+         * Unlike [subscriberCredentialId], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
-        @JsonProperty("subscriberCredential")
+        @JsonProperty("subscriberCredentialId")
         @ExcludeMissing
-        fun _subscriberCredential(): JsonField<String> = subscriberCredential
+        fun _subscriberCredentialId(): JsonField<String> = subscriberCredentialId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -525,11 +531,11 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var payload: JsonField<Payload>? = null
+            private var payload: JsonField<String>? = null
             private var sourceType: JsonField<SourceType>? = null
             private var transactionId: JsonField<String>? = null
             private var sourceId: JsonField<String> = JsonMissing.of()
-            private var subscriberCredential: JsonField<String> = JsonMissing.of()
+            private var subscriberCredentialId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -538,7 +544,7 @@ private constructor(
                 sourceType = body.sourceType
                 transactionId = body.transactionId
                 sourceId = body.sourceId
-                subscriberCredential = body.subscriberCredential
+                subscriberCredentialId = body.subscriberCredentialId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -549,16 +555,16 @@ private constructor(
              * already exist in Revenium, each key you send will be configured as a metering element
              * on the relevant data source.
              */
-            fun payload(payload: Payload) = payload(JsonField.of(payload))
+            fun payload(payload: String) = payload(JsonField.of(payload))
 
             /**
              * Sets [Builder.payload] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.payload] with a well-typed [Payload] value instead.
+             * You should usually call [Builder.payload] with a well-typed [String] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun payload(payload: JsonField<Payload>) = apply { this.payload = payload }
+            fun payload(payload: JsonField<String>) = apply { this.payload = payload }
 
             /** the source type */
             fun sourceType(sourceType: SourceType) = sourceType(JsonField.of(sourceType))
@@ -601,18 +607,18 @@ private constructor(
             fun sourceId(sourceId: JsonField<String>) = apply { this.sourceId = sourceId }
 
             /** The unique identifier of the credential */
-            fun subscriberCredential(subscriberCredential: String) =
-                subscriberCredential(JsonField.of(subscriberCredential))
+            fun subscriberCredentialId(subscriberCredentialId: String) =
+                subscriberCredentialId(JsonField.of(subscriberCredentialId))
 
             /**
-             * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+             * Sets [Builder.subscriberCredentialId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriberCredential] with a well-typed [String]
+             * You should usually call [Builder.subscriberCredentialId] with a well-typed [String]
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
-            fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-                this.subscriberCredential = subscriberCredential
+            fun subscriberCredentialId(subscriberCredentialId: JsonField<String>) = apply {
+                this.subscriberCredentialId = subscriberCredentialId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -654,7 +660,7 @@ private constructor(
                     checkRequired("sourceType", sourceType),
                     checkRequired("transactionId", transactionId),
                     sourceId,
-                    subscriberCredential,
+                    subscriberCredentialId,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -666,11 +672,11 @@ private constructor(
                 return@apply
             }
 
-            payload().validate()
+            payload()
             sourceType().validate()
             transactionId()
             sourceId()
-            subscriberCredential()
+            subscriberCredentialId()
             validated = true
         }
 
@@ -690,136 +696,28 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (payload.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (payload.asKnown().isPresent) 1 else 0) +
                 (sourceType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (sourceId.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredential.asKnown().isPresent) 1 else 0)
+                (if (subscriberCredentialId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && payload == other.payload && sourceType == other.sourceType && transactionId == other.transactionId && sourceId == other.sourceId && subscriberCredential == other.subscriberCredential && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && payload == other.payload && sourceType == other.sourceType && transactionId == other.transactionId && sourceId == other.sourceId && subscriberCredentialId == other.subscriberCredentialId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(payload, sourceType, transactionId, sourceId, subscriberCredential, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(payload, sourceType, transactionId, sourceId, subscriberCredentialId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{payload=$payload, sourceType=$sourceType, transactionId=$transactionId, sourceId=$sourceId, subscriberCredential=$subscriberCredential, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * The rating payload as a JSON object. For example, if you are sending key value pairs of
-     * 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the payload
-     * would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not already exist
-     * in Revenium, each key you send will be configured as a metering element on the relevant data
-     * source.
-     */
-    class Payload
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Payload]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Payload]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(payload: Payload) = apply {
-                additionalProperties = payload.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Payload].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Payload = Payload(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Payload = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: ReveniumMeteringInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Payload && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Payload{additionalProperties=$additionalProperties}"
+            "Body{payload=$payload, sourceType=$sourceType, transactionId=$transactionId, sourceId=$sourceId, subscriberCredentialId=$subscriberCredentialId, additionalProperties=$additionalProperties}"
     }
 
     /** the source type */

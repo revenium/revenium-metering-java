@@ -18,7 +18,7 @@ internal class MeteringResponseResourceTest {
             MeteringResponseResource.builder()
                 .id("abc123")
                 .label("Metering Response")
-                .resourceType("metering")
+                .object_("metering")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
@@ -46,7 +46,7 @@ internal class MeteringResponseResourceTest {
 
         assertThat(meteringResponseResource.id()).isEqualTo("abc123")
         assertThat(meteringResponseResource.label()).isEqualTo("Metering Response")
-        assertThat(meteringResponseResource.resourceType()).isEqualTo("metering")
+        assertThat(meteringResponseResource.object_()).isEqualTo("metering")
         assertThat(meteringResponseResource.signature()).isEqualTo("signature123")
         assertThat(meteringResponseResource._links())
             .contains(
@@ -81,7 +81,7 @@ internal class MeteringResponseResourceTest {
             MeteringResponseResource.builder()
                 .id("abc123")
                 .label("Metering Response")
-                .resourceType("metering")
+                .object_("metering")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
