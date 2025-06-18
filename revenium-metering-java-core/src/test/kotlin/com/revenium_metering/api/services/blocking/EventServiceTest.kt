@@ -4,6 +4,7 @@ package com.revenium_metering.api.services.blocking
 
 import com.revenium_metering.api.TestServerExtension
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient
+import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.models.events.EventCreateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -25,11 +26,22 @@ internal class EventServiceTest {
         val meteringResponseResource =
             eventService.create(
                 EventCreateParams.builder()
-                    .payload("payload")
+                    .payload(
+                        EventCreateParams.Payload.builder()
+                            .putAdditionalProperty(
+                                "requestTokens",
+                                JsonValue.from(mapOf<String, Any>()),
+                            )
+                            .putAdditionalProperty(
+                                "responseTokens",
+                                JsonValue.from(mapOf<String, Any>()),
+                            )
+                            .build()
+                    )
                     .sourceType(EventCreateParams.SourceType.UNKNOWN)
                     .transactionId("123e4567-e89b-12d3-a456-426614174000")
                     .sourceId("sourceId")
-                    .subscriberCredentialId(
+                    .subscriberCredential(
                         "The credential associated with the event.  Visible on the subscriber credentials in page in the Revenium platform."
                     )
                     .build()

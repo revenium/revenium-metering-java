@@ -26,7 +26,7 @@ class MeteringResponseResource
 private constructor(
     private val id: JsonField<String>,
     private val label: JsonField<String>,
-    private val object_: JsonField<String>,
+    private val resourceType: JsonField<String>,
     private val signature: JsonField<String>,
     private val _links: JsonField<_Links>,
     private val created: JsonField<String>,
@@ -38,12 +38,14 @@ private constructor(
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("label") @ExcludeMissing label: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("object") @ExcludeMissing object_: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("resourceType")
+        @ExcludeMissing
+        resourceType: JsonField<String> = JsonMissing.of(),
         @JsonProperty("signature") @ExcludeMissing signature: JsonField<String> = JsonMissing.of(),
         @JsonProperty("_links") @ExcludeMissing _links: JsonField<_Links> = JsonMissing.of(),
         @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<String> = JsonMissing.of(),
-    ) : this(id, label, object_, signature, _links, created, updated, mutableMapOf())
+    ) : this(id, label, resourceType, signature, _links, created, updated, mutableMapOf())
 
     /**
      * Unique identifier for the metering response
@@ -67,7 +69,7 @@ private constructor(
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun object_(): String = object_.getRequired("object")
+    fun resourceType(): String = resourceType.getRequired("resourceType")
 
     /**
      * Signature used for validating the response data
@@ -114,11 +116,13 @@ private constructor(
     @JsonProperty("label") @ExcludeMissing fun _label(): JsonField<String> = label
 
     /**
-     * Returns the raw JSON value of [object_].
+     * Returns the raw JSON value of [resourceType].
      *
-     * Unlike [object_], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [resourceType], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonField<String> = object_
+    @JsonProperty("resourceType")
+    @ExcludeMissing
+    fun _resourceType(): JsonField<String> = resourceType
 
     /**
      * Returns the raw JSON value of [signature].
@@ -169,7 +173,7 @@ private constructor(
          * ```java
          * .id()
          * .label()
-         * .object_()
+         * .resourceType()
          * .signature()
          * ```
          */
@@ -181,7 +185,7 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var label: JsonField<String>? = null
-        private var object_: JsonField<String>? = null
+        private var resourceType: JsonField<String>? = null
         private var signature: JsonField<String>? = null
         private var _links: JsonField<_Links> = JsonMissing.of()
         private var created: JsonField<String> = JsonMissing.of()
@@ -192,7 +196,7 @@ private constructor(
         internal fun from(meteringResponseResource: MeteringResponseResource) = apply {
             id = meteringResponseResource.id
             label = meteringResponseResource.label
-            object_ = meteringResponseResource.object_
+            resourceType = meteringResponseResource.resourceType
             signature = meteringResponseResource.signature
             _links = meteringResponseResource._links
             created = meteringResponseResource.created
@@ -223,15 +227,18 @@ private constructor(
         fun label(label: JsonField<String>) = apply { this.label = label }
 
         /** Type of the object, typically 'metering' */
-        fun object_(object_: String) = object_(JsonField.of(object_))
+        fun resourceType(resourceType: String) = resourceType(JsonField.of(resourceType))
 
         /**
-         * Sets [Builder.object_] to an arbitrary JSON value.
+         * Sets [Builder.resourceType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.object_] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.resourceType] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
+        fun resourceType(resourceType: JsonField<String>) = apply {
+            this.resourceType = resourceType
+        }
 
         /** Signature used for validating the response data */
         fun signature(signature: String) = signature(JsonField.of(signature))
@@ -305,7 +312,7 @@ private constructor(
          * ```java
          * .id()
          * .label()
-         * .object_()
+         * .resourceType()
          * .signature()
          * ```
          *
@@ -315,7 +322,7 @@ private constructor(
             MeteringResponseResource(
                 checkRequired("id", id),
                 checkRequired("label", label),
-                checkRequired("object_", object_),
+                checkRequired("resourceType", resourceType),
                 checkRequired("signature", signature),
                 _links,
                 created,
@@ -333,7 +340,7 @@ private constructor(
 
         id()
         label()
-        object_()
+        resourceType()
         signature()
         _links().ifPresent { it.validate() }
         created()
@@ -358,7 +365,7 @@ private constructor(
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
             (if (label.asKnown().isPresent) 1 else 0) +
-            (if (object_.asKnown().isPresent) 1 else 0) +
+            (if (resourceType.asKnown().isPresent) 1 else 0) +
             (if (signature.asKnown().isPresent) 1 else 0) +
             (_links.asKnown().getOrNull()?.validity() ?: 0) +
             (if (created.asKnown().isPresent) 1 else 0) +
@@ -470,15 +477,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MeteringResponseResource && id == other.id && label == other.label && object_ == other.object_ && signature == other.signature && _links == other._links && created == other.created && updated == other.updated && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MeteringResponseResource && id == other.id && label == other.label && resourceType == other.resourceType && signature == other.signature && _links == other._links && created == other.created && updated == other.updated && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, label, object_, signature, _links, created, updated, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, label, resourceType, signature, _links, created, updated, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MeteringResponseResource{id=$id, label=$label, object_=$object_, signature=$signature, _links=$_links, created=$created, updated=$updated, additionalProperties=$additionalProperties}"
+        "MeteringResponseResource{id=$id, label=$label, resourceType=$resourceType, signature=$signature, _links=$_links, created=$created, updated=$updated, additionalProperties=$additionalProperties}"
 }
