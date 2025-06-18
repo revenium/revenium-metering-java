@@ -4,7 +4,6 @@ package com.revenium_metering.api.services.async
 
 import com.revenium_metering.api.TestServerExtension
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClientAsync
-import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.models.events.EventCreateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -26,22 +25,11 @@ internal class EventServiceAsyncTest {
         val meteringResponseResourceFuture =
             eventServiceAsync.create(
                 EventCreateParams.builder()
-                    .payload(
-                        EventCreateParams.Payload.builder()
-                            .putAdditionalProperty(
-                                "requestTokens",
-                                JsonValue.from(mapOf<String, Any>()),
-                            )
-                            .putAdditionalProperty(
-                                "responseTokens",
-                                JsonValue.from(mapOf<String, Any>()),
-                            )
-                            .build()
-                    )
+                    .payload("payload")
                     .sourceType(EventCreateParams.SourceType.UNKNOWN)
                     .transactionId("123e4567-e89b-12d3-a456-426614174000")
                     .sourceId("sourceId")
-                    .subscriberCredential(
+                    .subscriberCredentialId(
                         "The credential associated with the event.  Visible on the subscriber credentials in page in the Revenium platform."
                     )
                     .build()
