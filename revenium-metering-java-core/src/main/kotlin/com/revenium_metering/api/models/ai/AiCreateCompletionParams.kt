@@ -142,12 +142,32 @@ private constructor(
     fun agent(): Optional<String> = body.agent()
 
     /**
+     * The cache creation token cost associated with the LLM completion. Note that if you send a
+     * valuefor this parameter in your request, it will override Revenium's automatic calculation of
+     * tokencost by AI model.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun cacheCreationTokenCost(): Optional<Double> = body.cacheCreationTokenCost()
+
+    /**
      * The number of cached creation tokens in the completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
     fun cacheCreationTokenCount(): Optional<Long> = body.cacheCreationTokenCount()
+
+    /**
+     * The cache read token cost associated with the LLM completion. Note that if you send a
+     * valuefor this parameter in your request, it will override Revenium's automatic calculation of
+     * tokencost by AI model.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun cacheReadTokenCost(): Optional<Double> = body.cacheReadTokenCost()
 
     /**
      * The number of cached read tokens in the completion
@@ -182,6 +202,14 @@ private constructor(
     fun mediationLatency(): Optional<Long> = body.mediationLatency()
 
     /**
+     * The source middleware or SDK that generated this AI completion request
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun middlewareSource(): Optional<String> = body.middlewareSource()
+
+    /**
      * The source of the AI model used for the completion
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -201,7 +229,7 @@ private constructor(
      * Populate the ID of the subscriber’s organization from your system to allow Revenium to track
      * usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
      * organizationId, Revenium’s reporting will show usage for the entire organization broken down
-     * by user.
+     * by subscriberId.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -209,7 +237,9 @@ private constructor(
     fun organizationId(): Optional<String> = body.organizationId()
 
     /**
-     * The output token cost associated with the LLM completion
+     * The output token cost associated with the LLM completion. Note that if you send a valuefor
+     * this parameter in your request, it will override Revenium's automatic calculation of
+     * tokencost by AI model. This option may not be available on all Revenium plans.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -242,41 +272,12 @@ private constructor(
     fun responseQualityScore(): Optional<Double> = body.responseQualityScore()
 
     /**
-     * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
-     * for individual users.
+     * The subscriber metadata
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun subscriberCredential(): Optional<String> = body.subscriberCredential()
-
-    /**
-     * Populate the name of the subscriber credential from your system to allow Revenium to track
-     * usage & costs for individual users.
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberCredentialName(): Optional<String> = body.subscriberCredentialName()
-
-    /**
-     * The email address of the subscriber
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberEmail(): Optional<String> = body.subscriberEmail()
-
-    /**
-     * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
-     * for individual users. i.e. user-123. If several subscriberCredentials have the same
-     * subscriberId, Revenium’s reporting will show usage for the entire organization broken down by
-     * user.
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberId(): Optional<String> = body.subscriberId()
+    fun subscriber(): Optional<Subscriber> = body.subscriber()
 
     /**
      * Unique identifier of the subscription from your own system that you wish to use to correlate
@@ -324,7 +325,9 @@ private constructor(
     fun timeToFirstToken(): Optional<Long> = body.timeToFirstToken()
 
     /**
-     * The total cost associated with the LLM completion
+     * The total cost associated with the LLM completion. Note that if you send a valuefor this
+     * parameter in your request, it will override Revenium's automatic calculation of tokencost by
+     * AI model.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -440,12 +443,28 @@ private constructor(
     fun _agent(): JsonField<String> = body._agent()
 
     /**
+     * Returns the raw JSON value of [cacheCreationTokenCost].
+     *
+     * Unlike [cacheCreationTokenCost], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _cacheCreationTokenCost(): JsonField<Double> = body._cacheCreationTokenCost()
+
+    /**
      * Returns the raw JSON value of [cacheCreationTokenCount].
      *
      * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
     fun _cacheCreationTokenCount(): JsonField<Long> = body._cacheCreationTokenCount()
+
+    /**
+     * Returns the raw JSON value of [cacheReadTokenCost].
+     *
+     * Unlike [cacheReadTokenCost], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _cacheReadTokenCost(): JsonField<Double> = body._cacheReadTokenCost()
 
     /**
      * Returns the raw JSON value of [cacheReadTokenCount].
@@ -476,6 +495,14 @@ private constructor(
      * type.
      */
     fun _mediationLatency(): JsonField<Long> = body._mediationLatency()
+
+    /**
+     * Returns the raw JSON value of [middlewareSource].
+     *
+     * Unlike [middlewareSource], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _middlewareSource(): JsonField<String> = body._middlewareSource()
 
     /**
      * Returns the raw JSON value of [modelSource].
@@ -529,34 +556,11 @@ private constructor(
     fun _responseQualityScore(): JsonField<Double> = body._responseQualityScore()
 
     /**
-     * Returns the raw JSON value of [subscriberCredential].
+     * Returns the raw JSON value of [subscriber].
      *
-     * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [subscriber], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
-
-    /**
-     * Returns the raw JSON value of [subscriberCredentialName].
-     *
-     * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
-     * unexpected type.
-     */
-    fun _subscriberCredentialName(): JsonField<String> = body._subscriberCredentialName()
-
-    /**
-     * Returns the raw JSON value of [subscriberEmail].
-     *
-     * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _subscriberEmail(): JsonField<String> = body._subscriberEmail()
-
-    /**
-     * Returns the raw JSON value of [subscriberId].
-     *
-     * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _subscriberId(): JsonField<String> = body._subscriberId()
+    fun _subscriber(): JsonField<Subscriber> = body._subscriber()
 
     /**
      * Returns the raw JSON value of [subscriptionId].
@@ -856,6 +860,26 @@ private constructor(
          */
         fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
 
+        /**
+         * The cache creation token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model.
+         */
+        fun cacheCreationTokenCost(cacheCreationTokenCost: Double) = apply {
+            body.cacheCreationTokenCost(cacheCreationTokenCost)
+        }
+
+        /**
+         * Sets [Builder.cacheCreationTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheCreationTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheCreationTokenCost(cacheCreationTokenCost: JsonField<Double>) = apply {
+            body.cacheCreationTokenCost(cacheCreationTokenCost)
+        }
+
         /** The number of cached creation tokens in the completion */
         fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
             body.cacheCreationTokenCount(cacheCreationTokenCount)
@@ -870,6 +894,26 @@ private constructor(
          */
         fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
             body.cacheCreationTokenCount(cacheCreationTokenCount)
+        }
+
+        /**
+         * The cache read token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model.
+         */
+        fun cacheReadTokenCost(cacheReadTokenCost: Double) = apply {
+            body.cacheReadTokenCost(cacheReadTokenCost)
+        }
+
+        /**
+         * Sets [Builder.cacheReadTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheReadTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheReadTokenCost(cacheReadTokenCost: JsonField<Double>) = apply {
+            body.cacheReadTokenCost(cacheReadTokenCost)
         }
 
         /** The number of cached read tokens in the completion */
@@ -930,6 +974,22 @@ private constructor(
             body.mediationLatency(mediationLatency)
         }
 
+        /** The source middleware or SDK that generated this AI completion request */
+        fun middlewareSource(middlewareSource: String) = apply {
+            body.middlewareSource(middlewareSource)
+        }
+
+        /**
+         * Sets [Builder.middlewareSource] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.middlewareSource] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun middlewareSource(middlewareSource: JsonField<String>) = apply {
+            body.middlewareSource(middlewareSource)
+        }
+
         /** The source of the AI model used for the completion */
         fun modelSource(modelSource: String) = apply { body.modelSource(modelSource) }
 
@@ -962,7 +1022,7 @@ private constructor(
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
          * organizationId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
+         * down by subscriberId.
          */
         fun organizationId(organizationId: String) = apply { body.organizationId(organizationId) }
 
@@ -977,7 +1037,12 @@ private constructor(
             body.organizationId(organizationId)
         }
 
-        /** The output token cost associated with the LLM completion */
+        /**
+         * The output token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model. This option may not be available on all Revenium
+         * plans.
+         */
         fun outputTokenCost(outputTokenCost: Double) = apply {
             body.outputTokenCost(outputTokenCost)
         }
@@ -1040,78 +1105,17 @@ private constructor(
             body.responseQualityScore(responseQualityScore)
         }
 
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users.
-         */
-        fun subscriberCredential(subscriberCredential: String) = apply {
-            body.subscriberCredential(subscriberCredential)
-        }
+        /** The subscriber metadata */
+        fun subscriber(subscriber: Subscriber) = apply { body.subscriber(subscriber) }
 
         /**
-         * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+         * Sets [Builder.subscriber] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriberCredential] with a well-typed [String] value
+         * You should usually call [Builder.subscriber] with a well-typed [Subscriber] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-            body.subscriberCredential(subscriberCredential)
-        }
-
-        /**
-         * Populate the name of the subscriber credential from your system to allow Revenium to
-         * track usage & costs for individual users.
-         */
-        fun subscriberCredentialName(subscriberCredentialName: String) = apply {
-            body.subscriberCredentialName(subscriberCredentialName)
-        }
-
-        /**
-         * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
-        fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
-            body.subscriberCredentialName(subscriberCredentialName)
-        }
-
-        /** The email address of the subscriber */
-        fun subscriberEmail(subscriberEmail: String) = apply {
-            body.subscriberEmail(subscriberEmail)
-        }
-
-        /**
-         * Sets [Builder.subscriberEmail] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberEmail] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
-            body.subscriberEmail(subscriberEmail)
-        }
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         */
-        fun subscriberId(subscriberId: String) = apply { body.subscriberId(subscriberId) }
-
-        /**
-         * Sets [Builder.subscriberId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun subscriberId(subscriberId: JsonField<String>) = apply {
-            body.subscriberId(subscriberId)
-        }
+        fun subscriber(subscriber: JsonField<Subscriber>) = apply { body.subscriber(subscriber) }
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -1193,7 +1197,11 @@ private constructor(
             body.timeToFirstToken(timeToFirstToken)
         }
 
-        /** The total cost associated with the LLM completion */
+        /**
+         * The total cost associated with the LLM completion. Note that if you send a valuefor this
+         * parameter in your request, it will override Revenium's automatic calculation of tokencost
+         * by AI model.
+         */
         fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
 
         /**
@@ -1388,11 +1396,14 @@ private constructor(
         private val totalTokenCount: JsonField<Long>,
         private val transactionId: JsonField<String>,
         private val agent: JsonField<String>,
+        private val cacheCreationTokenCost: JsonField<Double>,
         private val cacheCreationTokenCount: JsonField<Long>,
+        private val cacheReadTokenCost: JsonField<Double>,
         private val cacheReadTokenCount: JsonField<Long>,
         private val errorReason: JsonField<String>,
         private val inputTokenCost: JsonField<Double>,
         private val mediationLatency: JsonField<Long>,
+        private val middlewareSource: JsonField<String>,
         private val modelSource: JsonField<String>,
         private val operationType: JsonField<OperationType>,
         private val organizationId: JsonField<String>,
@@ -1400,10 +1411,7 @@ private constructor(
         private val productId: JsonField<String>,
         private val reasoningTokenCount: JsonField<Long>,
         private val responseQualityScore: JsonField<Double>,
-        private val subscriberCredential: JsonField<String>,
-        private val subscriberCredentialName: JsonField<String>,
-        private val subscriberEmail: JsonField<String>,
-        private val subscriberId: JsonField<String>,
+        private val subscriber: JsonField<Subscriber>,
         private val subscriptionId: JsonField<String>,
         private val systemFingerprint: JsonField<String>,
         private val taskType: JsonField<String>,
@@ -1454,9 +1462,15 @@ private constructor(
             @ExcludeMissing
             transactionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("agent") @ExcludeMissing agent: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("cacheCreationTokenCost")
+            @ExcludeMissing
+            cacheCreationTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("cacheCreationTokenCount")
             @ExcludeMissing
             cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("cacheReadTokenCost")
+            @ExcludeMissing
+            cacheReadTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("cacheReadTokenCount")
             @ExcludeMissing
             cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -1469,6 +1483,9 @@ private constructor(
             @JsonProperty("mediationLatency")
             @ExcludeMissing
             mediationLatency: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("middlewareSource")
+            @ExcludeMissing
+            middlewareSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("modelSource")
             @ExcludeMissing
             modelSource: JsonField<String> = JsonMissing.of(),
@@ -1490,18 +1507,9 @@ private constructor(
             @JsonProperty("responseQualityScore")
             @ExcludeMissing
             responseQualityScore: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("subscriberCredential")
+            @JsonProperty("subscriber")
             @ExcludeMissing
-            subscriberCredential: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberCredentialName")
-            @ExcludeMissing
-            subscriberCredentialName: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberEmail")
-            @ExcludeMissing
-            subscriberEmail: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberId")
-            @ExcludeMissing
-            subscriberId: JsonField<String> = JsonMissing.of(),
+            subscriber: JsonField<Subscriber> = JsonMissing.of(),
             @JsonProperty("subscriptionId")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
@@ -1536,11 +1544,14 @@ private constructor(
             totalTokenCount,
             transactionId,
             agent,
+            cacheCreationTokenCost,
             cacheCreationTokenCount,
+            cacheReadTokenCost,
             cacheReadTokenCount,
             errorReason,
             inputTokenCost,
             mediationLatency,
+            middlewareSource,
             modelSource,
             operationType,
             organizationId,
@@ -1548,10 +1559,7 @@ private constructor(
             productId,
             reasoningTokenCount,
             responseQualityScore,
-            subscriberCredential,
-            subscriberCredentialName,
-            subscriberEmail,
-            subscriberId,
+            subscriber,
             subscriptionId,
             systemFingerprint,
             taskType,
@@ -1689,6 +1697,17 @@ private constructor(
         fun agent(): Optional<String> = agent.getOptional("agent")
 
         /**
+         * The cache creation token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun cacheCreationTokenCost(): Optional<Double> =
+            cacheCreationTokenCost.getOptional("cacheCreationTokenCost")
+
+        /**
          * The number of cached creation tokens in the completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
@@ -1696,6 +1715,17 @@ private constructor(
          */
         fun cacheCreationTokenCount(): Optional<Long> =
             cacheCreationTokenCount.getOptional("cacheCreationTokenCount")
+
+        /**
+         * The cache read token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun cacheReadTokenCost(): Optional<Double> =
+            cacheReadTokenCost.getOptional("cacheReadTokenCost")
 
         /**
          * The number of cached read tokens in the completion
@@ -1731,6 +1761,14 @@ private constructor(
         fun mediationLatency(): Optional<Long> = mediationLatency.getOptional("mediationLatency")
 
         /**
+         * The source middleware or SDK that generated this AI completion request
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun middlewareSource(): Optional<String> = middlewareSource.getOptional("middlewareSource")
+
+        /**
          * The source of the AI model used for the completion
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
@@ -1750,7 +1788,7 @@ private constructor(
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
          * organizationId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
+         * down by subscriberId.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1758,7 +1796,10 @@ private constructor(
         fun organizationId(): Optional<String> = organizationId.getOptional("organizationId")
 
         /**
-         * The output token cost associated with the LLM completion
+         * The output token cost associated with the LLM completion. Note that if you send a
+         * valuefor this parameter in your request, it will override Revenium's automatic
+         * calculation of tokencost by AI model. This option may not be available on all Revenium
+         * plans.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1793,43 +1834,12 @@ private constructor(
             responseQualityScore.getOptional("responseQualityScore")
 
         /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users.
+         * The subscriber metadata
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriberCredential(): Optional<String> =
-            subscriberCredential.getOptional("subscriberCredential")
-
-        /**
-         * Populate the name of the subscriber credential from your system to allow Revenium to
-         * track usage & costs for individual users.
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberCredentialName(): Optional<String> =
-            subscriberCredentialName.getOptional("subscriberCredentialName")
-
-        /**
-         * The email address of the subscriber
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberEmail(): Optional<String> = subscriberEmail.getOptional("subscriberEmail")
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberId(): Optional<String> = subscriberId.getOptional("subscriberId")
+        fun subscriber(): Optional<Subscriber> = subscriber.getOptional("subscriber")
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -1878,7 +1888,9 @@ private constructor(
         fun timeToFirstToken(): Optional<Long> = timeToFirstToken.getOptional("timeToFirstToken")
 
         /**
-         * The total cost associated with the LLM completion
+         * The total cost associated with the LLM completion. Note that if you send a valuefor this
+         * parameter in your request, it will override Revenium's automatic calculation of tokencost
+         * by AI model.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -2019,6 +2031,16 @@ private constructor(
         @JsonProperty("agent") @ExcludeMissing fun _agent(): JsonField<String> = agent
 
         /**
+         * Returns the raw JSON value of [cacheCreationTokenCost].
+         *
+         * Unlike [cacheCreationTokenCost], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheCreationTokenCost")
+        @ExcludeMissing
+        fun _cacheCreationTokenCost(): JsonField<Double> = cacheCreationTokenCost
+
+        /**
          * Returns the raw JSON value of [cacheCreationTokenCount].
          *
          * Unlike [cacheCreationTokenCount], this method doesn't throw if the JSON field has an
@@ -2027,6 +2049,16 @@ private constructor(
         @JsonProperty("cacheCreationTokenCount")
         @ExcludeMissing
         fun _cacheCreationTokenCount(): JsonField<Long> = cacheCreationTokenCount
+
+        /**
+         * Returns the raw JSON value of [cacheReadTokenCost].
+         *
+         * Unlike [cacheReadTokenCost], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheReadTokenCost")
+        @ExcludeMissing
+        fun _cacheReadTokenCost(): JsonField<Double> = cacheReadTokenCost
 
         /**
          * Returns the raw JSON value of [cacheReadTokenCount].
@@ -2066,6 +2098,16 @@ private constructor(
         @JsonProperty("mediationLatency")
         @ExcludeMissing
         fun _mediationLatency(): JsonField<Long> = mediationLatency
+
+        /**
+         * Returns the raw JSON value of [middlewareSource].
+         *
+         * Unlike [middlewareSource], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("middlewareSource")
+        @ExcludeMissing
+        fun _middlewareSource(): JsonField<String> = middlewareSource
 
         /**
          * Returns the raw JSON value of [modelSource].
@@ -2134,44 +2176,13 @@ private constructor(
         fun _responseQualityScore(): JsonField<Double> = responseQualityScore
 
         /**
-         * Returns the raw JSON value of [subscriberCredential].
+         * Returns the raw JSON value of [subscriber].
          *
-         * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [subscriber], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("subscriberCredential")
+        @JsonProperty("subscriber")
         @ExcludeMissing
-        fun _subscriberCredential(): JsonField<String> = subscriberCredential
-
-        /**
-         * Returns the raw JSON value of [subscriberCredentialName].
-         *
-         * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("subscriberCredentialName")
-        @ExcludeMissing
-        fun _subscriberCredentialName(): JsonField<String> = subscriberCredentialName
-
-        /**
-         * Returns the raw JSON value of [subscriberEmail].
-         *
-         * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriberEmail")
-        @ExcludeMissing
-        fun _subscriberEmail(): JsonField<String> = subscriberEmail
-
-        /**
-         * Returns the raw JSON value of [subscriberId].
-         *
-         * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriberId")
-        @ExcludeMissing
-        fun _subscriberId(): JsonField<String> = subscriberId
+        fun _subscriber(): JsonField<Subscriber> = subscriber
 
         /**
          * Returns the raw JSON value of [subscriptionId].
@@ -2287,11 +2298,14 @@ private constructor(
             private var totalTokenCount: JsonField<Long>? = null
             private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
+            private var cacheCreationTokenCost: JsonField<Double> = JsonMissing.of()
             private var cacheCreationTokenCount: JsonField<Long> = JsonMissing.of()
+            private var cacheReadTokenCost: JsonField<Double> = JsonMissing.of()
             private var cacheReadTokenCount: JsonField<Long> = JsonMissing.of()
             private var errorReason: JsonField<String> = JsonMissing.of()
             private var inputTokenCost: JsonField<Double> = JsonMissing.of()
             private var mediationLatency: JsonField<Long> = JsonMissing.of()
+            private var middlewareSource: JsonField<String> = JsonMissing.of()
             private var modelSource: JsonField<String> = JsonMissing.of()
             private var operationType: JsonField<OperationType> = JsonMissing.of()
             private var organizationId: JsonField<String> = JsonMissing.of()
@@ -2299,10 +2313,7 @@ private constructor(
             private var productId: JsonField<String> = JsonMissing.of()
             private var reasoningTokenCount: JsonField<Long> = JsonMissing.of()
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
-            private var subscriberCredential: JsonField<String> = JsonMissing.of()
-            private var subscriberCredentialName: JsonField<String> = JsonMissing.of()
-            private var subscriberEmail: JsonField<String> = JsonMissing.of()
-            private var subscriberId: JsonField<String> = JsonMissing.of()
+            private var subscriber: JsonField<Subscriber> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var systemFingerprint: JsonField<String> = JsonMissing.of()
             private var taskType: JsonField<String> = JsonMissing.of()
@@ -2328,11 +2339,14 @@ private constructor(
                 totalTokenCount = body.totalTokenCount
                 transactionId = body.transactionId
                 agent = body.agent
+                cacheCreationTokenCost = body.cacheCreationTokenCost
                 cacheCreationTokenCount = body.cacheCreationTokenCount
+                cacheReadTokenCost = body.cacheReadTokenCost
                 cacheReadTokenCount = body.cacheReadTokenCount
                 errorReason = body.errorReason
                 inputTokenCost = body.inputTokenCost
                 mediationLatency = body.mediationLatency
+                middlewareSource = body.middlewareSource
                 modelSource = body.modelSource
                 operationType = body.operationType
                 organizationId = body.organizationId
@@ -2340,10 +2354,7 @@ private constructor(
                 productId = body.productId
                 reasoningTokenCount = body.reasoningTokenCount
                 responseQualityScore = body.responseQualityScore
-                subscriberCredential = body.subscriberCredential
-                subscriberCredentialName = body.subscriberCredentialName
-                subscriberEmail = body.subscriberEmail
-                subscriberId = body.subscriberId
+                subscriber = body.subscriber
                 subscriptionId = body.subscriptionId
                 systemFingerprint = body.systemFingerprint
                 taskType = body.taskType
@@ -2548,6 +2559,25 @@ private constructor(
              */
             fun agent(agent: JsonField<String>) = apply { this.agent = agent }
 
+            /**
+             * The cache creation token cost associated with the LLM completion. Note that if you
+             * send a valuefor this parameter in your request, it will override Revenium's automatic
+             * calculation of tokencost by AI model.
+             */
+            fun cacheCreationTokenCost(cacheCreationTokenCost: Double) =
+                cacheCreationTokenCost(JsonField.of(cacheCreationTokenCost))
+
+            /**
+             * Sets [Builder.cacheCreationTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheCreationTokenCost] with a well-typed [Double]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun cacheCreationTokenCost(cacheCreationTokenCost: JsonField<Double>) = apply {
+                this.cacheCreationTokenCost = cacheCreationTokenCost
+            }
+
             /** The number of cached creation tokens in the completion */
             fun cacheCreationTokenCount(cacheCreationTokenCount: Long) =
                 cacheCreationTokenCount(JsonField.of(cacheCreationTokenCount))
@@ -2561,6 +2591,25 @@ private constructor(
              */
             fun cacheCreationTokenCount(cacheCreationTokenCount: JsonField<Long>) = apply {
                 this.cacheCreationTokenCount = cacheCreationTokenCount
+            }
+
+            /**
+             * The cache read token cost associated with the LLM completion. Note that if you send a
+             * valuefor this parameter in your request, it will override Revenium's automatic
+             * calculation of tokencost by AI model.
+             */
+            fun cacheReadTokenCost(cacheReadTokenCost: Double) =
+                cacheReadTokenCost(JsonField.of(cacheReadTokenCost))
+
+            /**
+             * Sets [Builder.cacheReadTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheReadTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cacheReadTokenCost(cacheReadTokenCost: JsonField<Double>) = apply {
+                this.cacheReadTokenCost = cacheReadTokenCost
             }
 
             /** The number of cached read tokens in the completion */
@@ -2622,6 +2671,21 @@ private constructor(
                 this.mediationLatency = mediationLatency
             }
 
+            /** The source middleware or SDK that generated this AI completion request */
+            fun middlewareSource(middlewareSource: String) =
+                middlewareSource(JsonField.of(middlewareSource))
+
+            /**
+             * Sets [Builder.middlewareSource] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.middlewareSource] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun middlewareSource(middlewareSource: JsonField<String>) = apply {
+                this.middlewareSource = middlewareSource
+            }
+
             /** The source of the AI model used for the completion */
             fun modelSource(modelSource: String) = modelSource(JsonField.of(modelSource))
 
@@ -2655,7 +2719,7 @@ private constructor(
              * Populate the ID of the subscriber’s organization from your system to allow Revenium
              * to track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the
              * same organizationId, Revenium’s reporting will show usage for the entire organization
-             * broken down by user.
+             * broken down by subscriberId.
              */
             fun organizationId(organizationId: String) =
                 organizationId(JsonField.of(organizationId))
@@ -2671,7 +2735,12 @@ private constructor(
                 this.organizationId = organizationId
             }
 
-            /** The output token cost associated with the LLM completion */
+            /**
+             * The output token cost associated with the LLM completion. Note that if you send a
+             * valuefor this parameter in your request, it will override Revenium's automatic
+             * calculation of tokencost by AI model. This option may not be available on all
+             * Revenium plans.
+             */
             fun outputTokenCost(outputTokenCost: Double) =
                 outputTokenCost(JsonField.of(outputTokenCost))
 
@@ -2731,74 +2800,18 @@ private constructor(
                 this.responseQualityScore = responseQualityScore
             }
 
-            /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users.
-             */
-            fun subscriberCredential(subscriberCredential: String) =
-                subscriberCredential(JsonField.of(subscriberCredential))
+            /** The subscriber metadata */
+            fun subscriber(subscriber: Subscriber) = subscriber(JsonField.of(subscriber))
 
             /**
-             * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+             * Sets [Builder.subscriber] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriberCredential] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-                this.subscriberCredential = subscriberCredential
-            }
-
-            /**
-             * Populate the name of the subscriber credential from your system to allow Revenium to
-             * track usage & costs for individual users.
-             */
-            fun subscriberCredentialName(subscriberCredentialName: String) =
-                subscriberCredentialName(JsonField.of(subscriberCredentialName))
-
-            /**
-             * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
-                this.subscriberCredentialName = subscriberCredentialName
-            }
-
-            /** The email address of the subscriber */
-            fun subscriberEmail(subscriberEmail: String) =
-                subscriberEmail(JsonField.of(subscriberEmail))
-
-            /**
-             * Sets [Builder.subscriberEmail] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberEmail] with a well-typed [String] value
+             * You should usually call [Builder.subscriber] with a well-typed [Subscriber] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
-                this.subscriberEmail = subscriberEmail
-            }
-
-            /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users. i.e. user-123. If several subscriberCredentials have the
-             * same subscriberId, Revenium’s reporting will show usage for the entire organization
-             * broken down by user.
-             */
-            fun subscriberId(subscriberId: String) = subscriberId(JsonField.of(subscriberId))
-
-            /**
-             * Sets [Builder.subscriberId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun subscriberId(subscriberId: JsonField<String>) = apply {
-                this.subscriberId = subscriberId
+            fun subscriber(subscriber: JsonField<Subscriber>) = apply {
+                this.subscriber = subscriber
             }
 
             /**
@@ -2883,7 +2896,11 @@ private constructor(
                 this.timeToFirstToken = timeToFirstToken
             }
 
-            /** The total cost associated with the LLM completion */
+            /**
+             * The total cost associated with the LLM completion. Note that if you send a valuefor
+             * this parameter in your request, it will override Revenium's automatic calculation of
+             * tokencost by AI model.
+             */
             fun totalCost(totalCost: Double) = totalCost(JsonField.of(totalCost))
 
             /**
@@ -2966,11 +2983,14 @@ private constructor(
                     checkRequired("totalTokenCount", totalTokenCount),
                     checkRequired("transactionId", transactionId),
                     agent,
+                    cacheCreationTokenCost,
                     cacheCreationTokenCount,
+                    cacheReadTokenCost,
                     cacheReadTokenCount,
                     errorReason,
                     inputTokenCost,
                     mediationLatency,
+                    middlewareSource,
                     modelSource,
                     operationType,
                     organizationId,
@@ -2978,10 +2998,7 @@ private constructor(
                     productId,
                     reasoningTokenCount,
                     responseQualityScore,
-                    subscriberCredential,
-                    subscriberCredentialName,
-                    subscriberEmail,
-                    subscriberId,
+                    subscriber,
                     subscriptionId,
                     systemFingerprint,
                     taskType,
@@ -3014,11 +3031,14 @@ private constructor(
             totalTokenCount()
             transactionId()
             agent()
+            cacheCreationTokenCost()
             cacheCreationTokenCount()
+            cacheReadTokenCost()
             cacheReadTokenCount()
             errorReason()
             inputTokenCost()
             mediationLatency()
+            middlewareSource()
             modelSource()
             operationType().ifPresent { it.validate() }
             organizationId()
@@ -3026,10 +3046,7 @@ private constructor(
             productId()
             reasoningTokenCount()
             responseQualityScore()
-            subscriberCredential()
-            subscriberCredentialName()
-            subscriberEmail()
-            subscriberId()
+            subscriber().ifPresent { it.validate() }
             subscriptionId()
             systemFingerprint()
             taskType()
@@ -3070,11 +3087,14 @@ private constructor(
                 (if (totalTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (agent.asKnown().isPresent) 1 else 0) +
+                (if (cacheCreationTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (cacheCreationTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (cacheReadTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (cacheReadTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (errorReason.asKnown().isPresent) 1 else 0) +
                 (if (inputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (mediationLatency.asKnown().isPresent) 1 else 0) +
+                (if (middlewareSource.asKnown().isPresent) 1 else 0) +
                 (if (modelSource.asKnown().isPresent) 1 else 0) +
                 (operationType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (organizationId.asKnown().isPresent) 1 else 0) +
@@ -3082,10 +3102,7 @@ private constructor(
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (reasoningTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredential.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredentialName.asKnown().isPresent) 1 else 0) +
-                (if (subscriberEmail.asKnown().isPresent) 1 else 0) +
-                (if (subscriberId.asKnown().isPresent) 1 else 0) +
+                (subscriber.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
                 (if (taskType.asKnown().isPresent) 1 else 0) +
@@ -3099,17 +3116,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && reasoningTokenCount == other.reasoningTokenCount && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberCredentialName == other.subscriberCredentialName && subscriberEmail == other.subscriberEmail && subscriberId == other.subscriberId && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && cacheCreationTokenCost == other.cacheCreationTokenCost && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCost == other.cacheReadTokenCost && cacheReadTokenCount == other.cacheReadTokenCount && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && middlewareSource == other.middlewareSource && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && reasoningTokenCount == other.reasoningTokenCount && responseQualityScore == other.responseQualityScore && subscriber == other.subscriber && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, cacheCreationTokenCount, cacheReadTokenCount, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, reasoningTokenCount, responseQualityScore, subscriberCredential, subscriberCredentialName, subscriberEmail, subscriberId, subscriptionId, systemFingerprint, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, cacheCreationTokenCost, cacheCreationTokenCount, cacheReadTokenCost, cacheReadTokenCount, errorReason, inputTokenCost, mediationLatency, middlewareSource, modelSource, operationType, organizationId, outputTokenCost, productId, reasoningTokenCount, responseQualityScore, subscriber, subscriptionId, systemFingerprint, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, reasoningTokenCount=$reasoningTokenCount, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberCredentialName=$subscriberCredentialName, subscriberEmail=$subscriberEmail, subscriberId=$subscriberId, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, cacheCreationTokenCost=$cacheCreationTokenCost, cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCost=$cacheReadTokenCost, cacheReadTokenCount=$cacheReadTokenCount, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, middlewareSource=$middlewareSource, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, reasoningTokenCount=$reasoningTokenCount, responseQualityScore=$responseQualityScore, subscriber=$subscriber, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
     }
 
     /** Cost type for the completion */
@@ -3263,6 +3280,8 @@ private constructor(
 
             @JvmField val ERROR = of("ERROR")
 
+            @JvmField val CANCELLED = of("CANCELLED")
+
             @JvmStatic fun of(value: String) = StopReason(JsonField.of(value))
         }
 
@@ -3275,6 +3294,7 @@ private constructor(
             COST_LIMIT,
             COMPLETION_LIMIT,
             ERROR,
+            CANCELLED,
         }
 
         /**
@@ -3294,6 +3314,7 @@ private constructor(
             COST_LIMIT,
             COMPLETION_LIMIT,
             ERROR,
+            CANCELLED,
             /**
              * An enum member indicating that [StopReason] was instantiated with an unknown value.
              */
@@ -3316,6 +3337,7 @@ private constructor(
                 COST_LIMIT -> Value.COST_LIMIT
                 COMPLETION_LIMIT -> Value.COMPLETION_LIMIT
                 ERROR -> Value.ERROR
+                CANCELLED -> Value.CANCELLED
                 else -> Value._UNKNOWN
             }
 
@@ -3337,6 +3359,7 @@ private constructor(
                 COST_LIMIT -> Known.COST_LIMIT
                 COMPLETION_LIMIT -> Known.COMPLETION_LIMIT
                 ERROR -> Known.ERROR
+                CANCELLED -> Known.CANCELLED
                 else -> throw ReveniumMeteringInvalidDataException("Unknown StopReason: $value")
             }
 
@@ -3554,6 +3577,423 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /** The subscriber metadata */
+    class Subscriber
+    private constructor(
+        private val id: JsonField<String>,
+        private val credential: JsonField<Credential>,
+        private val email: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("credential")
+            @ExcludeMissing
+            credential: JsonField<Credential> = JsonMissing.of(),
+            @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+        ) : this(id, credential, email, mutableMapOf())
+
+        /**
+         * Track cost & performance by individual users (if customers are anonymous or tracking by
+         * emails is not desired). If several subscriberIds are submitted with the same
+         * organizationId, Revenium’s reporting will show usage for the entire organization broken
+         * down by subscriberId.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
+
+        /**
+         * The credential used by the subscriber
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun credential(): Optional<Credential> = credential.getOptional("credential")
+
+        /**
+         * The email address of the subscriber. Used to track cost & performance by individual users
+         * if customer e-mail addresses are known.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun email(): Optional<String> = email.getOptional("email")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [credential].
+         *
+         * Unlike [credential], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credential")
+        @ExcludeMissing
+        fun _credential(): JsonField<Credential> = credential
+
+        /**
+         * Returns the raw JSON value of [email].
+         *
+         * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Subscriber]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Subscriber]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String> = JsonMissing.of()
+            private var credential: JsonField<Credential> = JsonMissing.of()
+            private var email: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(subscriber: Subscriber) = apply {
+                id = subscriber.id
+                credential = subscriber.credential
+                email = subscriber.email
+                additionalProperties = subscriber.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * Track cost & performance by individual users (if customers are anonymous or tracking
+             * by emails is not desired). If several subscriberIds are submitted with the same
+             * organizationId, Revenium’s reporting will show usage for the entire organization
+             * broken down by subscriberId.
+             */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /** The credential used by the subscriber */
+            fun credential(credential: Credential) = credential(JsonField.of(credential))
+
+            /**
+             * Sets [Builder.credential] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.credential] with a well-typed [Credential] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun credential(credential: JsonField<Credential>) = apply {
+                this.credential = credential
+            }
+
+            /**
+             * The email address of the subscriber. Used to track cost & performance by individual
+             * users if customer e-mail addresses are known.
+             */
+            fun email(email: String) = email(JsonField.of(email))
+
+            /**
+             * Sets [Builder.email] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.email] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun email(email: JsonField<String>) = apply { this.email = email }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Subscriber].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Subscriber =
+                Subscriber(id, credential, email, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Subscriber = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            credential().ifPresent { it.validate() }
+            email()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (credential.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (email.asKnown().isPresent) 1 else 0)
+
+        /** The credential used by the subscriber */
+        class Credential
+        private constructor(
+            private val name: JsonField<String>,
+            private val value: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
+            ) : this(name, value, mutableMapOf())
+
+            /**
+             * An alias for an API key used by one or more users. Used to track cost & performance
+             * by individual API keys.
+             *
+             * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun name(): Optional<String> = name.getOptional("name")
+
+            /**
+             * The key value associated with the subscriber (most commonly an API key). Used to
+             * track cost & performance by API key value (normally used when the only identifier for
+             * a user is an API key).
+             *
+             * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun value(): Optional<String> = value.getOptional("value")
+
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            /**
+             * Returns the raw JSON value of [value].
+             *
+             * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Credential]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Credential]. */
+            class Builder internal constructor() {
+
+                private var name: JsonField<String> = JsonMissing.of()
+                private var value: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(credential: Credential) = apply {
+                    name = credential.name
+                    value = credential.value
+                    additionalProperties = credential.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * An alias for an API key used by one or more users. Used to track cost &
+                 * performance by individual API keys.
+                 */
+                fun name(name: String) = name(JsonField.of(name))
+
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                /**
+                 * The key value associated with the subscriber (most commonly an API key). Used to
+                 * track cost & performance by API key value (normally used when the only identifier
+                 * for a user is an API key).
+                 */
+                fun value(value: String) = value(JsonField.of(value))
+
+                /**
+                 * Sets [Builder.value] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.value] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun value(value: JsonField<String>) = apply { this.value = value }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Credential].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Credential =
+                    Credential(name, value, additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Credential = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                name()
+                value()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: ReveniumMeteringInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (name.asKnown().isPresent) 1 else 0) + (if (value.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Credential && name == other.name && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(name, value, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Credential{name=$name, value=$value, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Subscriber && id == other.id && credential == other.credential && email == other.email && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, credential, email, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Subscriber{id=$id, credential=$credential, email=$email, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
