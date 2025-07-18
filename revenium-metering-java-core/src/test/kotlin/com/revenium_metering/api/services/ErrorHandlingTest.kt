@@ -124,8 +124,134 @@ internal class ErrorHandlingTest {
 
     @Disabled("skipped: tests are disabled for the time being")
     @Test
+    fun aiCreateCompletion400WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<BadRequestException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(400)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
     fun aiCreateCompletion401() {
         val aiService = client.ai()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnauthorizedException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(401)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun aiCreateCompletion401WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -250,8 +376,134 @@ internal class ErrorHandlingTest {
 
     @Disabled("skipped: tests are disabled for the time being")
     @Test
+    fun aiCreateCompletion403WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<PermissionDeniedException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(403)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
     fun aiCreateCompletion404() {
         val aiService = client.ai()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<NotFoundException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(404)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun aiCreateCompletion404WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -376,8 +628,134 @@ internal class ErrorHandlingTest {
 
     @Disabled("skipped: tests are disabled for the time being")
     @Test
+    fun aiCreateCompletion422WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnprocessableEntityException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(422)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
     fun aiCreateCompletion429() {
         val aiService = client.ai()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<RateLimitException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(429)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun aiCreateCompletion429WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -502,8 +880,134 @@ internal class ErrorHandlingTest {
 
     @Disabled("skipped: tests are disabled for the time being")
     @Test
+    fun aiCreateCompletion500WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<InternalServerException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(500)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
     fun aiCreateCompletion999() {
         val aiService = client.ai()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnexpectedStatusCodeException> {
+                aiService.createCompletion(
+                    AiCreateCompletionParams.builder()
+                        .completionStartTime("2025-03-02T15:04:05Z")
+                        .costType(AiCreateCompletionParams.CostType.AI)
+                        .inputTokenCount(50L)
+                        .isStreamed(false)
+                        .model("gpt4")
+                        .outputTokenCount(150L)
+                        .provider("OpenAI")
+                        .requestDuration(1000L)
+                        .requestTime("2025-03-02T15:04:05Z")
+                        .responseTime("2025-03-02T15:04:06Z")
+                        .stopReason(AiCreateCompletionParams.StopReason.END)
+                        .totalTokenCount(200L)
+                        .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                        .agent("Bishop")
+                        .cacheCreationTokenCount(1300L)
+                        .cacheReadTokenCount(1300L)
+                        .errorReason("key not allowed to access model")
+                        .inputTokenCost(12.34)
+                        .mediationLatency(1000L)
+                        .modelSource("ANTHROPIC")
+                        .operationType(AiCreateCompletionParams.OperationType.CHAT)
+                        .organizationId("org-123")
+                        .outputTokenCost(12.34)
+                        .productId("Free Trial")
+                        .reasoningTokenCount(1300L)
+                        .responseQualityScore(45.0)
+                        .subscriberCredential("asd-123")
+                        .subscriberCredentialName("OpenAI Key (Production)")
+                        .subscriberEmail("user@example.com")
+                        .subscriberId("user-123")
+                        .subscriptionId("subscr-456")
+                        .systemFingerprint(
+                            "fp_44z789a1c23def456gh7890ijkl1234mnopq567rstuv8910wxyz"
+                        )
+                        .taskType("completion")
+                        .temperature(0.78)
+                        .timeToFirstToken(10200L)
+                        .totalCost(12.34)
+                        .traceId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(999)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun aiCreateCompletion999WithRawResponse() {
+        val aiService = client.ai().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
