@@ -3,13 +3,13 @@
 package com.revenium_metering.api.services.async
 
 import com.revenium_metering.api.core.ClientOptions
-import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.RequestOptions
+import com.revenium_metering.api.core.handlers.errorBodyHandler
 import com.revenium_metering.api.core.handlers.errorHandler
 import com.revenium_metering.api.core.handlers.jsonHandler
-import com.revenium_metering.api.core.handlers.withErrorHandler
 import com.revenium_metering.api.core.http.HttpMethod
 import com.revenium_metering.api.core.http.HttpRequest
+import com.revenium_metering.api.core.http.HttpResponse
 import com.revenium_metering.api.core.http.HttpResponse.Handler
 import com.revenium_metering.api.core.http.HttpResponseFor
 import com.revenium_metering.api.core.http.json
@@ -42,7 +42,8 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         EventServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -53,7 +54,6 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val createHandler: Handler<MeteringResponseResource> =
             jsonHandler<MeteringResponseResource>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: EventCreateParams,
@@ -71,7 +71,7 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
