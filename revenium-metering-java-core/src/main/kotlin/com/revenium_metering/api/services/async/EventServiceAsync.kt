@@ -24,11 +24,18 @@ interface EventServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventServiceAsync
 
-    /** Meter an event */
+    /**
+     * Submit a generic metering event with a flexible payload structure. Use this endpoint to meter
+     * custom events that you wish to track in Revenium. The payload should contain any key-value
+     * pairs representing metrics to track or rate for usage-based revenue calculation. The key
+     * values sent here will be created as 'metering elements' if they do not already exist, and
+     * rated according to pricing definitions for the relevant metering element on a product if they
+     * do.
+     */
     fun create(params: EventCreateParams): CompletableFuture<MeteringResponseResource> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: EventCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -55,7 +62,7 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: EventCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),

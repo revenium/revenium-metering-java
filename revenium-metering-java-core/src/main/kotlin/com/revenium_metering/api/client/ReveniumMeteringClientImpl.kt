@@ -51,7 +51,7 @@ class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
 
     override fun ai(): AiService = ai
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ReveniumMeteringClient.WithRawResponse {

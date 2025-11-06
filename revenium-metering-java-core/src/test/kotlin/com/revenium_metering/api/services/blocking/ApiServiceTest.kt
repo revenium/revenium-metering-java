@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 internal class ApiServiceTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Disabled("Prism tests are disabled")
     @Test
     fun meterRequest() {
         val client =
@@ -28,9 +28,7 @@ internal class ApiServiceTest {
                 ApiMeterRequestParams.builder()
                     .transactionId("123e4567-e89b-12d3-a456-426614174000")
                     .contentType("application/json")
-                    .credential(
-                        "The credential used to access the API.  Visible on the subscriber credentials in page in the Revenium platform."
-                    )
+                    .credential("sk_live_abc123def456")
                     .method(ApiMeterRequestParams.Method.GET)
                     .remoteHost("192.168.1.1")
                     .requestMessageSize(1024L)
@@ -44,7 +42,7 @@ internal class ApiServiceTest {
         meteringResponseResource.validate()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Disabled("Prism tests are disabled")
     @Test
     fun meterResponse() {
         val client =

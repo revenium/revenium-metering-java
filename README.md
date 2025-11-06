@@ -39,36 +39,37 @@ import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
-// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
+// Configures using the `reveniummetering.apiKey` and `reveniummetering.baseUrl` system properties
+// Or configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 MeteringResponseResource meteringResponseResource = client.ai().createCompletion(params);
 ```
 
 ## Client configuration
 
-Configure the client using environment variables:
+Configure the client using system properties or environment variables:
 
 ```java
 import com.revenium_metering.api.client.ReveniumMeteringClient;
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 
-// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
+// Configures using the `reveniummetering.apiKey` and `reveniummetering.baseUrl` system properties
+// Or configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 ```
 
@@ -90,7 +91,8 @@ import com.revenium_metering.api.client.ReveniumMeteringClient;
 import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
 
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
-    // Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
+    // Configures using the `reveniummetering.apiKey` and `reveniummetering.baseUrl` system properties
+    // Or configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build();
@@ -98,10 +100,12 @@ ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | Environment variable         | Required | Default value                      |
-| --------- | ---------------------------- | -------- | ---------------------------------- |
-| `apiKey`  | `REVENIUM_METERING_API_KEY`  | true     | -                                  |
-| `baseUrl` | `REVENIUM_METERING_BASE_URL` | true     | `"https://api.revenium.io/meter/"` |
+| Setter    | System property            | Environment variable         | Required | Default value                      |
+| --------- | -------------------------- | ---------------------------- | -------- | ---------------------------------- |
+| `apiKey`  | `reveniummetering.apiKey`  | `REVENIUM_METERING_API_KEY`  | true     | -                                  |
+| `baseUrl` | `reveniummetering.baseUrl` | `REVENIUM_METERING_BASE_URL` | true     | `"https://api.revenium.io/meter/"` |
+
+System properties take precedence over environment variables.
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
@@ -147,23 +151,23 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
+// Configures using the `reveniummetering.apiKey` and `reveniummetering.baseUrl` system properties
+// Or configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 CompletableFuture<MeteringResponseResource> meteringResponseResource = client.async().ai().createCompletion(params);
 ```
@@ -177,23 +181,23 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
+// Configures using the `reveniummetering.apiKey` and `reveniummetering.baseUrl` system properties
+// Or configures using the `REVENIUM_METERING_API_KEY` and `REVENIUM_METERING_BASE_URL` environment variables
 ReveniumMeteringClientAsync client = ReveniumMeteringOkHttpClientAsync.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 CompletableFuture<MeteringResponseResource> meteringResponseResource = client.ai().createCompletion(params);
 ```
@@ -213,19 +217,18 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 import com.revenium_metering.api.models.events.MeteringResponseResource;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 HttpResponseFor<MeteringResponseResource> meteringResponseResource = client.ai().withRawResponse().createCompletion(params);
 
@@ -260,6 +263,8 @@ The SDK throws custom unchecked exception types:
 
 - [`ReveniumMeteringIoException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringIoException.kt): I/O networking errors.
 
+- [`ReveniumMeteringRetryableException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+
 - [`ReveniumMeteringInvalidDataException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
 - [`ReveniumMeteringException`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/errors/ReveniumMeteringException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
@@ -280,6 +285,12 @@ Or to `debug` for more verbose logging:
 $ export REVENIUM_METERING_LOG=debug
 ```
 
+## ProGuard and R8
+
+Although the SDK uses reflection, it is still usable with [ProGuard](https://github.com/Guardsquare/proguard) and [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because `revenium-metering-java-core` is published with a [configuration file](revenium-metering-java-core/src/main/resources/META-INF/proguard/revenium-metering-java-core.pro) containing [keep rules](https://www.guardsquare.com/manual/configuration/usage).
+
+ProGuard and R8 should automatically detect and use the published rules, but you can also manually copy the keep rules if necessary.
+
 ## Jackson
 
 The SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON serialization/deserialization. It is compatible with version 2.13.4 or higher, but depends on version 2.18.2 by default.
@@ -295,7 +306,7 @@ If the SDK threw an exception, but you're _certain_ the version is compatible, t
 
 ### Retries
 
-The SDK automatically retries 2 times by default, with a short exponential backoff.
+The SDK automatically retries 2 times by default, with a short exponential backoff between requests.
 
 Only the following error types are retried:
 
@@ -305,7 +316,7 @@ Only the following error types are retried:
 - 429 Rate Limit
 - 5xx Internal
 
-The API may also explicitly instruct the SDK to retry or not retry a response.
+The API may also explicitly instruct the SDK to retry or not retry a request.
 
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
@@ -366,6 +377,27 @@ ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
     .build();
 ```
 
+### HTTPS
+
+> [!NOTE]
+> Most applications should not call these methods, and instead use the system defaults. The defaults include
+> special optimizations that can be lost if the implementations are modified.
+
+To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
+
+```java
+import com.revenium_metering.api.client.ReveniumMeteringClient;
+import com.revenium_metering.api.client.okhttp.ReveniumMeteringOkHttpClient;
+
+ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
+    .fromEnv()
+    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.
+    .sslSocketFactory(yourSSLSocketFactory)
+    .trustManager(yourTrustManager)
+    .hostnameVerifier(yourHostnameVerifier)
+    .build();
+```
+
 ### Custom HTTP client
 
 The SDK consists of three artifacts:
@@ -423,6 +455,21 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.
 
+To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
+
+```java
+import com.revenium_metering.api.core.JsonValue;
+import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
+
+AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .subscriber(AiCreateCompletionParams.Subscriber.builder()
+        .putAdditionalProperty("secretProperty", JsonValue.from("42"))
+        .build())
+    .build();
+```
+
+These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
+
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](revenium-metering-java-core/src/main/kotlin/com/revenium_metering/api/core/Values.kt) object to its setter:
 
 ```java
@@ -432,17 +479,16 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .completionStartTime(JsonValue.from(42))
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 ```
 
@@ -495,17 +541,16 @@ import com.revenium_metering.api.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .completionStartTime(JsonMissing.of())
     .build();
 ```

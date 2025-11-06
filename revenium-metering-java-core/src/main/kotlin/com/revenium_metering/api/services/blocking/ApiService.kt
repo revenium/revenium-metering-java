@@ -29,7 +29,7 @@ interface ApiService {
     fun meterRequest(params: ApiMeterRequestParams): MeteringResponseResource =
         meterRequest(params, RequestOptions.none())
 
-    /** @see [meterRequest] */
+    /** @see meterRequest */
     fun meterRequest(
         params: ApiMeterRequestParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -39,7 +39,7 @@ interface ApiService {
     fun meterResponse(params: ApiMeterResponseParams): MeteringResponseResource =
         meterResponse(params, RequestOptions.none())
 
-    /** @see [meterResponse] */
+    /** @see meterResponse */
     fun meterResponse(
         params: ApiMeterResponseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -63,7 +63,7 @@ interface ApiService {
         fun meterRequest(params: ApiMeterRequestParams): HttpResponseFor<MeteringResponseResource> =
             meterRequest(params, RequestOptions.none())
 
-        /** @see [meterRequest] */
+        /** @see meterRequest */
         @MustBeClosed
         fun meterRequest(
             params: ApiMeterRequestParams,
@@ -79,7 +79,7 @@ interface ApiService {
             params: ApiMeterResponseParams
         ): HttpResponseFor<MeteringResponseResource> = meterResponse(params, RequestOptions.none())
 
-        /** @see [meterResponse] */
+        /** @see meterResponse */
         @MustBeClosed
         fun meterResponse(
             params: ApiMeterResponseParams,

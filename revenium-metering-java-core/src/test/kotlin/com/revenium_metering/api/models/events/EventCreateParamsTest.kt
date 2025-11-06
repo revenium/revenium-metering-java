@@ -2,66 +2,86 @@
 
 package com.revenium_metering.api.models.events
 
+import com.revenium_metering.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class EventCreateParamsTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun create() {
         EventCreateParams.builder()
-            .payload("payload")
-            .sourceType(EventCreateParams.SourceType.UNKNOWN)
-            .transactionId("123e4567-e89b-12d3-a456-426614174000")
-            .sourceId("sourceId")
-            .subscriberCredentialId(
-                "The credential associated with the event.  Visible on the subscriber credentials in page in the Revenium platform."
+            .payload(
+                EventCreateParams.Payload.builder()
+                    .putAdditionalProperty("storageGB", JsonValue.from("bar"))
+                    .putAdditionalProperty("apiCalls", JsonValue.from("bar"))
+                    .putAdditionalProperty("computeMinutes", JsonValue.from("bar"))
+                    .build()
             )
+            .transactionId("123e4567-e89b-12d3-a456-426614174000")
+            .sourceId("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
+            .sourceType(EventCreateParams.SourceType.KONG)
+            .subscriberCredential("cust_abc123def456")
             .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun body() {
         val params =
             EventCreateParams.builder()
-                .payload("payload")
-                .sourceType(EventCreateParams.SourceType.UNKNOWN)
-                .transactionId("123e4567-e89b-12d3-a456-426614174000")
-                .sourceId("sourceId")
-                .subscriberCredentialId(
-                    "The credential associated with the event.  Visible on the subscriber credentials in page in the Revenium platform."
+                .payload(
+                    EventCreateParams.Payload.builder()
+                        .putAdditionalProperty("storageGB", JsonValue.from("bar"))
+                        .putAdditionalProperty("apiCalls", JsonValue.from("bar"))
+                        .putAdditionalProperty("computeMinutes", JsonValue.from("bar"))
+                        .build()
                 )
+                .transactionId("123e4567-e89b-12d3-a456-426614174000")
+                .sourceId("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
+                .sourceType(EventCreateParams.SourceType.KONG)
+                .subscriberCredential("cust_abc123def456")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.payload()).isEqualTo("payload")
-        assertThat(body.sourceType()).isEqualTo(EventCreateParams.SourceType.UNKNOWN)
-        assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-        assertThat(body.sourceId()).contains("sourceId")
-        assertThat(body.subscriberCredentialId())
-            .contains(
-                "The credential associated with the event.  Visible on the subscriber credentials in page in the Revenium platform."
+        assertThat(body.payload())
+            .isEqualTo(
+                EventCreateParams.Payload.builder()
+                    .putAdditionalProperty("storageGB", JsonValue.from("bar"))
+                    .putAdditionalProperty("apiCalls", JsonValue.from("bar"))
+                    .putAdditionalProperty("computeMinutes", JsonValue.from("bar"))
+                    .build()
             )
+        assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
+        assertThat(body.sourceId()).contains("5Agqrm:c4917580-281d-48e1-a206-05e595f006ec")
+        assertThat(body.sourceType()).contains(EventCreateParams.SourceType.KONG)
+        assertThat(body.subscriberCredential()).contains("cust_abc123def456")
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
             EventCreateParams.builder()
-                .payload("payload")
-                .sourceType(EventCreateParams.SourceType.UNKNOWN)
+                .payload(
+                    EventCreateParams.Payload.builder()
+                        .putAdditionalProperty("storageGB", JsonValue.from("bar"))
+                        .putAdditionalProperty("apiCalls", JsonValue.from("bar"))
+                        .putAdditionalProperty("computeMinutes", JsonValue.from("bar"))
+                        .build()
+                )
                 .transactionId("123e4567-e89b-12d3-a456-426614174000")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.payload()).isEqualTo("payload")
-        assertThat(body.sourceType()).isEqualTo(EventCreateParams.SourceType.UNKNOWN)
+        assertThat(body.payload())
+            .isEqualTo(
+                EventCreateParams.Payload.builder()
+                    .putAdditionalProperty("storageGB", JsonValue.from("bar"))
+                    .putAdditionalProperty("apiCalls", JsonValue.from("bar"))
+                    .putAdditionalProperty("computeMinutes", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
     }
 }

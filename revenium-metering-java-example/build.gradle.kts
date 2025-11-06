@@ -18,7 +18,7 @@ tasks.withType<JavaCompile>().configureEach {
 
 application {
     // Use `./gradlew :revenium-metering-java-example:run` to run `Main`
-    // Use `./gradlew :revenium-metering-java-example:run -Dexample=Something` to run `SomethingExample`
+    // Use `./gradlew :revenium-metering-java-example:run -Pexample=Something` to run `SomethingExample`
     mainClass = "com.revenium_metering.api.example.${
         if (project.hasProperty("example"))
             "${project.property("example")}Example"

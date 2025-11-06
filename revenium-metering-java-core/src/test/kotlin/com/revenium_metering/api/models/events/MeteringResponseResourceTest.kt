@@ -6,19 +6,17 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.revenium_metering.api.core.JsonValue
 import com.revenium_metering.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class MeteringResponseResourceTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun create() {
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
-                .label("Metering Response")
-                .object_("metering")
+                .label("metered-event")
+                .resourceType("metered-event")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
@@ -45,8 +43,8 @@ internal class MeteringResponseResourceTest {
                 .build()
 
         assertThat(meteringResponseResource.id()).isEqualTo("abc123")
-        assertThat(meteringResponseResource.label()).isEqualTo("Metering Response")
-        assertThat(meteringResponseResource.object_()).isEqualTo("metering")
+        assertThat(meteringResponseResource.label()).isEqualTo("metered-event")
+        assertThat(meteringResponseResource.resourceType()).isEqualTo("metered-event")
         assertThat(meteringResponseResource.signature()).isEqualTo("signature123")
         assertThat(meteringResponseResource._links())
             .contains(
@@ -73,15 +71,14 @@ internal class MeteringResponseResourceTest {
         assertThat(meteringResponseResource.updated()).contains("2025-03-02T15:04:06Z")
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
-                .label("Metering Response")
-                .object_("metering")
+                .label("metered-event")
+                .resourceType("metered-event")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
