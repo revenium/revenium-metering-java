@@ -29,7 +29,7 @@ interface ApiServiceAsync {
     fun meterRequest(params: ApiMeterRequestParams): CompletableFuture<MeteringResponseResource> =
         meterRequest(params, RequestOptions.none())
 
-    /** @see [meterRequest] */
+    /** @see meterRequest */
     fun meterRequest(
         params: ApiMeterRequestParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -39,7 +39,7 @@ interface ApiServiceAsync {
     fun meterResponse(params: ApiMeterResponseParams): CompletableFuture<MeteringResponseResource> =
         meterResponse(params, RequestOptions.none())
 
-    /** @see [meterResponse] */
+    /** @see meterResponse */
     fun meterResponse(
         params: ApiMeterResponseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -64,7 +64,7 @@ interface ApiServiceAsync {
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             meterRequest(params, RequestOptions.none())
 
-        /** @see [meterRequest] */
+        /** @see meterRequest */
         fun meterRequest(
             params: ApiMeterRequestParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -79,7 +79,7 @@ interface ApiServiceAsync {
         ): CompletableFuture<HttpResponseFor<MeteringResponseResource>> =
             meterResponse(params, RequestOptions.none())
 
-        /** @see [meterResponse] */
+        /** @see meterResponse */
         fun meterResponse(
             params: ApiMeterResponseParams,
             requestOptions: RequestOptions = RequestOptions.none(),

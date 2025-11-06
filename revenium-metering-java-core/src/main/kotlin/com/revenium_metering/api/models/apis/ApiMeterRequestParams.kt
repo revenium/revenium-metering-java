@@ -48,7 +48,11 @@ private constructor(
     fun contentType(): Optional<String> = body.contentType()
 
     /**
-     * The unique identifier of the credential
+     * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
+     * identifier maps the API transaction to a specific subscriber and their associated
+     * subscription/product for proper usage tracking and billing. Visible on the subscriber
+     * credentials page in the Revenium platform. Credentials can be API keys or key aliases
+     * depending on your system architecture.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -81,9 +85,9 @@ private constructor(
     fun requestMessageSize(): Optional<Long> = body.requestMessageSize()
 
     /**
-     * Visible in the ‘resource’ field when viewing sources in the revenium application. The
-     * resource field (often a full URL or relative URI) can be used to auto-match transactions to
-     * existing sources based on the URL/URI accessed in the API call.
+     *             Visible in the ‘resource’ field when viewing sources in the revenium application.
+     *             The resource field (often a full URL or relative URI) can be used to auto-match
+     *             transactions to existing sources based on the URL/URI accessed in the API call.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -191,8 +195,10 @@ private constructor(
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
@@ -268,7 +274,13 @@ private constructor(
          */
         fun contentType(contentType: JsonField<String>) = apply { body.contentType(contentType) }
 
-        /** The unique identifier of the credential */
+        /**
+         * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
+         * identifier maps the API transaction to a specific subscriber and their associated
+         * subscription/product for proper usage tracking and billing. Visible on the subscriber
+         * credentials page in the Revenium platform. Credentials can be API keys or key aliases
+         * depending on your system architecture.
+         */
         fun credential(credential: String) = apply { body.credential(credential) }
 
         /**
@@ -323,9 +335,9 @@ private constructor(
         }
 
         /**
-         * Visible in the ‘resource’ field when viewing sources in the revenium application. The
-         * resource field (often a full URL or relative URI) can be used to auto-match transactions
-         * to existing sources based on the URL/URI accessed in the API call.
+         *             Visible in the ‘resource’ field when viewing sources in the revenium application.
+         *             The resource field (often a full URL or relative URI) can be used to auto-match
+         *             transactions to existing sources based on the URL/URI accessed in the API call.
          */
         fun resource(resource: String) = apply { body.resource(resource) }
 
@@ -525,6 +537,7 @@ private constructor(
 
     /** The metadata for the API request */
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val transactionId: JsonField<String>,
         private val contentType: JsonField<String>,
@@ -603,7 +616,11 @@ private constructor(
         fun contentType(): Optional<String> = contentType.getOptional("contentType")
 
         /**
-         * The unique identifier of the credential
+         * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
+         * identifier maps the API transaction to a specific subscriber and their associated
+         * subscription/product for proper usage tracking and billing. Visible on the subscriber
+         * credentials page in the Revenium platform. Credentials can be API keys or key aliases
+         * depending on your system architecture.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -637,9 +654,9 @@ private constructor(
             requestMessageSize.getOptional("requestMessageSize")
 
         /**
-         * Visible in the ‘resource’ field when viewing sources in the revenium application. The
-         * resource field (often a full URL or relative URI) can be used to auto-match transactions
-         * to existing sources based on the URL/URI accessed in the API call.
+         *             Visible in the ‘resource’ field when viewing sources in the revenium application.
+         *             The resource field (often a full URL or relative URI) can be used to auto-match
+         *             transactions to existing sources based on the URL/URI accessed in the API call.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -845,7 +862,13 @@ private constructor(
                 this.contentType = contentType
             }
 
-            /** The unique identifier of the credential */
+            /**
+             * The credential used to access the API (e.g., API key, OAuth token, or key alias).
+             * This identifier maps the API transaction to a specific subscriber and their
+             * associated subscription/product for proper usage tracking and billing. Visible on the
+             * subscriber credentials page in the Revenium platform. Credentials can be API keys or
+             * key aliases depending on your system architecture.
+             */
             fun credential(credential: String) = credential(JsonField.of(credential))
 
             /**
@@ -900,9 +923,9 @@ private constructor(
             }
 
             /**
-             * Visible in the ‘resource’ field when viewing sources in the revenium application. The
-             * resource field (often a full URL or relative URI) can be used to auto-match
-             * transactions to existing sources based on the URL/URI accessed in the API call.
+             *             Visible in the ‘resource’ field when viewing sources in the revenium application.
+             *             The resource field (often a full URL or relative URI) can be used to auto-match
+             *             transactions to existing sources based on the URL/URI accessed in the API call.
              */
             fun resource(resource: String) = resource(JsonField.of(resource))
 
@@ -1060,12 +1083,35 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && transactionId == other.transactionId && contentType == other.contentType && credential == other.credential && method == other.method && remoteHost == other.remoteHost && requestMessageSize == other.requestMessageSize && resource == other.resource && sourceId == other.sourceId && sourceType == other.sourceType && userAgent == other.userAgent && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                transactionId == other.transactionId &&
+                contentType == other.contentType &&
+                credential == other.credential &&
+                method == other.method &&
+                remoteHost == other.remoteHost &&
+                requestMessageSize == other.requestMessageSize &&
+                resource == other.resource &&
+                sourceId == other.sourceId &&
+                sourceType == other.sourceType &&
+                userAgent == other.userAgent &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(transactionId, contentType, credential, method, remoteHost, requestMessageSize, resource, sourceId, sourceType, userAgent, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                transactionId,
+                contentType,
+                credential,
+                method,
+                remoteHost,
+                requestMessageSize,
+                resource,
+                sourceId,
+                sourceType,
+                userAgent,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1223,7 +1269,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Method && value == other.value /* spotless:on */
+            return other is Method && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1459,7 +1505,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is SourceType && value == other.value /* spotless:on */
+            return other is SourceType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1472,10 +1518,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ApiMeterRequestParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is ApiMeterRequestParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "ApiMeterRequestParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

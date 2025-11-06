@@ -3,20 +3,16 @@
 package com.revenium_metering.api.models.apis
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class ApiMeterRequestParamsTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun create() {
         ApiMeterRequestParams.builder()
             .transactionId("123e4567-e89b-12d3-a456-426614174000")
             .contentType("application/json")
-            .credential(
-                "The credential used to access the API.  Visible on the subscriber credentials in page in the Revenium platform."
-            )
+            .credential("sk_live_abc123def456")
             .method(ApiMeterRequestParams.Method.GET)
             .remoteHost("192.168.1.1")
             .requestMessageSize(1024L)
@@ -27,16 +23,13 @@ internal class ApiMeterRequestParamsTest {
             .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun body() {
         val params =
             ApiMeterRequestParams.builder()
                 .transactionId("123e4567-e89b-12d3-a456-426614174000")
                 .contentType("application/json")
-                .credential(
-                    "The credential used to access the API.  Visible on the subscriber credentials in page in the Revenium platform."
-                )
+                .credential("sk_live_abc123def456")
                 .method(ApiMeterRequestParams.Method.GET)
                 .remoteHost("192.168.1.1")
                 .requestMessageSize(1024L)
@@ -50,10 +43,7 @@ internal class ApiMeterRequestParamsTest {
 
         assertThat(body.transactionId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(body.contentType()).contains("application/json")
-        assertThat(body.credential())
-            .contains(
-                "The credential used to access the API.  Visible on the subscriber credentials in page in the Revenium platform."
-            )
+        assertThat(body.credential()).contains("sk_live_abc123def456")
         assertThat(body.method()).contains(ApiMeterRequestParams.Method.GET)
         assertThat(body.remoteHost()).contains("192.168.1.1")
         assertThat(body.requestMessageSize()).contains(1024L)
@@ -63,7 +53,6 @@ internal class ApiMeterRequestParamsTest {
         assertThat(body.userAgent()).contains("Mozilla/5.0")
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun bodyWithoutOptionalFields() {
         val params =

@@ -21,7 +21,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Record the details of an LLM completion */
+/**
+ * Submit AI completion metadata for metering and billing purposes. This endpoint tracks token
+ * usage, costs, and performance metrics for AI model completions. **Base URL:** Use the metering
+ * endpoint `/meter/v2/ai/completions` (not `/profitstream/v2/ai/completions`)
+ */
 class AiCreateCompletionParams
 private constructor(
     private val body: Body,
@@ -30,7 +34,10 @@ private constructor(
 ) : Params {
 
     /**
-     * Time to first token for streaming requests
+     * The timestamp when the AI completion started generating output, in ISO 8601 format with UTC
+     * timezone. For streaming requests, this is when the first token was received. For
+     * non-streaming requests, this is typically the same as or very close to responseTime. Used to
+     * calculate time-to-first-token latency for streaming completions.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -38,7 +45,9 @@ private constructor(
     fun completionStartTime(): String = body.completionStartTime()
 
     /**
-     * Cost type for the completion
+     * The type of cost being tracked. Currently always 'AI' for AI completion costs. This field is
+     * used internally by Revenium to categorize different types of metered usage. You typically do
+     * not need to set this field as it defaults to 'AI'.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -54,7 +63,10 @@ private constructor(
     fun inputTokenCount(): Long = body.inputTokenCount()
 
     /**
-     * Indicates if the completion was streamed
+     * Indicates whether this completion used streaming (true) or non-streaming/batch mode (false).
+     * Streaming completions receive tokens incrementally as they're generated, while non-streaming
+     * completions wait for the complete response. This affects how timeToFirstToken and
+     * responseTime are interpreted.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -62,7 +74,11 @@ private constructor(
     fun isStreamed(): Boolean = body.isStreamed()
 
     /**
-     * The model used for generating the LLM completion
+     * The AI model identifier used for this completion. Should match the exact model name from your
+     * AI provider (e.g., 'gpt-4', 'claude-3-opus-20240229', 'gemini-pro'). This is used for cost
+     * calculation, performance analytics, and model comparison reporting in Revenium. Valid model
+     * names in Revenium for proper cost estimate can be verified using the sources/ai/models
+     * endpoint.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -78,7 +94,22 @@ private constructor(
     fun outputTokenCount(): Long = body.outputTokenCount()
 
     /**
-     * Vendor providing the LLM completion service
+     * The underlying AI provider/vendor whose model is actually processing the request. This
+     * identifies which company's AI model is being used, regardless of how you're accessing it
+     * (direct API, proxy, or gateway).
+     *
+     * Common values: 'OpenAI' (for GPT models), 'Anthropic' (for Claude models), 'Google' (for
+     * Gemini models), 'Cohere', 'Mistral', 'Meta' (for Llama models), 'Amazon Bedrock', 'Azure'.
+     *
+     * Custom values are accepted but may affect analytics categorization. Revenium looks up model
+     * pricing primarily by model name (e.g., 'gpt-4', 'claude-3-opus'), so using non-standard
+     * provider names will not break cost calculation. However, using standard provider names
+     * ensures proper categorization in analytics and reporting.
+     *
+     * If using an aggregation service like LiteLLM or OpenRouter, this should still be the actual
+     * provider (e.g., 'Anthropic' not 'LiteLLM'). If using Revenium middleware, this is typically
+     * auto-populated from the AI provider's API response. Supported provider models can be verified
+     * using the sources/ai/models endpoint which returns both providers and model names.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -86,7 +117,10 @@ private constructor(
     fun provider(): String = body.provider()
 
     /**
-     * The duration of the request in milliseconds
+     * The total duration of the AI completion request in milliseconds, from request start to
+     * completion. Calculated as (responseTime - requestTime). This includes network latency, AI
+     * processing time, and any mediation/gateway overhead. Used for performance analytics and SLA
+     * monitoring.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -94,7 +128,10 @@ private constructor(
     fun requestDuration(): Long = body.requestDuration()
 
     /**
-     * The timestamp when the request was made
+     * The timestamp when your application sent the request to the AI provider, in ISO 8601 format
+     * with UTC timezone (e.g., '2025-03-02T15:04:05Z'). This is used to calculate request duration
+     * and analyze usage patterns over time. Set this to the time immediately before calling the AI
+     * provider's API.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -102,7 +139,10 @@ private constructor(
     fun requestTime(): String = body.requestTime()
 
     /**
-     * The timestamp when the response was generated. If streaming, this is the time to first token
+     * The timestamp when the AI completion finished, in ISO 8601 format with UTC timezone. For
+     * streaming requests, this is when the last token was received and the stream closed. For
+     * non-streaming requests, this is when the complete response was received. Used to calculate
+     * total request duration.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -126,14 +166,6 @@ private constructor(
     fun totalTokenCount(): Long = body.totalTokenCount()
 
     /**
-     * The unique identifier of the LLM completion transaction
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun transactionId(): String = body.transactionId()
-
-    /**
      * The AI agent that is making the request
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -142,7 +174,23 @@ private constructor(
     fun agent(): Optional<String> = body.agent()
 
     /**
-     * The number of cached creation tokens in the completion
+     * The cost in USD for cache creation tokens in this completion. Typically leave null to let
+     * Revenium automatically calculate costs based on the model and provider's caching pricing.
+     * Only provide a value if you have custom pricing agreements or want to override Revenium's
+     * cost calculation. If provided, this will override Revenium's automatic calculation.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun cacheCreationTokenCost(): Optional<Double> = body.cacheCreationTokenCost()
+
+    /**
+     * The number of tokens used to create new cache entries (prompt caching). When you send a long
+     * prompt for the first time, the AI provider may cache it for faster subsequent requests. Cache
+     * creation tokens are typically billed at a higher rate than regular input tokens. Only include
+     * if your provider supports prompt caching (e.g., Anthropic Claude, OpenAI with cache-enabled
+     * models). Revenium's middleware will always populate this field automatically. Leave null
+     * otherwise.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -150,7 +198,22 @@ private constructor(
     fun cacheCreationTokenCount(): Optional<Long> = body.cacheCreationTokenCount()
 
     /**
-     * The number of cached read tokens in the completion
+     * The cost in USD for cache read tokens in this completion. Typically leave null to let
+     * Revenium automatically calculate costs based on the model and provider's caching pricing.
+     * Only provide a value if you have custom pricing agreements or want to override Revenium's
+     * cost calculation. If provided, this will override Revenium's automatic calculation.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun cacheReadTokenCost(): Optional<Double> = body.cacheReadTokenCost()
+
+    /**
+     * The number of tokens read from cache (prompt caching). When reusing a previously cached
+     * prompt, these tokens are read from cache instead of being processed as new input tokens.
+     * Cache read tokens are typically billed at a lower rate than regular input tokens. Only
+     * include if your provider supports prompt caching and reports cache hits. Revenium's
+     * middleware will always populate this field automatically. Leave null otherwise.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -158,7 +221,10 @@ private constructor(
     fun cacheReadTokenCount(): Optional<Long> = body.cacheReadTokenCount()
 
     /**
-     * The details of the error that occurred during the LLM completion
+     * Error message or reason if the AI completion failed. Include this field when the AI provider
+     * returns an error (e.g., rate limit exceeded, invalid API key, model not found, content policy
+     * violation). Used for error rate analytics and debugging. Leave null for successful
+     * completions.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -166,7 +232,10 @@ private constructor(
     fun errorReason(): Optional<String> = body.errorReason()
 
     /**
-     * The input token cost associated with the LLM completion
+     * The cost in USD for input tokens in this completion. Typically leave null to let Revenium
+     * automatically calculate costs based on the model and provider's current pricing. Only provide
+     * a value if you have custom pricing agreements or want to override Revenium's cost
+     * calculation. Note: Manual cost override may not be available on all Revenium plans.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -174,7 +243,10 @@ private constructor(
     fun inputTokenCost(): Optional<Double> = body.inputTokenCost()
 
     /**
-     * The latency, in milliseconds, of latency by an AI or API gateway
+     * The latency in milliseconds introduced by intermediate systems between your application and
+     * the AI provider, such as API gateways, proxies, or AI mediation layers. This helps identify
+     * performance bottlenecks outside of the AI provider's processing time. Leave null if not using
+     * intermediate systems or if latency is not tracked separately.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -182,7 +254,26 @@ private constructor(
     fun mediationLatency(): Optional<Long> = body.mediationLatency()
 
     /**
-     * The source of the AI model used for the completion
+     * Identifier of the Revenium middleware package or SDK that captured and submitted this AI
+     * completion metadata. This field is AUTOMATICALLY SET by Revenium's middleware packages (e.g.,
+     * 'revenium-openai-python', 'revenium-anthropic-node'). You typically should NOT manually set
+     * this field. It is used for analytics to track which integration methods are being used and
+     * for debugging middleware-specific issues.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun middlewareSource(): Optional<String> = body.middlewareSource()
+
+    /**
+     * The routing or aggregation layer used to access the AI model. This identifies whether you're
+     * calling the AI provider directly or through an intermediary service.
+     *
+     * Common values: 'DIRECT', 'LITELLM', 'OPENROUTER', 'PORTKEY', 'AZURE_OPENAI', or provider
+     * names ('OPENAI', 'ANTHROPIC', 'GOOGLE', etc.) when calling directly.
+     *
+     * Custom values are accepted for specialized routing layers or gateways. This field is used for
+     * integration tracking and analytics.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -201,7 +292,7 @@ private constructor(
      * Populate the ID of the subscriber’s organization from your system to allow Revenium to track
      * usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
      * organizationId, Revenium’s reporting will show usage for the entire organization broken down
-     * by user.
+     * by subscriberId.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -209,7 +300,11 @@ private constructor(
     fun organizationId(): Optional<String> = body.organizationId()
 
     /**
-     * The output token cost associated with the LLM completion
+     * The cost in USD for output tokens in this completion. Typically leave null to let Revenium
+     * automatically calculate costs based on the model and provider's current pricing. Only provide
+     * a value if you have custom pricing agreements or want to override Revenium's cost
+     * calculation. If provided, this will override Revenium's automatic calculation. Note: Manual
+     * cost override may not be available on all Revenium plans.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -226,7 +321,11 @@ private constructor(
     fun productId(): Optional<String> = body.productId()
 
     /**
-     * The number of reasoning tokens in the completion
+     * The number of reasoning tokens used in the completion. Reasoning tokens are extended thinking
+     * tokens used by AI models for complex problem-solving. These are sometimes billed separately
+     * from regular input/output tokens. Only include this field if your AI provider reports
+     * reasoning tokens Revenium's middleware will always populate this field if reasoning tokens
+     * are reported by the AI provider. Leave null for models without reasoning capabilities.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -234,7 +333,10 @@ private constructor(
     fun reasoningTokenCount(): Optional<Long> = body.reasoningTokenCount()
 
     /**
-     * The quality score of the response
+     * Optional quality score for the AI response, typically on a 0-100 scale. Set by your
+     * application's evaluation logic (e.g., RAGAS, human feedback, custom scoring). Used in
+     * Revenium analytics to correlate quality with cost, model choice, and other metrics. Leave
+     * null if not tracking quality scores.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -242,41 +344,14 @@ private constructor(
     fun responseQualityScore(): Optional<Double> = body.responseQualityScore()
 
     /**
-     * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
-     * for individual users.
+     * Metadata about the subscriber/end-user making this AI request. Include this to track usage by
+     * individual users within an organization. Contains user identifiers and associated credential
+     * information. Leave null if not tracking individual user-level usage.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun subscriberCredential(): Optional<String> = body.subscriberCredential()
-
-    /**
-     * Populate the name of the subscriber credential from your system to allow Revenium to track
-     * usage & costs for individual users.
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberCredentialName(): Optional<String> = body.subscriberCredentialName()
-
-    /**
-     * The email address of the subscriber
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberEmail(): Optional<String> = body.subscriberEmail()
-
-    /**
-     * Populate the ID of the subscriber from your system to allow Revenium to track usage & costs
-     * for individual users. i.e. user-123. If several subscriberCredentials have the same
-     * subscriberId, Revenium’s reporting will show usage for the entire organization broken down by
-     * user.
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
-     *   if the server responded with an unexpected value).
-     */
-    fun subscriberId(): Optional<String> = body.subscriberId()
+    fun subscriber(): Optional<Subscriber> = body.subscriber()
 
     /**
      * Unique identifier of the subscription from your own system that you wish to use to correlate
@@ -288,9 +363,11 @@ private constructor(
     fun subscriptionId(): Optional<String> = body.subscriptionId()
 
     /**
-     * A unique identifier that represents the statistical signature of the language model that
-     * generated a specific chat completion. This fingerprint can be used for model attribution,
-     * debugging, and monitoring model behavior across request
+     * A unique identifier provided by the AI provider that represents the statistical signature of
+     * the language model that generated this completion. This fingerprint can be used for model
+     * attribution, debugging, and monitoring model behavior across requests. Automatically provided
+     * by some AI providers (e.g., OpenAI) in their API responses. Leave null if your provider does
+     * not supply this value.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -298,9 +375,11 @@ private constructor(
     fun systemFingerprint(): Optional<String> = body.systemFingerprint()
 
     /**
-     * If you wish to track the costs or performance of a specific task and compare the values over
-     * time or compare the performance across AI models or vendors, use a consistent taskType for
-     * all related tasks.
+     * Optional category to group related AI tasks for cost and performance analysis. Use consistent
+     * values to compare metrics across different models or vendors performing the same type of
+     * work. Examples: 'chat', 'summarization', 'code-generation', 'translation',
+     * 'image-generation', 'embeddings', 'classification', 'sentiment-analysis'. This is freeform
+     * text - choose values that match your use cases.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -308,7 +387,10 @@ private constructor(
     fun taskType(): Optional<String> = body.taskType()
 
     /**
-     * The temperature setting used for the LLM completion
+     * The temperature parameter used for this completion, controlling randomness in the AI's
+     * output. Typically ranges from 0.0 (deterministic) to 2.0 (very random). Track this to
+     * correlate temperature settings with response quality, cost, or other metrics. Useful for A/B
+     * testing different temperature values.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -316,7 +398,10 @@ private constructor(
     fun temperature(): Optional<Double> = body.temperature()
 
     /**
-     * The time to first token in milliseconds
+     * The latency in milliseconds from request start to first token received. Calculated as
+     * (completionStartTime - requestTime). This metric is particularly important for streaming
+     * completions to measure perceived responsiveness. For non-streaming completions, this may be
+     * null or equal to requestDuration.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -324,7 +409,10 @@ private constructor(
     fun timeToFirstToken(): Optional<Long> = body.timeToFirstToken()
 
     /**
-     * The total cost associated with the LLM completion
+     * The total cost in USD for this completion (sum of all token costs). Typically leave null to
+     * let Revenium automatically calculate the total based on token counts and current pricing.
+     * Only provide a value if you have custom pricing agreements or want to override Revenium's
+     * cost calculation. If provided, this will override Revenium's automatic calculation.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -332,12 +420,26 @@ private constructor(
     fun totalCost(): Optional<Double> = body.totalCost()
 
     /**
-     * Trace multiple LLM calls belonging to same overall request
+     * Optional trace identifier to group multiple related AI completion calls that belong to the
+     * same overall user request or workflow. For example, if a single user query triggers multiple
+     * LLM calls (e.g., retrieval + generation), use the same traceId for all calls to analyze them
+     * together in Revenium's analytics. Leave null for standalone completions.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
     fun traceId(): Optional<String> = body.traceId()
+
+    /**
+     * Unique identifier for this specific AI completion transaction. Used for deduplication,
+     * correlation with request/response pairs, and transaction lookup in Revenium analytics. If not
+     * provided, a UUID will be auto-generated. For best practices, generate a UUID in your
+     * application before making the AI call and use the same ID when submitting to Revenium.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun transactionId(): Optional<String> = body.transactionId()
 
     /**
      * Returns the raw JSON value of [completionStartTime].
@@ -426,18 +528,19 @@ private constructor(
     fun _totalTokenCount(): JsonField<Long> = body._totalTokenCount()
 
     /**
-     * Returns the raw JSON value of [transactionId].
-     *
-     * Unlike [transactionId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _transactionId(): JsonField<String> = body._transactionId()
-
-    /**
      * Returns the raw JSON value of [agent].
      *
      * Unlike [agent], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _agent(): JsonField<String> = body._agent()
+
+    /**
+     * Returns the raw JSON value of [cacheCreationTokenCost].
+     *
+     * Unlike [cacheCreationTokenCost], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _cacheCreationTokenCost(): JsonField<Double> = body._cacheCreationTokenCost()
 
     /**
      * Returns the raw JSON value of [cacheCreationTokenCount].
@@ -446,6 +549,14 @@ private constructor(
      * unexpected type.
      */
     fun _cacheCreationTokenCount(): JsonField<Long> = body._cacheCreationTokenCount()
+
+    /**
+     * Returns the raw JSON value of [cacheReadTokenCost].
+     *
+     * Unlike [cacheReadTokenCost], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _cacheReadTokenCost(): JsonField<Double> = body._cacheReadTokenCost()
 
     /**
      * Returns the raw JSON value of [cacheReadTokenCount].
@@ -476,6 +587,14 @@ private constructor(
      * type.
      */
     fun _mediationLatency(): JsonField<Long> = body._mediationLatency()
+
+    /**
+     * Returns the raw JSON value of [middlewareSource].
+     *
+     * Unlike [middlewareSource], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _middlewareSource(): JsonField<String> = body._middlewareSource()
 
     /**
      * Returns the raw JSON value of [modelSource].
@@ -529,34 +648,11 @@ private constructor(
     fun _responseQualityScore(): JsonField<Double> = body._responseQualityScore()
 
     /**
-     * Returns the raw JSON value of [subscriberCredential].
+     * Returns the raw JSON value of [subscriber].
      *
-     * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [subscriber], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
-
-    /**
-     * Returns the raw JSON value of [subscriberCredentialName].
-     *
-     * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
-     * unexpected type.
-     */
-    fun _subscriberCredentialName(): JsonField<String> = body._subscriberCredentialName()
-
-    /**
-     * Returns the raw JSON value of [subscriberEmail].
-     *
-     * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _subscriberEmail(): JsonField<String> = body._subscriberEmail()
-
-    /**
-     * Returns the raw JSON value of [subscriberId].
-     *
-     * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _subscriberId(): JsonField<String> = body._subscriberId()
+    fun _subscriber(): JsonField<Subscriber> = body._subscriber()
 
     /**
      * Returns the raw JSON value of [subscriptionId].
@@ -609,10 +705,19 @@ private constructor(
      */
     fun _traceId(): JsonField<String> = body._traceId()
 
+    /**
+     * Returns the raw JSON value of [transactionId].
+     *
+     * Unlike [transactionId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _transactionId(): JsonField<String> = body._transactionId()
+
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
@@ -636,7 +741,6 @@ private constructor(
          * .responseTime()
          * .stopReason()
          * .totalTokenCount()
-         * .transactionId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -670,7 +774,12 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** Time to first token for streaming requests */
+        /**
+         * The timestamp when the AI completion started generating output, in ISO 8601 format with
+         * UTC timezone. For streaming requests, this is when the first token was received. For
+         * non-streaming requests, this is typically the same as or very close to responseTime. Used
+         * to calculate time-to-first-token latency for streaming completions.
+         */
         fun completionStartTime(completionStartTime: String) = apply {
             body.completionStartTime(completionStartTime)
         }
@@ -686,7 +795,11 @@ private constructor(
             body.completionStartTime(completionStartTime)
         }
 
-        /** Cost type for the completion */
+        /**
+         * The type of cost being tracked. Currently always 'AI' for AI completion costs. This field
+         * is used internally by Revenium to categorize different types of metered usage. You
+         * typically do not need to set this field as it defaults to 'AI'.
+         */
         fun costType(costType: CostType) = apply { body.costType(costType) }
 
         /**
@@ -712,7 +825,12 @@ private constructor(
             body.inputTokenCount(inputTokenCount)
         }
 
-        /** Indicates if the completion was streamed */
+        /**
+         * Indicates whether this completion used streaming (true) or non-streaming/batch mode
+         * (false). Streaming completions receive tokens incrementally as they're generated, while
+         * non-streaming completions wait for the complete response. This affects how
+         * timeToFirstToken and responseTime are interpreted.
+         */
         fun isStreamed(isStreamed: Boolean) = apply { body.isStreamed(isStreamed) }
 
         /**
@@ -724,7 +842,13 @@ private constructor(
          */
         fun isStreamed(isStreamed: JsonField<Boolean>) = apply { body.isStreamed(isStreamed) }
 
-        /** The model used for generating the LLM completion */
+        /**
+         * The AI model identifier used for this completion. Should match the exact model name from
+         * your AI provider (e.g., 'gpt-4', 'claude-3-opus-20240229', 'gemini-pro'). This is used
+         * for cost calculation, performance analytics, and model comparison reporting in Revenium.
+         * Valid model names in Revenium for proper cost estimate can be verified using the
+         * sources/ai/models endpoint.
+         */
         fun model(model: String) = apply { body.model(model) }
 
         /**
@@ -751,7 +875,26 @@ private constructor(
             body.outputTokenCount(outputTokenCount)
         }
 
-        /** Vendor providing the LLM completion service */
+        /**
+         * The underlying AI provider/vendor whose model is actually processing the request. This
+         * identifies which company's AI model is being used, regardless of how you're accessing it
+         * (direct API, proxy, or gateway).
+         *
+         * Common values: 'OpenAI' (for GPT models), 'Anthropic' (for Claude models), 'Google' (for
+         * Gemini models), 'Cohere', 'Mistral', 'Meta' (for Llama models), 'Amazon Bedrock',
+         * 'Azure'.
+         *
+         * Custom values are accepted but may affect analytics categorization. Revenium looks up
+         * model pricing primarily by model name (e.g., 'gpt-4', 'claude-3-opus'), so using
+         * non-standard provider names will not break cost calculation. However, using standard
+         * provider names ensures proper categorization in analytics and reporting.
+         *
+         * If using an aggregation service like LiteLLM or OpenRouter, this should still be the
+         * actual provider (e.g., 'Anthropic' not 'LiteLLM'). If using Revenium middleware, this is
+         * typically auto-populated from the AI provider's API response. Supported provider models
+         * can be verified using the sources/ai/models endpoint which returns both providers and
+         * model names.
+         */
         fun provider(provider: String) = apply { body.provider(provider) }
 
         /**
@@ -762,7 +905,12 @@ private constructor(
          */
         fun provider(provider: JsonField<String>) = apply { body.provider(provider) }
 
-        /** The duration of the request in milliseconds */
+        /**
+         * The total duration of the AI completion request in milliseconds, from request start to
+         * completion. Calculated as (responseTime - requestTime). This includes network latency, AI
+         * processing time, and any mediation/gateway overhead. Used for performance analytics and
+         * SLA monitoring.
+         */
         fun requestDuration(requestDuration: Long) = apply { body.requestDuration(requestDuration) }
 
         /**
@@ -776,7 +924,12 @@ private constructor(
             body.requestDuration(requestDuration)
         }
 
-        /** The timestamp when the request was made */
+        /**
+         * The timestamp when your application sent the request to the AI provider, in ISO 8601
+         * format with UTC timezone (e.g., '2025-03-02T15:04:05Z'). This is used to calculate
+         * request duration and analyze usage patterns over time. Set this to the time immediately
+         * before calling the AI provider's API.
+         */
         fun requestTime(requestTime: String) = apply { body.requestTime(requestTime) }
 
         /**
@@ -789,8 +942,10 @@ private constructor(
         fun requestTime(requestTime: JsonField<String>) = apply { body.requestTime(requestTime) }
 
         /**
-         * The timestamp when the response was generated. If streaming, this is the time to first
-         * token
+         * The timestamp when the AI completion finished, in ISO 8601 format with UTC timezone. For
+         * streaming requests, this is when the last token was received and the stream closed. For
+         * non-streaming requests, this is when the complete response was received. Used to
+         * calculate total request duration.
          */
         fun responseTime(responseTime: String) = apply { body.responseTime(responseTime) }
 
@@ -831,20 +986,6 @@ private constructor(
             body.totalTokenCount(totalTokenCount)
         }
 
-        /** The unique identifier of the LLM completion transaction */
-        fun transactionId(transactionId: String) = apply { body.transactionId(transactionId) }
-
-        /**
-         * Sets [Builder.transactionId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.transactionId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun transactionId(transactionId: JsonField<String>) = apply {
-            body.transactionId(transactionId)
-        }
-
         /** The AI agent that is making the request */
         fun agent(agent: String) = apply { body.agent(agent) }
 
@@ -856,7 +997,35 @@ private constructor(
          */
         fun agent(agent: JsonField<String>) = apply { body.agent(agent) }
 
-        /** The number of cached creation tokens in the completion */
+        /**
+         * The cost in USD for cache creation tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's caching pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation.
+         */
+        fun cacheCreationTokenCost(cacheCreationTokenCost: Double) = apply {
+            body.cacheCreationTokenCost(cacheCreationTokenCost)
+        }
+
+        /**
+         * Sets [Builder.cacheCreationTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheCreationTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheCreationTokenCost(cacheCreationTokenCost: JsonField<Double>) = apply {
+            body.cacheCreationTokenCost(cacheCreationTokenCost)
+        }
+
+        /**
+         * The number of tokens used to create new cache entries (prompt caching). When you send a
+         * long prompt for the first time, the AI provider may cache it for faster subsequent
+         * requests. Cache creation tokens are typically billed at a higher rate than regular input
+         * tokens. Only include if your provider supports prompt caching (e.g., Anthropic Claude,
+         * OpenAI with cache-enabled models). Revenium's middleware will always populate this field
+         * automatically. Leave null otherwise.
+         */
         fun cacheCreationTokenCount(cacheCreationTokenCount: Long) = apply {
             body.cacheCreationTokenCount(cacheCreationTokenCount)
         }
@@ -872,7 +1041,34 @@ private constructor(
             body.cacheCreationTokenCount(cacheCreationTokenCount)
         }
 
-        /** The number of cached read tokens in the completion */
+        /**
+         * The cost in USD for cache read tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's caching pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation.
+         */
+        fun cacheReadTokenCost(cacheReadTokenCost: Double) = apply {
+            body.cacheReadTokenCost(cacheReadTokenCost)
+        }
+
+        /**
+         * Sets [Builder.cacheReadTokenCost] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cacheReadTokenCost] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cacheReadTokenCost(cacheReadTokenCost: JsonField<Double>) = apply {
+            body.cacheReadTokenCost(cacheReadTokenCost)
+        }
+
+        /**
+         * The number of tokens read from cache (prompt caching). When reusing a previously cached
+         * prompt, these tokens are read from cache instead of being processed as new input tokens.
+         * Cache read tokens are typically billed at a lower rate than regular input tokens. Only
+         * include if your provider supports prompt caching and reports cache hits. Revenium's
+         * middleware will always populate this field automatically. Leave null otherwise.
+         */
         fun cacheReadTokenCount(cacheReadTokenCount: Long) = apply {
             body.cacheReadTokenCount(cacheReadTokenCount)
         }
@@ -888,7 +1084,12 @@ private constructor(
             body.cacheReadTokenCount(cacheReadTokenCount)
         }
 
-        /** The details of the error that occurred during the LLM completion */
+        /**
+         * Error message or reason if the AI completion failed. Include this field when the AI
+         * provider returns an error (e.g., rate limit exceeded, invalid API key, model not found,
+         * content policy violation). Used for error rate analytics and debugging. Leave null for
+         * successful completions.
+         */
         fun errorReason(errorReason: String) = apply { body.errorReason(errorReason) }
 
         /**
@@ -900,7 +1101,12 @@ private constructor(
          */
         fun errorReason(errorReason: JsonField<String>) = apply { body.errorReason(errorReason) }
 
-        /** The input token cost associated with the LLM completion */
+        /**
+         * The cost in USD for input tokens in this completion. Typically leave null to let Revenium
+         * automatically calculate costs based on the model and provider's current pricing. Only
+         * provide a value if you have custom pricing agreements or want to override Revenium's cost
+         * calculation. Note: Manual cost override may not be available on all Revenium plans.
+         */
         fun inputTokenCost(inputTokenCost: Double) = apply { body.inputTokenCost(inputTokenCost) }
 
         /**
@@ -914,7 +1120,12 @@ private constructor(
             body.inputTokenCost(inputTokenCost)
         }
 
-        /** The latency, in milliseconds, of latency by an AI or API gateway */
+        /**
+         * The latency in milliseconds introduced by intermediate systems between your application
+         * and the AI provider, such as API gateways, proxies, or AI mediation layers. This helps
+         * identify performance bottlenecks outside of the AI provider's processing time. Leave null
+         * if not using intermediate systems or if latency is not tracked separately.
+         */
         fun mediationLatency(mediationLatency: Long) = apply {
             body.mediationLatency(mediationLatency)
         }
@@ -930,7 +1141,38 @@ private constructor(
             body.mediationLatency(mediationLatency)
         }
 
-        /** The source of the AI model used for the completion */
+        /**
+         * Identifier of the Revenium middleware package or SDK that captured and submitted this AI
+         * completion metadata. This field is AUTOMATICALLY SET by Revenium's middleware packages
+         * (e.g., 'revenium-openai-python', 'revenium-anthropic-node'). You typically should NOT
+         * manually set this field. It is used for analytics to track which integration methods are
+         * being used and for debugging middleware-specific issues.
+         */
+        fun middlewareSource(middlewareSource: String) = apply {
+            body.middlewareSource(middlewareSource)
+        }
+
+        /**
+         * Sets [Builder.middlewareSource] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.middlewareSource] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun middlewareSource(middlewareSource: JsonField<String>) = apply {
+            body.middlewareSource(middlewareSource)
+        }
+
+        /**
+         * The routing or aggregation layer used to access the AI model. This identifies whether
+         * you're calling the AI provider directly or through an intermediary service.
+         *
+         * Common values: 'DIRECT', 'LITELLM', 'OPENROUTER', 'PORTKEY', 'AZURE_OPENAI', or provider
+         * names ('OPENAI', 'ANTHROPIC', 'GOOGLE', etc.) when calling directly.
+         *
+         * Custom values are accepted for specialized routing layers or gateways. This field is used
+         * for integration tracking and analytics.
+         */
         fun modelSource(modelSource: String) = apply { body.modelSource(modelSource) }
 
         /**
@@ -962,7 +1204,7 @@ private constructor(
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
          * organizationId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
+         * down by subscriberId.
          */
         fun organizationId(organizationId: String) = apply { body.organizationId(organizationId) }
 
@@ -977,7 +1219,13 @@ private constructor(
             body.organizationId(organizationId)
         }
 
-        /** The output token cost associated with the LLM completion */
+        /**
+         * The cost in USD for output tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's current pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation. Note:
+         * Manual cost override may not be available on all Revenium plans.
+         */
         fun outputTokenCost(outputTokenCost: Double) = apply {
             body.outputTokenCost(outputTokenCost)
         }
@@ -1008,7 +1256,14 @@ private constructor(
          */
         fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
-        /** The number of reasoning tokens in the completion */
+        /**
+         * The number of reasoning tokens used in the completion. Reasoning tokens are extended
+         * thinking tokens used by AI models for complex problem-solving. These are sometimes billed
+         * separately from regular input/output tokens. Only include this field if your AI provider
+         * reports reasoning tokens Revenium's middleware will always populate this field if
+         * reasoning tokens are reported by the AI provider. Leave null for models without reasoning
+         * capabilities.
+         */
         fun reasoningTokenCount(reasoningTokenCount: Long) = apply {
             body.reasoningTokenCount(reasoningTokenCount)
         }
@@ -1024,7 +1279,12 @@ private constructor(
             body.reasoningTokenCount(reasoningTokenCount)
         }
 
-        /** The quality score of the response */
+        /**
+         * Optional quality score for the AI response, typically on a 0-100 scale. Set by your
+         * application's evaluation logic (e.g., RAGAS, human feedback, custom scoring). Used in
+         * Revenium analytics to correlate quality with cost, model choice, and other metrics. Leave
+         * null if not tracking quality scores.
+         */
         fun responseQualityScore(responseQualityScore: Double) = apply {
             body.responseQualityScore(responseQualityScore)
         }
@@ -1041,77 +1301,21 @@ private constructor(
         }
 
         /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users.
+         * Metadata about the subscriber/end-user making this AI request. Include this to track
+         * usage by individual users within an organization. Contains user identifiers and
+         * associated credential information. Leave null if not tracking individual user-level
+         * usage.
          */
-        fun subscriberCredential(subscriberCredential: String) = apply {
-            body.subscriberCredential(subscriberCredential)
-        }
+        fun subscriber(subscriber: Subscriber) = apply { body.subscriber(subscriber) }
 
         /**
-         * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+         * Sets [Builder.subscriber] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriberCredential] with a well-typed [String] value
+         * You should usually call [Builder.subscriber] with a well-typed [Subscriber] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-            body.subscriberCredential(subscriberCredential)
-        }
-
-        /**
-         * Populate the name of the subscriber credential from your system to allow Revenium to
-         * track usage & costs for individual users.
-         */
-        fun subscriberCredentialName(subscriberCredentialName: String) = apply {
-            body.subscriberCredentialName(subscriberCredentialName)
-        }
-
-        /**
-         * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
-        fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
-            body.subscriberCredentialName(subscriberCredentialName)
-        }
-
-        /** The email address of the subscriber */
-        fun subscriberEmail(subscriberEmail: String) = apply {
-            body.subscriberEmail(subscriberEmail)
-        }
-
-        /**
-         * Sets [Builder.subscriberEmail] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberEmail] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
-            body.subscriberEmail(subscriberEmail)
-        }
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         */
-        fun subscriberId(subscriberId: String) = apply { body.subscriberId(subscriberId) }
-
-        /**
-         * Sets [Builder.subscriberId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.subscriberId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun subscriberId(subscriberId: JsonField<String>) = apply {
-            body.subscriberId(subscriberId)
-        }
+        fun subscriber(subscriber: JsonField<Subscriber>) = apply { body.subscriber(subscriber) }
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -1131,9 +1335,11 @@ private constructor(
         }
 
         /**
-         * A unique identifier that represents the statistical signature of the language model that
-         * generated a specific chat completion. This fingerprint can be used for model attribution,
-         * debugging, and monitoring model behavior across request
+         * A unique identifier provided by the AI provider that represents the statistical signature
+         * of the language model that generated this completion. This fingerprint can be used for
+         * model attribution, debugging, and monitoring model behavior across requests.
+         * Automatically provided by some AI providers (e.g., OpenAI) in their API responses. Leave
+         * null if your provider does not supply this value.
          */
         fun systemFingerprint(systemFingerprint: String) = apply {
             body.systemFingerprint(systemFingerprint)
@@ -1151,9 +1357,11 @@ private constructor(
         }
 
         /**
-         * If you wish to track the costs or performance of a specific task and compare the values
-         * over time or compare the performance across AI models or vendors, use a consistent
-         * taskType for all related tasks.
+         * Optional category to group related AI tasks for cost and performance analysis. Use
+         * consistent values to compare metrics across different models or vendors performing the
+         * same type of work. Examples: 'chat', 'summarization', 'code-generation', 'translation',
+         * 'image-generation', 'embeddings', 'classification', 'sentiment-analysis'. This is
+         * freeform text - choose values that match your use cases.
          */
         fun taskType(taskType: String) = apply { body.taskType(taskType) }
 
@@ -1165,7 +1373,12 @@ private constructor(
          */
         fun taskType(taskType: JsonField<String>) = apply { body.taskType(taskType) }
 
-        /** The temperature setting used for the LLM completion */
+        /**
+         * The temperature parameter used for this completion, controlling randomness in the AI's
+         * output. Typically ranges from 0.0 (deterministic) to 2.0 (very random). Track this to
+         * correlate temperature settings with response quality, cost, or other metrics. Useful for
+         * A/B testing different temperature values.
+         */
         fun temperature(temperature: Double) = apply { body.temperature(temperature) }
 
         /**
@@ -1177,7 +1390,12 @@ private constructor(
          */
         fun temperature(temperature: JsonField<Double>) = apply { body.temperature(temperature) }
 
-        /** The time to first token in milliseconds */
+        /**
+         * The latency in milliseconds from request start to first token received. Calculated as
+         * (completionStartTime - requestTime). This metric is particularly important for streaming
+         * completions to measure perceived responsiveness. For non-streaming completions, this may
+         * be null or equal to requestDuration.
+         */
         fun timeToFirstToken(timeToFirstToken: Long) = apply {
             body.timeToFirstToken(timeToFirstToken)
         }
@@ -1193,7 +1411,13 @@ private constructor(
             body.timeToFirstToken(timeToFirstToken)
         }
 
-        /** The total cost associated with the LLM completion */
+        /**
+         * The total cost in USD for this completion (sum of all token costs). Typically leave null
+         * to let Revenium automatically calculate the total based on token counts and current
+         * pricing. Only provide a value if you have custom pricing agreements or want to override
+         * Revenium's cost calculation. If provided, this will override Revenium's automatic
+         * calculation.
+         */
         fun totalCost(totalCost: Double) = apply { body.totalCost(totalCost) }
 
         /**
@@ -1205,7 +1429,12 @@ private constructor(
          */
         fun totalCost(totalCost: JsonField<Double>) = apply { body.totalCost(totalCost) }
 
-        /** Trace multiple LLM calls belonging to same overall request */
+        /**
+         * Optional trace identifier to group multiple related AI completion calls that belong to
+         * the same overall user request or workflow. For example, if a single user query triggers
+         * multiple LLM calls (e.g., retrieval + generation), use the same traceId for all calls to
+         * analyze them together in Revenium's analytics. Leave null for standalone completions.
+         */
         fun traceId(traceId: String) = apply { body.traceId(traceId) }
 
         /**
@@ -1215,6 +1444,25 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun traceId(traceId: JsonField<String>) = apply { body.traceId(traceId) }
+
+        /**
+         * Unique identifier for this specific AI completion transaction. Used for deduplication,
+         * correlation with request/response pairs, and transaction lookup in Revenium analytics. If
+         * not provided, a UUID will be auto-generated. For best practices, generate a UUID in your
+         * application before making the AI call and use the same ID when submitting to Revenium.
+         */
+        fun transactionId(transactionId: String) = apply { body.transactionId(transactionId) }
+
+        /**
+         * Sets [Builder.transactionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.transactionId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun transactionId(transactionId: JsonField<String>) = apply {
+            body.transactionId(transactionId)
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -1352,7 +1600,6 @@ private constructor(
          * .responseTime()
          * .stopReason()
          * .totalTokenCount()
-         * .transactionId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -1371,8 +1618,12 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** The AI completion metadata */
+    /**
+     * Completion metadata details for LLM completions, capturing identifiers and cost metrics for
+     * analytics and monetization.
+     */
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val completionStartTime: JsonField<String>,
         private val costType: JsonField<CostType>,
@@ -1386,13 +1637,15 @@ private constructor(
         private val responseTime: JsonField<String>,
         private val stopReason: JsonField<StopReason>,
         private val totalTokenCount: JsonField<Long>,
-        private val transactionId: JsonField<String>,
         private val agent: JsonField<String>,
+        private val cacheCreationTokenCost: JsonField<Double>,
         private val cacheCreationTokenCount: JsonField<Long>,
+        private val cacheReadTokenCost: JsonField<Double>,
         private val cacheReadTokenCount: JsonField<Long>,
         private val errorReason: JsonField<String>,
         private val inputTokenCost: JsonField<Double>,
         private val mediationLatency: JsonField<Long>,
+        private val middlewareSource: JsonField<String>,
         private val modelSource: JsonField<String>,
         private val operationType: JsonField<OperationType>,
         private val organizationId: JsonField<String>,
@@ -1400,10 +1653,7 @@ private constructor(
         private val productId: JsonField<String>,
         private val reasoningTokenCount: JsonField<Long>,
         private val responseQualityScore: JsonField<Double>,
-        private val subscriberCredential: JsonField<String>,
-        private val subscriberCredentialName: JsonField<String>,
-        private val subscriberEmail: JsonField<String>,
-        private val subscriberId: JsonField<String>,
+        private val subscriber: JsonField<Subscriber>,
         private val subscriptionId: JsonField<String>,
         private val systemFingerprint: JsonField<String>,
         private val taskType: JsonField<String>,
@@ -1411,6 +1661,7 @@ private constructor(
         private val timeToFirstToken: JsonField<Long>,
         private val totalCost: JsonField<Double>,
         private val traceId: JsonField<String>,
+        private val transactionId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1450,13 +1701,16 @@ private constructor(
             @JsonProperty("totalTokenCount")
             @ExcludeMissing
             totalTokenCount: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("transactionId")
-            @ExcludeMissing
-            transactionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("agent") @ExcludeMissing agent: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("cacheCreationTokenCost")
+            @ExcludeMissing
+            cacheCreationTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("cacheCreationTokenCount")
             @ExcludeMissing
             cacheCreationTokenCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("cacheReadTokenCost")
+            @ExcludeMissing
+            cacheReadTokenCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("cacheReadTokenCount")
             @ExcludeMissing
             cacheReadTokenCount: JsonField<Long> = JsonMissing.of(),
@@ -1469,6 +1723,9 @@ private constructor(
             @JsonProperty("mediationLatency")
             @ExcludeMissing
             mediationLatency: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("middlewareSource")
+            @ExcludeMissing
+            middlewareSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("modelSource")
             @ExcludeMissing
             modelSource: JsonField<String> = JsonMissing.of(),
@@ -1490,18 +1747,9 @@ private constructor(
             @JsonProperty("responseQualityScore")
             @ExcludeMissing
             responseQualityScore: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("subscriberCredential")
+            @JsonProperty("subscriber")
             @ExcludeMissing
-            subscriberCredential: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberCredentialName")
-            @ExcludeMissing
-            subscriberCredentialName: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberEmail")
-            @ExcludeMissing
-            subscriberEmail: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberId")
-            @ExcludeMissing
-            subscriberId: JsonField<String> = JsonMissing.of(),
+            subscriber: JsonField<Subscriber> = JsonMissing.of(),
             @JsonProperty("subscriptionId")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
@@ -1521,6 +1769,9 @@ private constructor(
             @ExcludeMissing
             totalCost: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("traceId") @ExcludeMissing traceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("transactionId")
+            @ExcludeMissing
+            transactionId: JsonField<String> = JsonMissing.of(),
         ) : this(
             completionStartTime,
             costType,
@@ -1534,13 +1785,15 @@ private constructor(
             responseTime,
             stopReason,
             totalTokenCount,
-            transactionId,
             agent,
+            cacheCreationTokenCost,
             cacheCreationTokenCount,
+            cacheReadTokenCost,
             cacheReadTokenCount,
             errorReason,
             inputTokenCost,
             mediationLatency,
+            middlewareSource,
             modelSource,
             operationType,
             organizationId,
@@ -1548,10 +1801,7 @@ private constructor(
             productId,
             reasoningTokenCount,
             responseQualityScore,
-            subscriberCredential,
-            subscriberCredentialName,
-            subscriberEmail,
-            subscriberId,
+            subscriber,
             subscriptionId,
             systemFingerprint,
             taskType,
@@ -1559,11 +1809,15 @@ private constructor(
             timeToFirstToken,
             totalCost,
             traceId,
+            transactionId,
             mutableMapOf(),
         )
 
         /**
-         * Time to first token for streaming requests
+         * The timestamp when the AI completion started generating output, in ISO 8601 format with
+         * UTC timezone. For streaming requests, this is when the first token was received. For
+         * non-streaming requests, this is typically the same as or very close to responseTime. Used
+         * to calculate time-to-first-token latency for streaming completions.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1572,7 +1826,9 @@ private constructor(
         fun completionStartTime(): String = completionStartTime.getRequired("completionStartTime")
 
         /**
-         * Cost type for the completion
+         * The type of cost being tracked. Currently always 'AI' for AI completion costs. This field
+         * is used internally by Revenium to categorize different types of metered usage. You
+         * typically do not need to set this field as it defaults to 'AI'.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1590,7 +1846,10 @@ private constructor(
         fun inputTokenCount(): Long = inputTokenCount.getRequired("inputTokenCount")
 
         /**
-         * Indicates if the completion was streamed
+         * Indicates whether this completion used streaming (true) or non-streaming/batch mode
+         * (false). Streaming completions receive tokens incrementally as they're generated, while
+         * non-streaming completions wait for the complete response. This affects how
+         * timeToFirstToken and responseTime are interpreted.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1599,7 +1858,11 @@ private constructor(
         fun isStreamed(): Boolean = isStreamed.getRequired("isStreamed")
 
         /**
-         * The model used for generating the LLM completion
+         * The AI model identifier used for this completion. Should match the exact model name from
+         * your AI provider (e.g., 'gpt-4', 'claude-3-opus-20240229', 'gemini-pro'). This is used
+         * for cost calculation, performance analytics, and model comparison reporting in Revenium.
+         * Valid model names in Revenium for proper cost estimate can be verified using the
+         * sources/ai/models endpoint.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1617,7 +1880,24 @@ private constructor(
         fun outputTokenCount(): Long = outputTokenCount.getRequired("outputTokenCount")
 
         /**
-         * Vendor providing the LLM completion service
+         * The underlying AI provider/vendor whose model is actually processing the request. This
+         * identifies which company's AI model is being used, regardless of how you're accessing it
+         * (direct API, proxy, or gateway).
+         *
+         * Common values: 'OpenAI' (for GPT models), 'Anthropic' (for Claude models), 'Google' (for
+         * Gemini models), 'Cohere', 'Mistral', 'Meta' (for Llama models), 'Amazon Bedrock',
+         * 'Azure'.
+         *
+         * Custom values are accepted but may affect analytics categorization. Revenium looks up
+         * model pricing primarily by model name (e.g., 'gpt-4', 'claude-3-opus'), so using
+         * non-standard provider names will not break cost calculation. However, using standard
+         * provider names ensures proper categorization in analytics and reporting.
+         *
+         * If using an aggregation service like LiteLLM or OpenRouter, this should still be the
+         * actual provider (e.g., 'Anthropic' not 'LiteLLM'). If using Revenium middleware, this is
+         * typically auto-populated from the AI provider's API response. Supported provider models
+         * can be verified using the sources/ai/models endpoint which returns both providers and
+         * model names.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1626,7 +1906,10 @@ private constructor(
         fun provider(): String = provider.getRequired("provider")
 
         /**
-         * The duration of the request in milliseconds
+         * The total duration of the AI completion request in milliseconds, from request start to
+         * completion. Calculated as (responseTime - requestTime). This includes network latency, AI
+         * processing time, and any mediation/gateway overhead. Used for performance analytics and
+         * SLA monitoring.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1635,7 +1918,10 @@ private constructor(
         fun requestDuration(): Long = requestDuration.getRequired("requestDuration")
 
         /**
-         * The timestamp when the request was made
+         * The timestamp when your application sent the request to the AI provider, in ISO 8601
+         * format with UTC timezone (e.g., '2025-03-02T15:04:05Z'). This is used to calculate
+         * request duration and analyze usage patterns over time. Set this to the time immediately
+         * before calling the AI provider's API.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1644,8 +1930,10 @@ private constructor(
         fun requestTime(): String = requestTime.getRequired("requestTime")
 
         /**
-         * The timestamp when the response was generated. If streaming, this is the time to first
-         * token
+         * The timestamp when the AI completion finished, in ISO 8601 format with UTC timezone. For
+         * streaming requests, this is when the last token was received and the stream closed. For
+         * non-streaming requests, this is when the complete response was received. Used to
+         * calculate total request duration.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1672,15 +1960,6 @@ private constructor(
         fun totalTokenCount(): Long = totalTokenCount.getRequired("totalTokenCount")
 
         /**
-         * The unique identifier of the LLM completion transaction
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun transactionId(): String = transactionId.getRequired("transactionId")
-
-        /**
          * The AI agent that is making the request
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
@@ -1689,7 +1968,24 @@ private constructor(
         fun agent(): Optional<String> = agent.getOptional("agent")
 
         /**
-         * The number of cached creation tokens in the completion
+         * The cost in USD for cache creation tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's caching pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun cacheCreationTokenCost(): Optional<Double> =
+            cacheCreationTokenCost.getOptional("cacheCreationTokenCost")
+
+        /**
+         * The number of tokens used to create new cache entries (prompt caching). When you send a
+         * long prompt for the first time, the AI provider may cache it for faster subsequent
+         * requests. Cache creation tokens are typically billed at a higher rate than regular input
+         * tokens. Only include if your provider supports prompt caching (e.g., Anthropic Claude,
+         * OpenAI with cache-enabled models). Revenium's middleware will always populate this field
+         * automatically. Leave null otherwise.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1698,7 +1994,23 @@ private constructor(
             cacheCreationTokenCount.getOptional("cacheCreationTokenCount")
 
         /**
-         * The number of cached read tokens in the completion
+         * The cost in USD for cache read tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's caching pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun cacheReadTokenCost(): Optional<Double> =
+            cacheReadTokenCost.getOptional("cacheReadTokenCost")
+
+        /**
+         * The number of tokens read from cache (prompt caching). When reusing a previously cached
+         * prompt, these tokens are read from cache instead of being processed as new input tokens.
+         * Cache read tokens are typically billed at a lower rate than regular input tokens. Only
+         * include if your provider supports prompt caching and reports cache hits. Revenium's
+         * middleware will always populate this field automatically. Leave null otherwise.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1707,7 +2019,10 @@ private constructor(
             cacheReadTokenCount.getOptional("cacheReadTokenCount")
 
         /**
-         * The details of the error that occurred during the LLM completion
+         * Error message or reason if the AI completion failed. Include this field when the AI
+         * provider returns an error (e.g., rate limit exceeded, invalid API key, model not found,
+         * content policy violation). Used for error rate analytics and debugging. Leave null for
+         * successful completions.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1715,7 +2030,10 @@ private constructor(
         fun errorReason(): Optional<String> = errorReason.getOptional("errorReason")
 
         /**
-         * The input token cost associated with the LLM completion
+         * The cost in USD for input tokens in this completion. Typically leave null to let Revenium
+         * automatically calculate costs based on the model and provider's current pricing. Only
+         * provide a value if you have custom pricing agreements or want to override Revenium's cost
+         * calculation. Note: Manual cost override may not be available on all Revenium plans.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1723,7 +2041,10 @@ private constructor(
         fun inputTokenCost(): Optional<Double> = inputTokenCost.getOptional("inputTokenCost")
 
         /**
-         * The latency, in milliseconds, of latency by an AI or API gateway
+         * The latency in milliseconds introduced by intermediate systems between your application
+         * and the AI provider, such as API gateways, proxies, or AI mediation layers. This helps
+         * identify performance bottlenecks outside of the AI provider's processing time. Leave null
+         * if not using intermediate systems or if latency is not tracked separately.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1731,7 +2052,26 @@ private constructor(
         fun mediationLatency(): Optional<Long> = mediationLatency.getOptional("mediationLatency")
 
         /**
-         * The source of the AI model used for the completion
+         * Identifier of the Revenium middleware package or SDK that captured and submitted this AI
+         * completion metadata. This field is AUTOMATICALLY SET by Revenium's middleware packages
+         * (e.g., 'revenium-openai-python', 'revenium-anthropic-node'). You typically should NOT
+         * manually set this field. It is used for analytics to track which integration methods are
+         * being used and for debugging middleware-specific issues.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun middlewareSource(): Optional<String> = middlewareSource.getOptional("middlewareSource")
+
+        /**
+         * The routing or aggregation layer used to access the AI model. This identifies whether
+         * you're calling the AI provider directly or through an intermediary service.
+         *
+         * Common values: 'DIRECT', 'LITELLM', 'OPENROUTER', 'PORTKEY', 'AZURE_OPENAI', or provider
+         * names ('OPENAI', 'ANTHROPIC', 'GOOGLE', etc.) when calling directly.
+         *
+         * Custom values are accepted for specialized routing layers or gateways. This field is used
+         * for integration tracking and analytics.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1750,7 +2090,7 @@ private constructor(
          * Populate the ID of the subscriber’s organization from your system to allow Revenium to
          * track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the same
          * organizationId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
+         * down by subscriberId.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1758,7 +2098,11 @@ private constructor(
         fun organizationId(): Optional<String> = organizationId.getOptional("organizationId")
 
         /**
-         * The output token cost associated with the LLM completion
+         * The cost in USD for output tokens in this completion. Typically leave null to let
+         * Revenium automatically calculate costs based on the model and provider's current pricing.
+         * Only provide a value if you have custom pricing agreements or want to override Revenium's
+         * cost calculation. If provided, this will override Revenium's automatic calculation. Note:
+         * Manual cost override may not be available on all Revenium plans.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1775,7 +2119,12 @@ private constructor(
         fun productId(): Optional<String> = productId.getOptional("productId")
 
         /**
-         * The number of reasoning tokens in the completion
+         * The number of reasoning tokens used in the completion. Reasoning tokens are extended
+         * thinking tokens used by AI models for complex problem-solving. These are sometimes billed
+         * separately from regular input/output tokens. Only include this field if your AI provider
+         * reports reasoning tokens Revenium's middleware will always populate this field if
+         * reasoning tokens are reported by the AI provider. Leave null for models without reasoning
+         * capabilities.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1784,7 +2133,10 @@ private constructor(
             reasoningTokenCount.getOptional("reasoningTokenCount")
 
         /**
-         * The quality score of the response
+         * Optional quality score for the AI response, typically on a 0-100 scale. Set by your
+         * application's evaluation logic (e.g., RAGAS, human feedback, custom scoring). Used in
+         * Revenium analytics to correlate quality with cost, model choice, and other metrics. Leave
+         * null if not tracking quality scores.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1793,43 +2145,15 @@ private constructor(
             responseQualityScore.getOptional("responseQualityScore")
 
         /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users.
+         * Metadata about the subscriber/end-user making this AI request. Include this to track
+         * usage by individual users within an organization. Contains user identifiers and
+         * associated credential information. Leave null if not tracking individual user-level
+         * usage.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriberCredential(): Optional<String> =
-            subscriberCredential.getOptional("subscriberCredential")
-
-        /**
-         * Populate the name of the subscriber credential from your system to allow Revenium to
-         * track usage & costs for individual users.
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberCredentialName(): Optional<String> =
-            subscriberCredentialName.getOptional("subscriberCredentialName")
-
-        /**
-         * The email address of the subscriber
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberEmail(): Optional<String> = subscriberEmail.getOptional("subscriberEmail")
-
-        /**
-         * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-         * costs for individual users. i.e. user-123. If several subscriberCredentials have the same
-         * subscriberId, Revenium’s reporting will show usage for the entire organization broken
-         * down by user.
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriberId(): Optional<String> = subscriberId.getOptional("subscriberId")
+        fun subscriber(): Optional<Subscriber> = subscriber.getOptional("subscriber")
 
         /**
          * Unique identifier of the subscription from your own system that you wish to use to
@@ -1841,9 +2165,11 @@ private constructor(
         fun subscriptionId(): Optional<String> = subscriptionId.getOptional("subscriptionId")
 
         /**
-         * A unique identifier that represents the statistical signature of the language model that
-         * generated a specific chat completion. This fingerprint can be used for model attribution,
-         * debugging, and monitoring model behavior across request
+         * A unique identifier provided by the AI provider that represents the statistical signature
+         * of the language model that generated this completion. This fingerprint can be used for
+         * model attribution, debugging, and monitoring model behavior across requests.
+         * Automatically provided by some AI providers (e.g., OpenAI) in their API responses. Leave
+         * null if your provider does not supply this value.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1852,9 +2178,11 @@ private constructor(
             systemFingerprint.getOptional("systemFingerprint")
 
         /**
-         * If you wish to track the costs or performance of a specific task and compare the values
-         * over time or compare the performance across AI models or vendors, use a consistent
-         * taskType for all related tasks.
+         * Optional category to group related AI tasks for cost and performance analysis. Use
+         * consistent values to compare metrics across different models or vendors performing the
+         * same type of work. Examples: 'chat', 'summarization', 'code-generation', 'translation',
+         * 'image-generation', 'embeddings', 'classification', 'sentiment-analysis'. This is
+         * freeform text - choose values that match your use cases.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1862,7 +2190,10 @@ private constructor(
         fun taskType(): Optional<String> = taskType.getOptional("taskType")
 
         /**
-         * The temperature setting used for the LLM completion
+         * The temperature parameter used for this completion, controlling randomness in the AI's
+         * output. Typically ranges from 0.0 (deterministic) to 2.0 (very random). Track this to
+         * correlate temperature settings with response quality, cost, or other metrics. Useful for
+         * A/B testing different temperature values.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1870,7 +2201,10 @@ private constructor(
         fun temperature(): Optional<Double> = temperature.getOptional("temperature")
 
         /**
-         * The time to first token in milliseconds
+         * The latency in milliseconds from request start to first token received. Calculated as
+         * (completionStartTime - requestTime). This metric is particularly important for streaming
+         * completions to measure perceived responsiveness. For non-streaming completions, this may
+         * be null or equal to requestDuration.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1878,7 +2212,11 @@ private constructor(
         fun timeToFirstToken(): Optional<Long> = timeToFirstToken.getOptional("timeToFirstToken")
 
         /**
-         * The total cost associated with the LLM completion
+         * The total cost in USD for this completion (sum of all token costs). Typically leave null
+         * to let Revenium automatically calculate the total based on token counts and current
+         * pricing. Only provide a value if you have custom pricing agreements or want to override
+         * Revenium's cost calculation. If provided, this will override Revenium's automatic
+         * calculation.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -1886,12 +2224,26 @@ private constructor(
         fun totalCost(): Optional<Double> = totalCost.getOptional("totalCost")
 
         /**
-         * Trace multiple LLM calls belonging to same overall request
+         * Optional trace identifier to group multiple related AI completion calls that belong to
+         * the same overall user request or workflow. For example, if a single user query triggers
+         * multiple LLM calls (e.g., retrieval + generation), use the same traceId for all calls to
+         * analyze them together in Revenium's analytics. Leave null for standalone completions.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
         fun traceId(): Optional<String> = traceId.getOptional("traceId")
+
+        /**
+         * Unique identifier for this specific AI completion transaction. Used for deduplication,
+         * correlation with request/response pairs, and transaction lookup in Revenium analytics. If
+         * not provided, a UUID will be auto-generated. For best practices, generate a UUID in your
+         * application before making the AI call and use the same ID when submitting to Revenium.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun transactionId(): Optional<String> = transactionId.getOptional("transactionId")
 
         /**
          * Returns the raw JSON value of [completionStartTime].
@@ -2002,21 +2354,21 @@ private constructor(
         fun _totalTokenCount(): JsonField<Long> = totalTokenCount
 
         /**
-         * Returns the raw JSON value of [transactionId].
-         *
-         * Unlike [transactionId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("transactionId")
-        @ExcludeMissing
-        fun _transactionId(): JsonField<String> = transactionId
-
-        /**
          * Returns the raw JSON value of [agent].
          *
          * Unlike [agent], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("agent") @ExcludeMissing fun _agent(): JsonField<String> = agent
+
+        /**
+         * Returns the raw JSON value of [cacheCreationTokenCost].
+         *
+         * Unlike [cacheCreationTokenCost], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheCreationTokenCost")
+        @ExcludeMissing
+        fun _cacheCreationTokenCost(): JsonField<Double> = cacheCreationTokenCost
 
         /**
          * Returns the raw JSON value of [cacheCreationTokenCount].
@@ -2027,6 +2379,16 @@ private constructor(
         @JsonProperty("cacheCreationTokenCount")
         @ExcludeMissing
         fun _cacheCreationTokenCount(): JsonField<Long> = cacheCreationTokenCount
+
+        /**
+         * Returns the raw JSON value of [cacheReadTokenCost].
+         *
+         * Unlike [cacheReadTokenCost], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cacheReadTokenCost")
+        @ExcludeMissing
+        fun _cacheReadTokenCost(): JsonField<Double> = cacheReadTokenCost
 
         /**
          * Returns the raw JSON value of [cacheReadTokenCount].
@@ -2066,6 +2428,16 @@ private constructor(
         @JsonProperty("mediationLatency")
         @ExcludeMissing
         fun _mediationLatency(): JsonField<Long> = mediationLatency
+
+        /**
+         * Returns the raw JSON value of [middlewareSource].
+         *
+         * Unlike [middlewareSource], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("middlewareSource")
+        @ExcludeMissing
+        fun _middlewareSource(): JsonField<String> = middlewareSource
 
         /**
          * Returns the raw JSON value of [modelSource].
@@ -2134,44 +2506,13 @@ private constructor(
         fun _responseQualityScore(): JsonField<Double> = responseQualityScore
 
         /**
-         * Returns the raw JSON value of [subscriberCredential].
+         * Returns the raw JSON value of [subscriber].
          *
-         * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [subscriber], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("subscriberCredential")
+        @JsonProperty("subscriber")
         @ExcludeMissing
-        fun _subscriberCredential(): JsonField<String> = subscriberCredential
-
-        /**
-         * Returns the raw JSON value of [subscriberCredentialName].
-         *
-         * Unlike [subscriberCredentialName], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("subscriberCredentialName")
-        @ExcludeMissing
-        fun _subscriberCredentialName(): JsonField<String> = subscriberCredentialName
-
-        /**
-         * Returns the raw JSON value of [subscriberEmail].
-         *
-         * Unlike [subscriberEmail], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriberEmail")
-        @ExcludeMissing
-        fun _subscriberEmail(): JsonField<String> = subscriberEmail
-
-        /**
-         * Returns the raw JSON value of [subscriberId].
-         *
-         * Unlike [subscriberId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriberId")
-        @ExcludeMissing
-        fun _subscriberId(): JsonField<String> = subscriberId
+        fun _subscriber(): JsonField<Subscriber> = subscriber
 
         /**
          * Returns the raw JSON value of [subscriptionId].
@@ -2233,6 +2574,16 @@ private constructor(
          */
         @JsonProperty("traceId") @ExcludeMissing fun _traceId(): JsonField<String> = traceId
 
+        /**
+         * Returns the raw JSON value of [transactionId].
+         *
+         * Unlike [transactionId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("transactionId")
+        @ExcludeMissing
+        fun _transactionId(): JsonField<String> = transactionId
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -2264,7 +2615,6 @@ private constructor(
              * .responseTime()
              * .stopReason()
              * .totalTokenCount()
-             * .transactionId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -2285,13 +2635,15 @@ private constructor(
             private var responseTime: JsonField<String>? = null
             private var stopReason: JsonField<StopReason>? = null
             private var totalTokenCount: JsonField<Long>? = null
-            private var transactionId: JsonField<String>? = null
             private var agent: JsonField<String> = JsonMissing.of()
+            private var cacheCreationTokenCost: JsonField<Double> = JsonMissing.of()
             private var cacheCreationTokenCount: JsonField<Long> = JsonMissing.of()
+            private var cacheReadTokenCost: JsonField<Double> = JsonMissing.of()
             private var cacheReadTokenCount: JsonField<Long> = JsonMissing.of()
             private var errorReason: JsonField<String> = JsonMissing.of()
             private var inputTokenCost: JsonField<Double> = JsonMissing.of()
             private var mediationLatency: JsonField<Long> = JsonMissing.of()
+            private var middlewareSource: JsonField<String> = JsonMissing.of()
             private var modelSource: JsonField<String> = JsonMissing.of()
             private var operationType: JsonField<OperationType> = JsonMissing.of()
             private var organizationId: JsonField<String> = JsonMissing.of()
@@ -2299,10 +2651,7 @@ private constructor(
             private var productId: JsonField<String> = JsonMissing.of()
             private var reasoningTokenCount: JsonField<Long> = JsonMissing.of()
             private var responseQualityScore: JsonField<Double> = JsonMissing.of()
-            private var subscriberCredential: JsonField<String> = JsonMissing.of()
-            private var subscriberCredentialName: JsonField<String> = JsonMissing.of()
-            private var subscriberEmail: JsonField<String> = JsonMissing.of()
-            private var subscriberId: JsonField<String> = JsonMissing.of()
+            private var subscriber: JsonField<Subscriber> = JsonMissing.of()
             private var subscriptionId: JsonField<String> = JsonMissing.of()
             private var systemFingerprint: JsonField<String> = JsonMissing.of()
             private var taskType: JsonField<String> = JsonMissing.of()
@@ -2310,6 +2659,7 @@ private constructor(
             private var timeToFirstToken: JsonField<Long> = JsonMissing.of()
             private var totalCost: JsonField<Double> = JsonMissing.of()
             private var traceId: JsonField<String> = JsonMissing.of()
+            private var transactionId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -2326,13 +2676,15 @@ private constructor(
                 responseTime = body.responseTime
                 stopReason = body.stopReason
                 totalTokenCount = body.totalTokenCount
-                transactionId = body.transactionId
                 agent = body.agent
+                cacheCreationTokenCost = body.cacheCreationTokenCost
                 cacheCreationTokenCount = body.cacheCreationTokenCount
+                cacheReadTokenCost = body.cacheReadTokenCost
                 cacheReadTokenCount = body.cacheReadTokenCount
                 errorReason = body.errorReason
                 inputTokenCost = body.inputTokenCost
                 mediationLatency = body.mediationLatency
+                middlewareSource = body.middlewareSource
                 modelSource = body.modelSource
                 operationType = body.operationType
                 organizationId = body.organizationId
@@ -2340,10 +2692,7 @@ private constructor(
                 productId = body.productId
                 reasoningTokenCount = body.reasoningTokenCount
                 responseQualityScore = body.responseQualityScore
-                subscriberCredential = body.subscriberCredential
-                subscriberCredentialName = body.subscriberCredentialName
-                subscriberEmail = body.subscriberEmail
-                subscriberId = body.subscriberId
+                subscriber = body.subscriber
                 subscriptionId = body.subscriptionId
                 systemFingerprint = body.systemFingerprint
                 taskType = body.taskType
@@ -2351,10 +2700,17 @@ private constructor(
                 timeToFirstToken = body.timeToFirstToken
                 totalCost = body.totalCost
                 traceId = body.traceId
+                transactionId = body.transactionId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** Time to first token for streaming requests */
+            /**
+             * The timestamp when the AI completion started generating output, in ISO 8601 format
+             * with UTC timezone. For streaming requests, this is when the first token was received.
+             * For non-streaming requests, this is typically the same as or very close to
+             * responseTime. Used to calculate time-to-first-token latency for streaming
+             * completions.
+             */
             fun completionStartTime(completionStartTime: String) =
                 completionStartTime(JsonField.of(completionStartTime))
 
@@ -2369,7 +2725,11 @@ private constructor(
                 this.completionStartTime = completionStartTime
             }
 
-            /** Cost type for the completion */
+            /**
+             * The type of cost being tracked. Currently always 'AI' for AI completion costs. This
+             * field is used internally by Revenium to categorize different types of metered usage.
+             * You typically do not need to set this field as it defaults to 'AI'.
+             */
             fun costType(costType: CostType) = costType(JsonField.of(costType))
 
             /**
@@ -2396,7 +2756,12 @@ private constructor(
                 this.inputTokenCount = inputTokenCount
             }
 
-            /** Indicates if the completion was streamed */
+            /**
+             * Indicates whether this completion used streaming (true) or non-streaming/batch mode
+             * (false). Streaming completions receive tokens incrementally as they're generated,
+             * while non-streaming completions wait for the complete response. This affects how
+             * timeToFirstToken and responseTime are interpreted.
+             */
             fun isStreamed(isStreamed: Boolean) = isStreamed(JsonField.of(isStreamed))
 
             /**
@@ -2408,7 +2773,13 @@ private constructor(
              */
             fun isStreamed(isStreamed: JsonField<Boolean>) = apply { this.isStreamed = isStreamed }
 
-            /** The model used for generating the LLM completion */
+            /**
+             * The AI model identifier used for this completion. Should match the exact model name
+             * from your AI provider (e.g., 'gpt-4', 'claude-3-opus-20240229', 'gemini-pro'). This
+             * is used for cost calculation, performance analytics, and model comparison reporting
+             * in Revenium. Valid model names in Revenium for proper cost estimate can be verified
+             * using the sources/ai/models endpoint.
+             */
             fun model(model: String) = model(JsonField.of(model))
 
             /**
@@ -2435,7 +2806,26 @@ private constructor(
                 this.outputTokenCount = outputTokenCount
             }
 
-            /** Vendor providing the LLM completion service */
+            /**
+             * The underlying AI provider/vendor whose model is actually processing the request.
+             * This identifies which company's AI model is being used, regardless of how you're
+             * accessing it (direct API, proxy, or gateway).
+             *
+             * Common values: 'OpenAI' (for GPT models), 'Anthropic' (for Claude models), 'Google'
+             * (for Gemini models), 'Cohere', 'Mistral', 'Meta' (for Llama models), 'Amazon
+             * Bedrock', 'Azure'.
+             *
+             * Custom values are accepted but may affect analytics categorization. Revenium looks up
+             * model pricing primarily by model name (e.g., 'gpt-4', 'claude-3-opus'), so using
+             * non-standard provider names will not break cost calculation. However, using standard
+             * provider names ensures proper categorization in analytics and reporting.
+             *
+             * If using an aggregation service like LiteLLM or OpenRouter, this should still be the
+             * actual provider (e.g., 'Anthropic' not 'LiteLLM'). If using Revenium middleware, this
+             * is typically auto-populated from the AI provider's API response. Supported provider
+             * models can be verified using the sources/ai/models endpoint which returns both
+             * providers and model names.
+             */
             fun provider(provider: String) = provider(JsonField.of(provider))
 
             /**
@@ -2447,7 +2837,12 @@ private constructor(
              */
             fun provider(provider: JsonField<String>) = apply { this.provider = provider }
 
-            /** The duration of the request in milliseconds */
+            /**
+             * The total duration of the AI completion request in milliseconds, from request start
+             * to completion. Calculated as (responseTime - requestTime). This includes network
+             * latency, AI processing time, and any mediation/gateway overhead. Used for performance
+             * analytics and SLA monitoring.
+             */
             fun requestDuration(requestDuration: Long) =
                 requestDuration(JsonField.of(requestDuration))
 
@@ -2462,7 +2857,12 @@ private constructor(
                 this.requestDuration = requestDuration
             }
 
-            /** The timestamp when the request was made */
+            /**
+             * The timestamp when your application sent the request to the AI provider, in ISO 8601
+             * format with UTC timezone (e.g., '2025-03-02T15:04:05Z'). This is used to calculate
+             * request duration and analyze usage patterns over time. Set this to the time
+             * immediately before calling the AI provider's API.
+             */
             fun requestTime(requestTime: String) = requestTime(JsonField.of(requestTime))
 
             /**
@@ -2477,8 +2877,10 @@ private constructor(
             }
 
             /**
-             * The timestamp when the response was generated. If streaming, this is the time to
-             * first token
+             * The timestamp when the AI completion finished, in ISO 8601 format with UTC timezone.
+             * For streaming requests, this is when the last token was received and the stream
+             * closed. For non-streaming requests, this is when the complete response was received.
+             * Used to calculate total request duration.
              */
             fun responseTime(responseTime: String) = responseTime(JsonField.of(responseTime))
 
@@ -2522,20 +2924,6 @@ private constructor(
                 this.totalTokenCount = totalTokenCount
             }
 
-            /** The unique identifier of the LLM completion transaction */
-            fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
-
-            /**
-             * Sets [Builder.transactionId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.transactionId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun transactionId(transactionId: JsonField<String>) = apply {
-                this.transactionId = transactionId
-            }
-
             /** The AI agent that is making the request */
             fun agent(agent: String) = agent(JsonField.of(agent))
 
@@ -2548,7 +2936,35 @@ private constructor(
              */
             fun agent(agent: JsonField<String>) = apply { this.agent = agent }
 
-            /** The number of cached creation tokens in the completion */
+            /**
+             * The cost in USD for cache creation tokens in this completion. Typically leave null to
+             * let Revenium automatically calculate costs based on the model and provider's caching
+             * pricing. Only provide a value if you have custom pricing agreements or want to
+             * override Revenium's cost calculation. If provided, this will override Revenium's
+             * automatic calculation.
+             */
+            fun cacheCreationTokenCost(cacheCreationTokenCost: Double) =
+                cacheCreationTokenCost(JsonField.of(cacheCreationTokenCost))
+
+            /**
+             * Sets [Builder.cacheCreationTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheCreationTokenCost] with a well-typed [Double]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun cacheCreationTokenCost(cacheCreationTokenCost: JsonField<Double>) = apply {
+                this.cacheCreationTokenCost = cacheCreationTokenCost
+            }
+
+            /**
+             * The number of tokens used to create new cache entries (prompt caching). When you send
+             * a long prompt for the first time, the AI provider may cache it for faster subsequent
+             * requests. Cache creation tokens are typically billed at a higher rate than regular
+             * input tokens. Only include if your provider supports prompt caching (e.g., Anthropic
+             * Claude, OpenAI with cache-enabled models). Revenium's middleware will always populate
+             * this field automatically. Leave null otherwise.
+             */
             fun cacheCreationTokenCount(cacheCreationTokenCount: Long) =
                 cacheCreationTokenCount(JsonField.of(cacheCreationTokenCount))
 
@@ -2563,7 +2979,35 @@ private constructor(
                 this.cacheCreationTokenCount = cacheCreationTokenCount
             }
 
-            /** The number of cached read tokens in the completion */
+            /**
+             * The cost in USD for cache read tokens in this completion. Typically leave null to let
+             * Revenium automatically calculate costs based on the model and provider's caching
+             * pricing. Only provide a value if you have custom pricing agreements or want to
+             * override Revenium's cost calculation. If provided, this will override Revenium's
+             * automatic calculation.
+             */
+            fun cacheReadTokenCost(cacheReadTokenCost: Double) =
+                cacheReadTokenCost(JsonField.of(cacheReadTokenCost))
+
+            /**
+             * Sets [Builder.cacheReadTokenCost] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cacheReadTokenCost] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cacheReadTokenCost(cacheReadTokenCost: JsonField<Double>) = apply {
+                this.cacheReadTokenCost = cacheReadTokenCost
+            }
+
+            /**
+             * The number of tokens read from cache (prompt caching). When reusing a previously
+             * cached prompt, these tokens are read from cache instead of being processed as new
+             * input tokens. Cache read tokens are typically billed at a lower rate than regular
+             * input tokens. Only include if your provider supports prompt caching and reports cache
+             * hits. Revenium's middleware will always populate this field automatically. Leave null
+             * otherwise.
+             */
             fun cacheReadTokenCount(cacheReadTokenCount: Long) =
                 cacheReadTokenCount(JsonField.of(cacheReadTokenCount))
 
@@ -2578,7 +3022,12 @@ private constructor(
                 this.cacheReadTokenCount = cacheReadTokenCount
             }
 
-            /** The details of the error that occurred during the LLM completion */
+            /**
+             * Error message or reason if the AI completion failed. Include this field when the AI
+             * provider returns an error (e.g., rate limit exceeded, invalid API key, model not
+             * found, content policy violation). Used for error rate analytics and debugging. Leave
+             * null for successful completions.
+             */
             fun errorReason(errorReason: String) = errorReason(JsonField.of(errorReason))
 
             /**
@@ -2592,7 +3041,13 @@ private constructor(
                 this.errorReason = errorReason
             }
 
-            /** The input token cost associated with the LLM completion */
+            /**
+             * The cost in USD for input tokens in this completion. Typically leave null to let
+             * Revenium automatically calculate costs based on the model and provider's current
+             * pricing. Only provide a value if you have custom pricing agreements or want to
+             * override Revenium's cost calculation. Note: Manual cost override may not be available
+             * on all Revenium plans.
+             */
             fun inputTokenCost(inputTokenCost: Double) =
                 inputTokenCost(JsonField.of(inputTokenCost))
 
@@ -2607,7 +3062,13 @@ private constructor(
                 this.inputTokenCost = inputTokenCost
             }
 
-            /** The latency, in milliseconds, of latency by an AI or API gateway */
+            /**
+             * The latency in milliseconds introduced by intermediate systems between your
+             * application and the AI provider, such as API gateways, proxies, or AI mediation
+             * layers. This helps identify performance bottlenecks outside of the AI provider's
+             * processing time. Leave null if not using intermediate systems or if latency is not
+             * tracked separately.
+             */
             fun mediationLatency(mediationLatency: Long) =
                 mediationLatency(JsonField.of(mediationLatency))
 
@@ -2622,7 +3083,37 @@ private constructor(
                 this.mediationLatency = mediationLatency
             }
 
-            /** The source of the AI model used for the completion */
+            /**
+             * Identifier of the Revenium middleware package or SDK that captured and submitted this
+             * AI completion metadata. This field is AUTOMATICALLY SET by Revenium's middleware
+             * packages (e.g., 'revenium-openai-python', 'revenium-anthropic-node'). You typically
+             * should NOT manually set this field. It is used for analytics to track which
+             * integration methods are being used and for debugging middleware-specific issues.
+             */
+            fun middlewareSource(middlewareSource: String) =
+                middlewareSource(JsonField.of(middlewareSource))
+
+            /**
+             * Sets [Builder.middlewareSource] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.middlewareSource] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun middlewareSource(middlewareSource: JsonField<String>) = apply {
+                this.middlewareSource = middlewareSource
+            }
+
+            /**
+             * The routing or aggregation layer used to access the AI model. This identifies whether
+             * you're calling the AI provider directly or through an intermediary service.
+             *
+             * Common values: 'DIRECT', 'LITELLM', 'OPENROUTER', 'PORTKEY', 'AZURE_OPENAI', or
+             * provider names ('OPENAI', 'ANTHROPIC', 'GOOGLE', etc.) when calling directly.
+             *
+             * Custom values are accepted for specialized routing layers or gateways. This field is
+             * used for integration tracking and analytics.
+             */
             fun modelSource(modelSource: String) = modelSource(JsonField.of(modelSource))
 
             /**
@@ -2655,7 +3146,7 @@ private constructor(
              * Populate the ID of the subscriber’s organization from your system to allow Revenium
              * to track usage & costs by company. i.e. AcmeCorp. If several subscriberIds have the
              * same organizationId, Revenium’s reporting will show usage for the entire organization
-             * broken down by user.
+             * broken down by subscriberId.
              */
             fun organizationId(organizationId: String) =
                 organizationId(JsonField.of(organizationId))
@@ -2671,7 +3162,14 @@ private constructor(
                 this.organizationId = organizationId
             }
 
-            /** The output token cost associated with the LLM completion */
+            /**
+             * The cost in USD for output tokens in this completion. Typically leave null to let
+             * Revenium automatically calculate costs based on the model and provider's current
+             * pricing. Only provide a value if you have custom pricing agreements or want to
+             * override Revenium's cost calculation. If provided, this will override Revenium's
+             * automatic calculation. Note: Manual cost override may not be available on all
+             * Revenium plans.
+             */
             fun outputTokenCost(outputTokenCost: Double) =
                 outputTokenCost(JsonField.of(outputTokenCost))
 
@@ -2701,7 +3199,14 @@ private constructor(
              */
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            /** The number of reasoning tokens in the completion */
+            /**
+             * The number of reasoning tokens used in the completion. Reasoning tokens are extended
+             * thinking tokens used by AI models for complex problem-solving. These are sometimes
+             * billed separately from regular input/output tokens. Only include this field if your
+             * AI provider reports reasoning tokens Revenium's middleware will always populate this
+             * field if reasoning tokens are reported by the AI provider. Leave null for models
+             * without reasoning capabilities.
+             */
             fun reasoningTokenCount(reasoningTokenCount: Long) =
                 reasoningTokenCount(JsonField.of(reasoningTokenCount))
 
@@ -2716,7 +3221,12 @@ private constructor(
                 this.reasoningTokenCount = reasoningTokenCount
             }
 
-            /** The quality score of the response */
+            /**
+             * Optional quality score for the AI response, typically on a 0-100 scale. Set by your
+             * application's evaluation logic (e.g., RAGAS, human feedback, custom scoring). Used in
+             * Revenium analytics to correlate quality with cost, model choice, and other metrics.
+             * Leave null if not tracking quality scores.
+             */
             fun responseQualityScore(responseQualityScore: Double) =
                 responseQualityScore(JsonField.of(responseQualityScore))
 
@@ -2732,73 +3242,22 @@ private constructor(
             }
 
             /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users.
+             * Metadata about the subscriber/end-user making this AI request. Include this to track
+             * usage by individual users within an organization. Contains user identifiers and
+             * associated credential information. Leave null if not tracking individual user-level
+             * usage.
              */
-            fun subscriberCredential(subscriberCredential: String) =
-                subscriberCredential(JsonField.of(subscriberCredential))
+            fun subscriber(subscriber: Subscriber) = subscriber(JsonField.of(subscriber))
 
             /**
-             * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+             * Sets [Builder.subscriber] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriberCredential] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
-                this.subscriberCredential = subscriberCredential
-            }
-
-            /**
-             * Populate the name of the subscriber credential from your system to allow Revenium to
-             * track usage & costs for individual users.
-             */
-            fun subscriberCredentialName(subscriberCredentialName: String) =
-                subscriberCredentialName(JsonField.of(subscriberCredentialName))
-
-            /**
-             * Sets [Builder.subscriberCredentialName] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberCredentialName] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun subscriberCredentialName(subscriberCredentialName: JsonField<String>) = apply {
-                this.subscriberCredentialName = subscriberCredentialName
-            }
-
-            /** The email address of the subscriber */
-            fun subscriberEmail(subscriberEmail: String) =
-                subscriberEmail(JsonField.of(subscriberEmail))
-
-            /**
-             * Sets [Builder.subscriberEmail] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberEmail] with a well-typed [String] value
+             * You should usually call [Builder.subscriber] with a well-typed [Subscriber] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun subscriberEmail(subscriberEmail: JsonField<String>) = apply {
-                this.subscriberEmail = subscriberEmail
-            }
-
-            /**
-             * Populate the ID of the subscriber from your system to allow Revenium to track usage &
-             * costs for individual users. i.e. user-123. If several subscriberCredentials have the
-             * same subscriberId, Revenium’s reporting will show usage for the entire organization
-             * broken down by user.
-             */
-            fun subscriberId(subscriberId: String) = subscriberId(JsonField.of(subscriberId))
-
-            /**
-             * Sets [Builder.subscriberId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriberId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun subscriberId(subscriberId: JsonField<String>) = apply {
-                this.subscriberId = subscriberId
+            fun subscriber(subscriber: JsonField<Subscriber>) = apply {
+                this.subscriber = subscriber
             }
 
             /**
@@ -2820,9 +3279,11 @@ private constructor(
             }
 
             /**
-             * A unique identifier that represents the statistical signature of the language model
-             * that generated a specific chat completion. This fingerprint can be used for model
-             * attribution, debugging, and monitoring model behavior across request
+             * A unique identifier provided by the AI provider that represents the statistical
+             * signature of the language model that generated this completion. This fingerprint can
+             * be used for model attribution, debugging, and monitoring model behavior across
+             * requests. Automatically provided by some AI providers (e.g., OpenAI) in their API
+             * responses. Leave null if your provider does not supply this value.
              */
             fun systemFingerprint(systemFingerprint: String) =
                 systemFingerprint(JsonField.of(systemFingerprint))
@@ -2839,9 +3300,12 @@ private constructor(
             }
 
             /**
-             * If you wish to track the costs or performance of a specific task and compare the
-             * values over time or compare the performance across AI models or vendors, use a
-             * consistent taskType for all related tasks.
+             * Optional category to group related AI tasks for cost and performance analysis. Use
+             * consistent values to compare metrics across different models or vendors performing
+             * the same type of work. Examples: 'chat', 'summarization', 'code-generation',
+             * 'translation', 'image-generation', 'embeddings', 'classification',
+             * 'sentiment-analysis'. This is freeform text - choose values that match your use
+             * cases.
              */
             fun taskType(taskType: String) = taskType(JsonField.of(taskType))
 
@@ -2854,7 +3318,12 @@ private constructor(
              */
             fun taskType(taskType: JsonField<String>) = apply { this.taskType = taskType }
 
-            /** The temperature setting used for the LLM completion */
+            /**
+             * The temperature parameter used for this completion, controlling randomness in the
+             * AI's output. Typically ranges from 0.0 (deterministic) to 2.0 (very random). Track
+             * this to correlate temperature settings with response quality, cost, or other metrics.
+             * Useful for A/B testing different temperature values.
+             */
             fun temperature(temperature: Double) = temperature(JsonField.of(temperature))
 
             /**
@@ -2868,7 +3337,12 @@ private constructor(
                 this.temperature = temperature
             }
 
-            /** The time to first token in milliseconds */
+            /**
+             * The latency in milliseconds from request start to first token received. Calculated as
+             * (completionStartTime - requestTime). This metric is particularly important for
+             * streaming completions to measure perceived responsiveness. For non-streaming
+             * completions, this may be null or equal to requestDuration.
+             */
             fun timeToFirstToken(timeToFirstToken: Long) =
                 timeToFirstToken(JsonField.of(timeToFirstToken))
 
@@ -2883,7 +3357,13 @@ private constructor(
                 this.timeToFirstToken = timeToFirstToken
             }
 
-            /** The total cost associated with the LLM completion */
+            /**
+             * The total cost in USD for this completion (sum of all token costs). Typically leave
+             * null to let Revenium automatically calculate the total based on token counts and
+             * current pricing. Only provide a value if you have custom pricing agreements or want
+             * to override Revenium's cost calculation. If provided, this will override Revenium's
+             * automatic calculation.
+             */
             fun totalCost(totalCost: Double) = totalCost(JsonField.of(totalCost))
 
             /**
@@ -2895,7 +3375,13 @@ private constructor(
              */
             fun totalCost(totalCost: JsonField<Double>) = apply { this.totalCost = totalCost }
 
-            /** Trace multiple LLM calls belonging to same overall request */
+            /**
+             * Optional trace identifier to group multiple related AI completion calls that belong
+             * to the same overall user request or workflow. For example, if a single user query
+             * triggers multiple LLM calls (e.g., retrieval + generation), use the same traceId for
+             * all calls to analyze them together in Revenium's analytics. Leave null for standalone
+             * completions.
+             */
             fun traceId(traceId: String) = traceId(JsonField.of(traceId))
 
             /**
@@ -2906,6 +3392,26 @@ private constructor(
              * supported value.
              */
             fun traceId(traceId: JsonField<String>) = apply { this.traceId = traceId }
+
+            /**
+             * Unique identifier for this specific AI completion transaction. Used for
+             * deduplication, correlation with request/response pairs, and transaction lookup in
+             * Revenium analytics. If not provided, a UUID will be auto-generated. For best
+             * practices, generate a UUID in your application before making the AI call and use the
+             * same ID when submitting to Revenium.
+             */
+            fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
+
+            /**
+             * Sets [Builder.transactionId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.transactionId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun transactionId(transactionId: JsonField<String>) = apply {
+                this.transactionId = transactionId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2945,7 +3451,6 @@ private constructor(
              * .responseTime()
              * .stopReason()
              * .totalTokenCount()
-             * .transactionId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -2964,13 +3469,15 @@ private constructor(
                     checkRequired("responseTime", responseTime),
                     checkRequired("stopReason", stopReason),
                     checkRequired("totalTokenCount", totalTokenCount),
-                    checkRequired("transactionId", transactionId),
                     agent,
+                    cacheCreationTokenCost,
                     cacheCreationTokenCount,
+                    cacheReadTokenCost,
                     cacheReadTokenCount,
                     errorReason,
                     inputTokenCost,
                     mediationLatency,
+                    middlewareSource,
                     modelSource,
                     operationType,
                     organizationId,
@@ -2978,10 +3485,7 @@ private constructor(
                     productId,
                     reasoningTokenCount,
                     responseQualityScore,
-                    subscriberCredential,
-                    subscriberCredentialName,
-                    subscriberEmail,
-                    subscriberId,
+                    subscriber,
                     subscriptionId,
                     systemFingerprint,
                     taskType,
@@ -2989,6 +3493,7 @@ private constructor(
                     timeToFirstToken,
                     totalCost,
                     traceId,
+                    transactionId,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -3012,13 +3517,15 @@ private constructor(
             responseTime()
             stopReason().validate()
             totalTokenCount()
-            transactionId()
             agent()
+            cacheCreationTokenCost()
             cacheCreationTokenCount()
+            cacheReadTokenCost()
             cacheReadTokenCount()
             errorReason()
             inputTokenCost()
             mediationLatency()
+            middlewareSource()
             modelSource()
             operationType().ifPresent { it.validate() }
             organizationId()
@@ -3026,10 +3533,7 @@ private constructor(
             productId()
             reasoningTokenCount()
             responseQualityScore()
-            subscriberCredential()
-            subscriberCredentialName()
-            subscriberEmail()
-            subscriberId()
+            subscriber().ifPresent { it.validate() }
             subscriptionId()
             systemFingerprint()
             taskType()
@@ -3037,6 +3541,7 @@ private constructor(
             timeToFirstToken()
             totalCost()
             traceId()
+            transactionId()
             validated = true
         }
 
@@ -3068,13 +3573,15 @@ private constructor(
                 (if (responseTime.asKnown().isPresent) 1 else 0) +
                 (stopReason.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (totalTokenCount.asKnown().isPresent) 1 else 0) +
-                (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (agent.asKnown().isPresent) 1 else 0) +
+                (if (cacheCreationTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (cacheCreationTokenCount.asKnown().isPresent) 1 else 0) +
+                (if (cacheReadTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (cacheReadTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (errorReason.asKnown().isPresent) 1 else 0) +
                 (if (inputTokenCost.asKnown().isPresent) 1 else 0) +
                 (if (mediationLatency.asKnown().isPresent) 1 else 0) +
+                (if (middlewareSource.asKnown().isPresent) 1 else 0) +
                 (if (modelSource.asKnown().isPresent) 1 else 0) +
                 (operationType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (organizationId.asKnown().isPresent) 1 else 0) +
@@ -3082,37 +3589,116 @@ private constructor(
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (reasoningTokenCount.asKnown().isPresent) 1 else 0) +
                 (if (responseQualityScore.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredential.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredentialName.asKnown().isPresent) 1 else 0) +
-                (if (subscriberEmail.asKnown().isPresent) 1 else 0) +
-                (if (subscriberId.asKnown().isPresent) 1 else 0) +
+                (subscriber.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (systemFingerprint.asKnown().isPresent) 1 else 0) +
                 (if (taskType.asKnown().isPresent) 1 else 0) +
                 (if (temperature.asKnown().isPresent) 1 else 0) +
                 (if (timeToFirstToken.asKnown().isPresent) 1 else 0) +
                 (if (totalCost.asKnown().isPresent) 1 else 0) +
-                (if (traceId.asKnown().isPresent) 1 else 0)
+                (if (traceId.asKnown().isPresent) 1 else 0) +
+                (if (transactionId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && completionStartTime == other.completionStartTime && costType == other.costType && inputTokenCount == other.inputTokenCount && isStreamed == other.isStreamed && model == other.model && outputTokenCount == other.outputTokenCount && provider == other.provider && requestDuration == other.requestDuration && requestTime == other.requestTime && responseTime == other.responseTime && stopReason == other.stopReason && totalTokenCount == other.totalTokenCount && transactionId == other.transactionId && agent == other.agent && cacheCreationTokenCount == other.cacheCreationTokenCount && cacheReadTokenCount == other.cacheReadTokenCount && errorReason == other.errorReason && inputTokenCost == other.inputTokenCost && mediationLatency == other.mediationLatency && modelSource == other.modelSource && operationType == other.operationType && organizationId == other.organizationId && outputTokenCost == other.outputTokenCost && productId == other.productId && reasoningTokenCount == other.reasoningTokenCount && responseQualityScore == other.responseQualityScore && subscriberCredential == other.subscriberCredential && subscriberCredentialName == other.subscriberCredentialName && subscriberEmail == other.subscriberEmail && subscriberId == other.subscriberId && subscriptionId == other.subscriptionId && systemFingerprint == other.systemFingerprint && taskType == other.taskType && temperature == other.temperature && timeToFirstToken == other.timeToFirstToken && totalCost == other.totalCost && traceId == other.traceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                completionStartTime == other.completionStartTime &&
+                costType == other.costType &&
+                inputTokenCount == other.inputTokenCount &&
+                isStreamed == other.isStreamed &&
+                model == other.model &&
+                outputTokenCount == other.outputTokenCount &&
+                provider == other.provider &&
+                requestDuration == other.requestDuration &&
+                requestTime == other.requestTime &&
+                responseTime == other.responseTime &&
+                stopReason == other.stopReason &&
+                totalTokenCount == other.totalTokenCount &&
+                agent == other.agent &&
+                cacheCreationTokenCost == other.cacheCreationTokenCost &&
+                cacheCreationTokenCount == other.cacheCreationTokenCount &&
+                cacheReadTokenCost == other.cacheReadTokenCost &&
+                cacheReadTokenCount == other.cacheReadTokenCount &&
+                errorReason == other.errorReason &&
+                inputTokenCost == other.inputTokenCost &&
+                mediationLatency == other.mediationLatency &&
+                middlewareSource == other.middlewareSource &&
+                modelSource == other.modelSource &&
+                operationType == other.operationType &&
+                organizationId == other.organizationId &&
+                outputTokenCost == other.outputTokenCost &&
+                productId == other.productId &&
+                reasoningTokenCount == other.reasoningTokenCount &&
+                responseQualityScore == other.responseQualityScore &&
+                subscriber == other.subscriber &&
+                subscriptionId == other.subscriptionId &&
+                systemFingerprint == other.systemFingerprint &&
+                taskType == other.taskType &&
+                temperature == other.temperature &&
+                timeToFirstToken == other.timeToFirstToken &&
+                totalCost == other.totalCost &&
+                traceId == other.traceId &&
+                transactionId == other.transactionId &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(completionStartTime, costType, inputTokenCount, isStreamed, model, outputTokenCount, provider, requestDuration, requestTime, responseTime, stopReason, totalTokenCount, transactionId, agent, cacheCreationTokenCount, cacheReadTokenCount, errorReason, inputTokenCost, mediationLatency, modelSource, operationType, organizationId, outputTokenCost, productId, reasoningTokenCount, responseQualityScore, subscriberCredential, subscriberCredentialName, subscriberEmail, subscriberId, subscriptionId, systemFingerprint, taskType, temperature, timeToFirstToken, totalCost, traceId, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                completionStartTime,
+                costType,
+                inputTokenCount,
+                isStreamed,
+                model,
+                outputTokenCount,
+                provider,
+                requestDuration,
+                requestTime,
+                responseTime,
+                stopReason,
+                totalTokenCount,
+                agent,
+                cacheCreationTokenCost,
+                cacheCreationTokenCount,
+                cacheReadTokenCost,
+                cacheReadTokenCount,
+                errorReason,
+                inputTokenCost,
+                mediationLatency,
+                middlewareSource,
+                modelSource,
+                operationType,
+                organizationId,
+                outputTokenCost,
+                productId,
+                reasoningTokenCount,
+                responseQualityScore,
+                subscriber,
+                subscriptionId,
+                systemFingerprint,
+                taskType,
+                temperature,
+                timeToFirstToken,
+                totalCost,
+                traceId,
+                transactionId,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, transactionId=$transactionId, agent=$agent, cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCount=$cacheReadTokenCount, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, reasoningTokenCount=$reasoningTokenCount, responseQualityScore=$responseQualityScore, subscriberCredential=$subscriberCredential, subscriberCredentialName=$subscriberCredentialName, subscriberEmail=$subscriberEmail, subscriberId=$subscriberId, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, additionalProperties=$additionalProperties}"
+            "Body{completionStartTime=$completionStartTime, costType=$costType, inputTokenCount=$inputTokenCount, isStreamed=$isStreamed, model=$model, outputTokenCount=$outputTokenCount, provider=$provider, requestDuration=$requestDuration, requestTime=$requestTime, responseTime=$responseTime, stopReason=$stopReason, totalTokenCount=$totalTokenCount, agent=$agent, cacheCreationTokenCost=$cacheCreationTokenCost, cacheCreationTokenCount=$cacheCreationTokenCount, cacheReadTokenCost=$cacheReadTokenCost, cacheReadTokenCount=$cacheReadTokenCount, errorReason=$errorReason, inputTokenCost=$inputTokenCost, mediationLatency=$mediationLatency, middlewareSource=$middlewareSource, modelSource=$modelSource, operationType=$operationType, organizationId=$organizationId, outputTokenCost=$outputTokenCost, productId=$productId, reasoningTokenCount=$reasoningTokenCount, responseQualityScore=$responseQualityScore, subscriber=$subscriber, subscriptionId=$subscriptionId, systemFingerprint=$systemFingerprint, taskType=$taskType, temperature=$temperature, timeToFirstToken=$timeToFirstToken, totalCost=$totalCost, traceId=$traceId, transactionId=$transactionId, additionalProperties=$additionalProperties}"
     }
 
-    /** Cost type for the completion */
+    /**
+     * The type of cost being tracked. Currently always 'AI' for AI completion costs. This field is
+     * used internally by Revenium to categorize different types of metered usage. You typically do
+     * not need to set this field as it defaults to 'AI'.
+     */
     class CostType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -3226,7 +3812,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CostType && value == other.value /* spotless:on */
+            return other is CostType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -3263,6 +3849,8 @@ private constructor(
 
             @JvmField val ERROR = of("ERROR")
 
+            @JvmField val CANCELLED = of("CANCELLED")
+
             @JvmStatic fun of(value: String) = StopReason(JsonField.of(value))
         }
 
@@ -3275,6 +3863,7 @@ private constructor(
             COST_LIMIT,
             COMPLETION_LIMIT,
             ERROR,
+            CANCELLED,
         }
 
         /**
@@ -3294,6 +3883,7 @@ private constructor(
             COST_LIMIT,
             COMPLETION_LIMIT,
             ERROR,
+            CANCELLED,
             /**
              * An enum member indicating that [StopReason] was instantiated with an unknown value.
              */
@@ -3316,6 +3906,7 @@ private constructor(
                 COST_LIMIT -> Value.COST_LIMIT
                 COMPLETION_LIMIT -> Value.COMPLETION_LIMIT
                 ERROR -> Value.ERROR
+                CANCELLED -> Value.CANCELLED
                 else -> Value._UNKNOWN
             }
 
@@ -3337,6 +3928,7 @@ private constructor(
                 COST_LIMIT -> Known.COST_LIMIT
                 COMPLETION_LIMIT -> Known.COMPLETION_LIMIT
                 ERROR -> Known.ERROR
+                CANCELLED -> Known.CANCELLED
                 else -> throw ReveniumMeteringInvalidDataException("Unknown StopReason: $value")
             }
 
@@ -3386,7 +3978,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is StopReason && value == other.value /* spotless:on */
+            return other is StopReason && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -3548,7 +4140,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OperationType && value == other.value /* spotless:on */
+            return other is OperationType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -3556,15 +4148,446 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /**
+     * Metadata about the subscriber/end-user making this AI request. Include this to track usage by
+     * individual users within an organization. Contains user identifiers and associated credential
+     * information. Leave null if not tracking individual user-level usage.
+     */
+    class Subscriber
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val id: JsonField<String>,
+        private val credential: JsonField<Credential>,
+        private val email: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("credential")
+            @ExcludeMissing
+            credential: JsonField<Credential> = JsonMissing.of(),
+            @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+        ) : this(id, credential, email, mutableMapOf())
+
+        /**
+         * Track cost & performance by individual users (if customers are anonymous or tracking by
+         * emails is not desired). If several subscriberIds are submitted with the same
+         * organizationId, Revenium’s reporting will show usage for the entire organization broken
+         * down by subscriberId.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
+
+        /**
+         * The credential used by the subscriber
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun credential(): Optional<Credential> = credential.getOptional("credential")
+
+        /**
+         * The email address of the subscriber. Used to track cost & performance by individual users
+         * if customer e-mail addresses are known.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun email(): Optional<String> = email.getOptional("email")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [credential].
+         *
+         * Unlike [credential], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credential")
+        @ExcludeMissing
+        fun _credential(): JsonField<Credential> = credential
+
+        /**
+         * Returns the raw JSON value of [email].
+         *
+         * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Subscriber]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Subscriber]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String> = JsonMissing.of()
+            private var credential: JsonField<Credential> = JsonMissing.of()
+            private var email: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(subscriber: Subscriber) = apply {
+                id = subscriber.id
+                credential = subscriber.credential
+                email = subscriber.email
+                additionalProperties = subscriber.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * Track cost & performance by individual users (if customers are anonymous or tracking
+             * by emails is not desired). If several subscriberIds are submitted with the same
+             * organizationId, Revenium’s reporting will show usage for the entire organization
+             * broken down by subscriberId.
+             */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /** The credential used by the subscriber */
+            fun credential(credential: Credential) = credential(JsonField.of(credential))
+
+            /**
+             * Sets [Builder.credential] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.credential] with a well-typed [Credential] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun credential(credential: JsonField<Credential>) = apply {
+                this.credential = credential
+            }
+
+            /**
+             * The email address of the subscriber. Used to track cost & performance by individual
+             * users if customer e-mail addresses are known.
+             */
+            fun email(email: String) = email(JsonField.of(email))
+
+            /**
+             * Sets [Builder.email] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.email] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun email(email: JsonField<String>) = apply { this.email = email }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Subscriber].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Subscriber =
+                Subscriber(id, credential, email, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Subscriber = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            credential().ifPresent { it.validate() }
+            email()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (credential.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (email.asKnown().isPresent) 1 else 0)
+
+        /** The credential used by the subscriber */
+        class Credential
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val name: JsonField<String>,
+            private val value: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
+            ) : this(name, value, mutableMapOf())
+
+            /**
+             * An alias for an API key used by one or more users. Used to track cost & performance
+             * by individual API keys.
+             *
+             * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun name(): Optional<String> = name.getOptional("name")
+
+            /**
+             * The key value associated with the subscriber (most commonly an API key). Used to
+             * track cost & performance by API key value (normally used when the only identifier for
+             * a user is an API key).
+             *
+             * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun value(): Optional<String> = value.getOptional("value")
+
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            /**
+             * Returns the raw JSON value of [value].
+             *
+             * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Credential]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Credential]. */
+            class Builder internal constructor() {
+
+                private var name: JsonField<String> = JsonMissing.of()
+                private var value: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(credential: Credential) = apply {
+                    name = credential.name
+                    value = credential.value
+                    additionalProperties = credential.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * An alias for an API key used by one or more users. Used to track cost &
+                 * performance by individual API keys.
+                 */
+                fun name(name: String) = name(JsonField.of(name))
+
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                /**
+                 * The key value associated with the subscriber (most commonly an API key). Used to
+                 * track cost & performance by API key value (normally used when the only identifier
+                 * for a user is an API key).
+                 */
+                fun value(value: String) = value(JsonField.of(value))
+
+                /**
+                 * Sets [Builder.value] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.value] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun value(value: JsonField<String>) = apply { this.value = value }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Credential].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Credential =
+                    Credential(name, value, additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Credential = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                name()
+                value()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: ReveniumMeteringInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (name.asKnown().isPresent) 1 else 0) + (if (value.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Credential &&
+                    name == other.name &&
+                    value == other.value &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(name, value, additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Credential{name=$name, value=$value, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Subscriber &&
+                id == other.id &&
+                credential == other.credential &&
+                email == other.email &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(id, credential, email, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Subscriber{id=$id, credential=$credential, email=$email, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is AiCreateCompletionParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is AiCreateCompletionParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "AiCreateCompletionParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

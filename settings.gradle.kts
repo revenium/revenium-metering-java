@@ -1,6 +1,14 @@
 rootProject.name = "revenium-metering-java-root"
 
-include("revenium-metering-java")
-include("revenium-metering-java-client-okhttp")
-include("revenium-metering-java-core")
-include("revenium-metering-java-example")
+val projectNames = rootDir.listFiles()
+    ?.asSequence()
+    .orEmpty()
+    .filter { file ->
+        file.isDirectory &&
+        file.name.startsWith("revenium-metering-java") &&
+        file.listFiles()?.asSequence().orEmpty().any { it.name == "build.gradle.kts" }
+    }
+    .map { it.name }
+    .toList()
+println("projects: $projectNames")
+projectNames.forEach { include(it) }

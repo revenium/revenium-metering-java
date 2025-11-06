@@ -24,11 +24,15 @@ interface AiService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiService
 
-    /** Record the details of an LLM completion */
+    /**
+     * Submit AI completion metadata for metering and billing purposes. This endpoint tracks token
+     * usage, costs, and performance metrics for AI model completions. **Base URL:** Use the
+     * metering endpoint `/meter/v2/ai/completions` (not `/profitstream/v2/ai/completions`)
+     */
     fun createCompletion(params: AiCreateCompletionParams): MeteringResponseResource =
         createCompletion(params, RequestOptions.none())
 
-    /** @see [createCompletion] */
+    /** @see createCompletion */
     fun createCompletion(
         params: AiCreateCompletionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -54,7 +58,7 @@ interface AiService {
         ): HttpResponseFor<MeteringResponseResource> =
             createCompletion(params, RequestOptions.none())
 
-        /** @see [createCompletion] */
+        /** @see createCompletion */
         @MustBeClosed
         fun createCompletion(
             params: AiCreateCompletionParams,

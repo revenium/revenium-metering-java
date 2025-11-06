@@ -3,12 +3,10 @@
 package com.revenium_metering.api.models.apis
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class ApiMeterResponseParamsTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun create() {
         ApiMeterResponseParams.builder()
@@ -22,7 +20,6 @@ internal class ApiMeterResponseParamsTest {
             .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun body() {
         val params =
@@ -47,7 +44,6 @@ internal class ApiMeterResponseParamsTest {
         assertThat(body.totalDuration()).contains(1500L)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
