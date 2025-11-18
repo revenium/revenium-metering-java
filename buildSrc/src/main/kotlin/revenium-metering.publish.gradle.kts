@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/revenium-metering-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/revenium-metering-java.git")
-                    url.set("https://github.com/stainless-sdks/revenium-metering-java")
+                    connection.set("scm:git:git://github.com/revenium/revenium-metering-java.git")
+                    developerConnection.set("scm:git:git://github.com/revenium/revenium-metering-java.git")
+                    url.set("https://github.com/revenium/revenium-metering-java")
                 }
 
                 versionMapping {
