@@ -1,5 +1,5 @@
 # Specify the entrypoint where ProGuard starts to determine what's reachable.
--keep class com.revenium_metering.api.proguard.** { *; }
+-keep class io.revenium.metering.proguard.** { *; }
 
 # For the testing framework.
 -keep class org.junit.** { *; }
