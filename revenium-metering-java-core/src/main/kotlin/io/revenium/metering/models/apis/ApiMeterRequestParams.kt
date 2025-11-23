@@ -48,11 +48,7 @@ private constructor(
     fun contentType(): Optional<String> = body.contentType()
 
     /**
-     * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
-     * identifier maps the API transaction to a specific subscriber and their associated
-     * subscription/product for proper usage tracking and billing. Visible on the subscriber
-     * credentials page in the Revenium platform. Credentials can be API keys or key aliases
-     * depending on your system architecture.
+     * The unique identifier of the credential
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -274,13 +270,7 @@ private constructor(
          */
         fun contentType(contentType: JsonField<String>) = apply { body.contentType(contentType) }
 
-        /**
-         * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
-         * identifier maps the API transaction to a specific subscriber and their associated
-         * subscription/product for proper usage tracking and billing. Visible on the subscriber
-         * credentials page in the Revenium platform. Credentials can be API keys or key aliases
-         * depending on your system architecture.
-         */
+        /** The unique identifier of the credential */
         fun credential(credential: String) = apply { body.credential(credential) }
 
         /**
@@ -616,11 +606,7 @@ private constructor(
         fun contentType(): Optional<String> = contentType.getOptional("contentType")
 
         /**
-         * The credential used to access the API (e.g., API key, OAuth token, or key alias). This
-         * identifier maps the API transaction to a specific subscriber and their associated
-         * subscription/product for proper usage tracking and billing. Visible on the subscriber
-         * credentials page in the Revenium platform. Credentials can be API keys or key aliases
-         * depending on your system architecture.
+         * The unique identifier of the credential
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -862,13 +848,7 @@ private constructor(
                 this.contentType = contentType
             }
 
-            /**
-             * The credential used to access the API (e.g., API key, OAuth token, or key alias).
-             * This identifier maps the API transaction to a specific subscriber and their
-             * associated subscription/product for proper usage tracking and billing. Visible on the
-             * subscriber credentials page in the Revenium platform. Credentials can be API keys or
-             * key aliases depending on your system architecture.
-             */
+            /** The unique identifier of the credential */
             fun credential(credential: String) = credential(JsonField.of(credential))
 
             /**

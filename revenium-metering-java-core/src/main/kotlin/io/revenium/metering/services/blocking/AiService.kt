@@ -24,7 +24,7 @@ interface AiService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiService
 
-    /** Submit AI completion metadata for metering and billing purposes. */
+    /** Record the details of an LLM completion */
     fun createCompletion(params: AiCreateCompletionParams): MeteringResponseResource =
         createCompletion(params, RequestOptions.none())
 

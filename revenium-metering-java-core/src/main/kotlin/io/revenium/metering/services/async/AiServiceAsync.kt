@@ -24,7 +24,7 @@ interface AiServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AiServiceAsync
 
-    /** Submit AI completion metadata for metering and billing purposes. */
+    /** Record the details of an LLM completion */
     fun createCompletion(
         params: AiCreateCompletionParams
     ): CompletableFuture<MeteringResponseResource> = createCompletion(params, RequestOptions.none())
