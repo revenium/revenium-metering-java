@@ -56,19 +56,18 @@ import io.revenium.metering.models.events.MeteringResponseResource;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 MeteringResponseResource meteringResponseResource = client.ai().createCompletion(params);
 ```
@@ -169,19 +168,18 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 CompletableFuture<MeteringResponseResource> meteringResponseResource = client.async().ai().createCompletion(params);
 ```
@@ -200,19 +198,18 @@ import java.util.concurrent.CompletableFuture;
 ReveniumMeteringClientAsync client = ReveniumMeteringOkHttpClientAsync.fromEnv();
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 CompletableFuture<MeteringResponseResource> meteringResponseResource = client.ai().createCompletion(params);
 ```
@@ -232,19 +229,18 @@ import io.revenium.metering.models.ai.AiCreateCompletionParams;
 import io.revenium.metering.models.events.MeteringResponseResource;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
-    .completionStartTime("2025-03-02T15:04:05Z")
+    .completionStartTime("2025-10-17T17:35:00Z")
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 HttpResponseFor<MeteringResponseResource> meteringResponseResource = client.ai().withRawResponse().createCompletion(params);
 
@@ -471,6 +467,21 @@ AiCreateCompletionParams params = AiCreateCompletionParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.
 
+To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
+
+```java
+import io.revenium.metering.core.JsonValue;
+import io.revenium.metering.models.ai.AiCreateCompletionParams;
+
+AiCreateCompletionParams params = AiCreateCompletionParams.builder()
+    .subscriber(AiCreateCompletionParams.Subscriber.builder()
+        .putAdditionalProperty("secretProperty", JsonValue.from("42"))
+        .build())
+    .build();
+```
+
+These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
+
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](revenium-metering-java-core/src/main/kotlin/io/revenium/metering/core/Values.kt) object to its setter:
 
 ```java
@@ -480,17 +491,16 @@ import io.revenium.metering.models.ai.AiCreateCompletionParams;
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .completionStartTime(JsonValue.from(42))
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .build();
 ```
 
@@ -543,17 +553,16 @@ import io.revenium.metering.models.ai.AiCreateCompletionParams;
 
 AiCreateCompletionParams params = AiCreateCompletionParams.builder()
     .costType(AiCreateCompletionParams.CostType.AI)
-    .inputTokenCount(50L)
+    .inputTokenCount(100L)
     .isStreamed(false)
-    .model("gpt4")
+    .model("gpt-4")
     .outputTokenCount(150L)
     .provider("OpenAI")
-    .requestDuration(1000L)
-    .requestTime("2025-03-02T15:04:05Z")
-    .responseTime("2025-03-02T15:04:06Z")
+    .requestDuration(2000L)
+    .requestTime("2025-10-17T17:35:00Z")
+    .responseTime("2025-10-17T17:35:02Z")
     .stopReason(AiCreateCompletionParams.StopReason.END)
-    .totalTokenCount(200L)
-    .transactionId("123e4567-e89b-12d3-a456-426614174000")
+    .totalTokenCount(250L)
     .completionStartTime(JsonMissing.of())
     .build();
 ```

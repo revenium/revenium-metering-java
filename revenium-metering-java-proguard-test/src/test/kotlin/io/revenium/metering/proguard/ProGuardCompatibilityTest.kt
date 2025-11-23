@@ -61,8 +61,8 @@ internal class ProGuardCompatibilityTest {
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
-                .label("Metering Response")
-                .object_("metering")
+                .label("metered-event")
+                .resourceType("metered-event")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links

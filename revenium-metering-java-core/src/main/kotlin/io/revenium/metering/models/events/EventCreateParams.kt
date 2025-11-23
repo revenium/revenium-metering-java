@@ -15,13 +15,20 @@ import io.revenium.metering.core.Params
 import io.revenium.metering.core.checkRequired
 import io.revenium.metering.core.http.Headers
 import io.revenium.metering.core.http.QueryParams
+import io.revenium.metering.core.toImmutable
 import io.revenium.metering.errors.ReveniumMeteringInvalidDataException
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Meter an event */
+/**
+ * Submit a generic metering event with a flexible payload structure. Use this endpoint to meter
+ * custom events that you wish to track in Revenium. The payload should contain any key-value pairs
+ * representing metrics to track or rate for usage-based revenue calculation. The key values sent
+ * here will be created as 'metering elements' if they do not already exist, and rated according to
+ * pricing definitions for the relevant metering element on a product if they do.
+ */
 class EventCreateParams
 private constructor(
     private val body: Body,
@@ -30,24 +37,15 @@ private constructor(
 ) : Params {
 
     /**
-     * The rating payload as a JSON object. For example, if you are sending key value pairs of
-     * 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the payload
-     * would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not already exist
-     * in Revenium, each key you send will be configured as a metering element on the relevant data
-     * source.
+     * The rating payload as a JSON object containing key-value pairs representing usage metrics to
+     * track. For example, a SaaS application might send: { "storageGB": 15.5, "apiCalls": 1250,
+     * "computeMinutes": 480 }. If these keys do not already exist in Revenium, each key you send
+     * will be automatically configured as a metering element on the relevant data source.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun payload(): String = body.payload()
-
-    /**
-     * the source type
-     *
-     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun sourceType(): SourceType = body.sourceType()
+    fun payload(): Payload = body.payload()
 
     /**
      * The unique identifier of the metering event
@@ -58,7 +56,13 @@ private constructor(
     fun transactionId(): String = body.transactionId()
 
     /**
-     * the sourceId
+     * Optional identifier for the source that represents the feature under which usage charges
+     * should be tracked. In the events endpoint, sources typically represent categories for
+     * billable units such as features, services, or resources (e.g., 'storageCharges' or
+     * 'CpuCharges'). If you wish for the key value pairs you send to be automatically applied to a
+     * source that is used in a product to calculate usage-based revenue, you should specify the
+     * relevant sourceId here. Sources must be pre-configured in the Revenium platform. The ID can
+     * be found on the sources page or retrieved via the list sources endpoint.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
@@ -66,26 +70,33 @@ private constructor(
     fun sourceId(): Optional<String> = body.sourceId()
 
     /**
-     * The unique identifier of the credential
+     * Specifies the originating SDK or gateway of the metered event traffic. This is used for
+     * Revenium analytics only, and does not affect how Revenium processes and categorizes incoming
+     * metrics. Optional - defaults to 'UNKNOWN' if not specified.
      *
      * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
      *   if the server responded with an unexpected value).
      */
-    fun subscriberCredentialId(): Optional<String> = body.subscriberCredentialId()
+    fun sourceType(): Optional<SourceType> = body.sourceType()
+
+    /**
+     * Optional unique identifier for the subscriber/customer associated with this usage event. This
+     * credential maps the metered usage to a specific subscription and its associated product
+     * pricing rules. Can be any unique identifier from your system (customer ID, subscription ID,
+     * API key, etc.) that you've configured as a subscriber credential in the Revenium platform.
+     * Visible on the subscriber credentials page in Revenium.
+     *
+     * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type (e.g.
+     *   if the server responded with an unexpected value).
+     */
+    fun subscriberCredential(): Optional<String> = body.subscriberCredential()
 
     /**
      * Returns the raw JSON value of [payload].
      *
      * Unlike [payload], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _payload(): JsonField<String> = body._payload()
-
-    /**
-     * Returns the raw JSON value of [sourceType].
-     *
-     * Unlike [sourceType], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _sourceType(): JsonField<SourceType> = body._sourceType()
+    fun _payload(): JsonField<Payload> = body._payload()
 
     /**
      * Returns the raw JSON value of [transactionId].
@@ -102,12 +113,19 @@ private constructor(
     fun _sourceId(): JsonField<String> = body._sourceId()
 
     /**
-     * Returns the raw JSON value of [subscriberCredentialId].
+     * Returns the raw JSON value of [sourceType].
      *
-     * Unlike [subscriberCredentialId], this method doesn't throw if the JSON field has an
-     * unexpected type.
+     * Unlike [sourceType], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _subscriberCredentialId(): JsonField<String> = body._subscriberCredentialId()
+    fun _sourceType(): JsonField<SourceType> = body._sourceType()
+
+    /**
+     * Returns the raw JSON value of [subscriberCredential].
+     *
+     * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _subscriberCredential(): JsonField<String> = body._subscriberCredential()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -127,7 +145,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .payload()
-         * .sourceType()
          * .transactionId()
          * ```
          */
@@ -154,42 +171,30 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [payload]
-         * - [sourceType]
          * - [transactionId]
          * - [sourceId]
-         * - [subscriberCredentialId]
+         * - [sourceType]
+         * - [subscriberCredential]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /**
-         * The rating payload as a JSON object. For example, if you are sending key value pairs of
-         * 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the payload
-         * would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not already
-         * exist in Revenium, each key you send will be configured as a metering element on the
-         * relevant data source.
+         * The rating payload as a JSON object containing key-value pairs representing usage metrics
+         * to track. For example, a SaaS application might send: { "storageGB": 15.5, "apiCalls":
+         * 1250, "computeMinutes": 480 }. If these keys do not already exist in Revenium, each key
+         * you send will be automatically configured as a metering element on the relevant data
+         * source.
          */
-        fun payload(payload: String) = apply { body.payload(payload) }
+        fun payload(payload: Payload) = apply { body.payload(payload) }
 
         /**
          * Sets [Builder.payload] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.payload] with a well-typed [String] value instead. This
+         * You should usually call [Builder.payload] with a well-typed [Payload] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun payload(payload: JsonField<String>) = apply { body.payload(payload) }
-
-        /** the source type */
-        fun sourceType(sourceType: SourceType) = apply { body.sourceType(sourceType) }
-
-        /**
-         * Sets [Builder.sourceType] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.sourceType] with a well-typed [SourceType] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun sourceType(sourceType: JsonField<SourceType>) = apply { body.sourceType(sourceType) }
+        fun payload(payload: JsonField<Payload>) = apply { body.payload(payload) }
 
         /** The unique identifier of the metering event */
         fun transactionId(transactionId: String) = apply { body.transactionId(transactionId) }
@@ -205,7 +210,16 @@ private constructor(
             body.transactionId(transactionId)
         }
 
-        /** the sourceId */
+        /**
+         * Optional identifier for the source that represents the feature under which usage charges
+         * should be tracked. In the events endpoint, sources typically represent categories for
+         * billable units such as features, services, or resources (e.g., 'storageCharges' or
+         * 'CpuCharges'). If you wish for the key value pairs you send to be automatically applied
+         * to a source that is used in a product to calculate usage-based revenue, you should
+         * specify the relevant sourceId here. Sources must be pre-configured in the Revenium
+         * platform. The ID can be found on the sources page or retrieved via the list sources
+         * endpoint.
+         */
         fun sourceId(sourceId: String) = apply { body.sourceId(sourceId) }
 
         /**
@@ -216,20 +230,42 @@ private constructor(
          */
         fun sourceId(sourceId: JsonField<String>) = apply { body.sourceId(sourceId) }
 
-        /** The unique identifier of the credential */
-        fun subscriberCredentialId(subscriberCredentialId: String) = apply {
-            body.subscriberCredentialId(subscriberCredentialId)
-        }
+        /**
+         * Specifies the originating SDK or gateway of the metered event traffic. This is used for
+         * Revenium analytics only, and does not affect how Revenium processes and categorizes
+         * incoming metrics. Optional - defaults to 'UNKNOWN' if not specified.
+         */
+        fun sourceType(sourceType: SourceType) = apply { body.sourceType(sourceType) }
 
         /**
-         * Sets [Builder.subscriberCredentialId] to an arbitrary JSON value.
+         * Sets [Builder.sourceType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriberCredentialId] with a well-typed [String] value
+         * You should usually call [Builder.sourceType] with a well-typed [SourceType] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriberCredentialId(subscriberCredentialId: JsonField<String>) = apply {
-            body.subscriberCredentialId(subscriberCredentialId)
+        fun sourceType(sourceType: JsonField<SourceType>) = apply { body.sourceType(sourceType) }
+
+        /**
+         * Optional unique identifier for the subscriber/customer associated with this usage event.
+         * This credential maps the metered usage to a specific subscription and its associated
+         * product pricing rules. Can be any unique identifier from your system (customer ID,
+         * subscription ID, API key, etc.) that you've configured as a subscriber credential in the
+         * Revenium platform. Visible on the subscriber credentials page in Revenium.
+         */
+        fun subscriberCredential(subscriberCredential: String) = apply {
+            body.subscriberCredential(subscriberCredential)
+        }
+
+        /**
+         * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriberCredential] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
+            body.subscriberCredential(subscriberCredential)
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -357,7 +393,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .payload()
-         * .sourceType()
          * .transactionId()
          * ```
          *
@@ -381,59 +416,43 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val payload: JsonField<String>,
-        private val sourceType: JsonField<SourceType>,
+        private val payload: JsonField<Payload>,
         private val transactionId: JsonField<String>,
         private val sourceId: JsonField<String>,
-        private val subscriberCredentialId: JsonField<String>,
+        private val sourceType: JsonField<SourceType>,
+        private val subscriberCredential: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("payload") @ExcludeMissing payload: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("sourceType")
-            @ExcludeMissing
-            sourceType: JsonField<SourceType> = JsonMissing.of(),
+            @JsonProperty("payload") @ExcludeMissing payload: JsonField<Payload> = JsonMissing.of(),
             @JsonProperty("transactionId")
             @ExcludeMissing
             transactionId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("sourceId")
             @ExcludeMissing
             sourceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscriberCredentialId")
+            @JsonProperty("sourceType")
             @ExcludeMissing
-            subscriberCredentialId: JsonField<String> = JsonMissing.of(),
-        ) : this(
-            payload,
-            sourceType,
-            transactionId,
-            sourceId,
-            subscriberCredentialId,
-            mutableMapOf(),
-        )
+            sourceType: JsonField<SourceType> = JsonMissing.of(),
+            @JsonProperty("subscriberCredential")
+            @ExcludeMissing
+            subscriberCredential: JsonField<String> = JsonMissing.of(),
+        ) : this(payload, transactionId, sourceId, sourceType, subscriberCredential, mutableMapOf())
 
         /**
-         * The rating payload as a JSON object. For example, if you are sending key value pairs of
-         * 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the payload
-         * would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not already
-         * exist in Revenium, each key you send will be configured as a metering element on the
-         * relevant data source.
+         * The rating payload as a JSON object containing key-value pairs representing usage metrics
+         * to track. For example, a SaaS application might send: { "storageGB": 15.5, "apiCalls":
+         * 1250, "computeMinutes": 480 }. If these keys do not already exist in Revenium, each key
+         * you send will be automatically configured as a metering element on the relevant data
+         * source.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
          */
-        fun payload(): String = payload.getRequired("payload")
-
-        /**
-         * the source type
-         *
-         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
-         */
-        fun sourceType(): SourceType = sourceType.getRequired("sourceType")
+        fun payload(): Payload = payload.getRequired("payload")
 
         /**
          * The unique identifier of the metering event
@@ -445,7 +464,14 @@ private constructor(
         fun transactionId(): String = transactionId.getRequired("transactionId")
 
         /**
-         * the sourceId
+         * Optional identifier for the source that represents the feature under which usage charges
+         * should be tracked. In the events endpoint, sources typically represent categories for
+         * billable units such as features, services, or resources (e.g., 'storageCharges' or
+         * 'CpuCharges'). If you wish for the key value pairs you send to be automatically applied
+         * to a source that is used in a product to calculate usage-based revenue, you should
+         * specify the relevant sourceId here. Sources must be pre-configured in the Revenium
+         * platform. The ID can be found on the sources page or retrieved via the list sources
+         * endpoint.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -453,29 +479,34 @@ private constructor(
         fun sourceId(): Optional<String> = sourceId.getOptional("sourceId")
 
         /**
-         * The unique identifier of the credential
+         * Specifies the originating SDK or gateway of the metered event traffic. This is used for
+         * Revenium analytics only, and does not affect how Revenium processes and categorizes
+         * incoming metrics. Optional - defaults to 'UNKNOWN' if not specified.
          *
          * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun subscriberCredentialId(): Optional<String> =
-            subscriberCredentialId.getOptional("subscriberCredentialId")
+        fun sourceType(): Optional<SourceType> = sourceType.getOptional("sourceType")
+
+        /**
+         * Optional unique identifier for the subscriber/customer associated with this usage event.
+         * This credential maps the metered usage to a specific subscription and its associated
+         * product pricing rules. Can be any unique identifier from your system (customer ID,
+         * subscription ID, API key, etc.) that you've configured as a subscriber credential in the
+         * Revenium platform. Visible on the subscriber credentials page in Revenium.
+         *
+         * @throws ReveniumMeteringInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun subscriberCredential(): Optional<String> =
+            subscriberCredential.getOptional("subscriberCredential")
 
         /**
          * Returns the raw JSON value of [payload].
          *
          * Unlike [payload], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("payload") @ExcludeMissing fun _payload(): JsonField<String> = payload
-
-        /**
-         * Returns the raw JSON value of [sourceType].
-         *
-         * Unlike [sourceType], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("sourceType")
-        @ExcludeMissing
-        fun _sourceType(): JsonField<SourceType> = sourceType
+        @JsonProperty("payload") @ExcludeMissing fun _payload(): JsonField<Payload> = payload
 
         /**
          * Returns the raw JSON value of [transactionId].
@@ -495,14 +526,23 @@ private constructor(
         @JsonProperty("sourceId") @ExcludeMissing fun _sourceId(): JsonField<String> = sourceId
 
         /**
-         * Returns the raw JSON value of [subscriberCredentialId].
+         * Returns the raw JSON value of [sourceType].
          *
-         * Unlike [subscriberCredentialId], this method doesn't throw if the JSON field has an
+         * Unlike [sourceType], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("sourceType")
+        @ExcludeMissing
+        fun _sourceType(): JsonField<SourceType> = sourceType
+
+        /**
+         * Returns the raw JSON value of [subscriberCredential].
+         *
+         * Unlike [subscriberCredential], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
-        @JsonProperty("subscriberCredentialId")
+        @JsonProperty("subscriberCredential")
         @ExcludeMissing
-        fun _subscriberCredentialId(): JsonField<String> = subscriberCredentialId
+        fun _subscriberCredential(): JsonField<String> = subscriberCredential
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -524,7 +564,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .payload()
-             * .sourceType()
              * .transactionId()
              * ```
              */
@@ -534,54 +573,40 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var payload: JsonField<String>? = null
-            private var sourceType: JsonField<SourceType>? = null
+            private var payload: JsonField<Payload>? = null
             private var transactionId: JsonField<String>? = null
             private var sourceId: JsonField<String> = JsonMissing.of()
-            private var subscriberCredentialId: JsonField<String> = JsonMissing.of()
+            private var sourceType: JsonField<SourceType> = JsonMissing.of()
+            private var subscriberCredential: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 payload = body.payload
-                sourceType = body.sourceType
                 transactionId = body.transactionId
                 sourceId = body.sourceId
-                subscriberCredentialId = body.subscriberCredentialId
+                sourceType = body.sourceType
+                subscriberCredential = body.subscriberCredential
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
             /**
-             * The rating payload as a JSON object. For example, if you are sending key value pairs
-             * of 'requestTokens' and 'responseTokens' with values of '1' and '2' respectively, the
-             * payload would be { "requestTokens": "1", "responseTokens": "2"}. If these keys do not
-             * already exist in Revenium, each key you send will be configured as a metering element
-             * on the relevant data source.
+             * The rating payload as a JSON object containing key-value pairs representing usage
+             * metrics to track. For example, a SaaS application might send: { "storageGB": 15.5,
+             * "apiCalls": 1250, "computeMinutes": 480 }. If these keys do not already exist in
+             * Revenium, each key you send will be automatically configured as a metering element on
+             * the relevant data source.
              */
-            fun payload(payload: String) = payload(JsonField.of(payload))
+            fun payload(payload: Payload) = payload(JsonField.of(payload))
 
             /**
              * Sets [Builder.payload] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.payload] with a well-typed [String] value instead.
+             * You should usually call [Builder.payload] with a well-typed [Payload] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun payload(payload: JsonField<String>) = apply { this.payload = payload }
-
-            /** the source type */
-            fun sourceType(sourceType: SourceType) = sourceType(JsonField.of(sourceType))
-
-            /**
-             * Sets [Builder.sourceType] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.sourceType] with a well-typed [SourceType] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun sourceType(sourceType: JsonField<SourceType>) = apply {
-                this.sourceType = sourceType
-            }
+            fun payload(payload: JsonField<Payload>) = apply { this.payload = payload }
 
             /** The unique identifier of the metering event */
             fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
@@ -597,7 +622,16 @@ private constructor(
                 this.transactionId = transactionId
             }
 
-            /** the sourceId */
+            /**
+             * Optional identifier for the source that represents the feature under which usage
+             * charges should be tracked. In the events endpoint, sources typically represent
+             * categories for billable units such as features, services, or resources (e.g.,
+             * 'storageCharges' or 'CpuCharges'). If you wish for the key value pairs you send to be
+             * automatically applied to a source that is used in a product to calculate usage-based
+             * revenue, you should specify the relevant sourceId here. Sources must be
+             * pre-configured in the Revenium platform. The ID can be found on the sources page or
+             * retrieved via the list sources endpoint.
+             */
             fun sourceId(sourceId: String) = sourceId(JsonField.of(sourceId))
 
             /**
@@ -609,19 +643,44 @@ private constructor(
              */
             fun sourceId(sourceId: JsonField<String>) = apply { this.sourceId = sourceId }
 
-            /** The unique identifier of the credential */
-            fun subscriberCredentialId(subscriberCredentialId: String) =
-                subscriberCredentialId(JsonField.of(subscriberCredentialId))
+            /**
+             * Specifies the originating SDK or gateway of the metered event traffic. This is used
+             * for Revenium analytics only, and does not affect how Revenium processes and
+             * categorizes incoming metrics. Optional - defaults to 'UNKNOWN' if not specified.
+             */
+            fun sourceType(sourceType: SourceType) = sourceType(JsonField.of(sourceType))
 
             /**
-             * Sets [Builder.subscriberCredentialId] to an arbitrary JSON value.
+             * Sets [Builder.sourceType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriberCredentialId] with a well-typed [String]
+             * You should usually call [Builder.sourceType] with a well-typed [SourceType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun sourceType(sourceType: JsonField<SourceType>) = apply {
+                this.sourceType = sourceType
+            }
+
+            /**
+             * Optional unique identifier for the subscriber/customer associated with this usage
+             * event. This credential maps the metered usage to a specific subscription and its
+             * associated product pricing rules. Can be any unique identifier from your system
+             * (customer ID, subscription ID, API key, etc.) that you've configured as a subscriber
+             * credential in the Revenium platform. Visible on the subscriber credentials page in
+             * Revenium.
+             */
+            fun subscriberCredential(subscriberCredential: String) =
+                subscriberCredential(JsonField.of(subscriberCredential))
+
+            /**
+             * Sets [Builder.subscriberCredential] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriberCredential] with a well-typed [String]
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
-            fun subscriberCredentialId(subscriberCredentialId: JsonField<String>) = apply {
-                this.subscriberCredentialId = subscriberCredentialId
+            fun subscriberCredential(subscriberCredential: JsonField<String>) = apply {
+                this.subscriberCredential = subscriberCredential
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -651,7 +710,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .payload()
-             * .sourceType()
              * .transactionId()
              * ```
              *
@@ -660,10 +718,10 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("payload", payload),
-                    checkRequired("sourceType", sourceType),
                     checkRequired("transactionId", transactionId),
                     sourceId,
-                    subscriberCredentialId,
+                    sourceType,
+                    subscriberCredential,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -675,11 +733,11 @@ private constructor(
                 return@apply
             }
 
-            payload()
-            sourceType().validate()
+            payload().validate()
             transactionId()
             sourceId()
-            subscriberCredentialId()
+            sourceType().ifPresent { it.validate() }
+            subscriberCredential()
             validated = true
         }
 
@@ -699,11 +757,11 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (payload.asKnown().isPresent) 1 else 0) +
-                (sourceType.asKnown().getOrNull()?.validity() ?: 0) +
+            (payload.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (transactionId.asKnown().isPresent) 1 else 0) +
                 (if (sourceId.asKnown().isPresent) 1 else 0) +
-                (if (subscriberCredentialId.asKnown().isPresent) 1 else 0)
+                (sourceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (subscriberCredential.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -712,20 +770,20 @@ private constructor(
 
             return other is Body &&
                 payload == other.payload &&
-                sourceType == other.sourceType &&
                 transactionId == other.transactionId &&
                 sourceId == other.sourceId &&
-                subscriberCredentialId == other.subscriberCredentialId &&
+                sourceType == other.sourceType &&
+                subscriberCredential == other.subscriberCredential &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
             Objects.hash(
                 payload,
-                sourceType,
                 transactionId,
                 sourceId,
-                subscriberCredentialId,
+                sourceType,
+                subscriberCredential,
                 additionalProperties,
             )
         }
@@ -733,10 +791,119 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{payload=$payload, sourceType=$sourceType, transactionId=$transactionId, sourceId=$sourceId, subscriberCredentialId=$subscriberCredentialId, additionalProperties=$additionalProperties}"
+            "Body{payload=$payload, transactionId=$transactionId, sourceId=$sourceId, sourceType=$sourceType, subscriberCredential=$subscriberCredential, additionalProperties=$additionalProperties}"
     }
 
-    /** the source type */
+    /**
+     * The rating payload as a JSON object containing key-value pairs representing usage metrics to
+     * track. For example, a SaaS application might send: { "storageGB": 15.5, "apiCalls": 1250,
+     * "computeMinutes": 480 }. If these keys do not already exist in Revenium, each key you send
+     * will be automatically configured as a metering element on the relevant data source.
+     */
+    class Payload
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Payload]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Payload]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(payload: Payload) = apply {
+                additionalProperties = payload.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Payload].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Payload = Payload(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Payload = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: ReveniumMeteringInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Payload && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Payload{additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Specifies the originating SDK or gateway of the metered event traffic. This is used for
+     * Revenium analytics only, and does not affect how Revenium processes and categorizes incoming
+     * metrics. Optional - defaults to 'UNKNOWN' if not specified.
+     */
     class SourceType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
