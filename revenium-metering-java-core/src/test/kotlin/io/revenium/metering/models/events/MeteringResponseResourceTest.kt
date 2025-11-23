@@ -15,8 +15,8 @@ internal class MeteringResponseResourceTest {
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
-                .label("metered-event")
-                .resourceType("metered-event")
+                .label("Metering Response")
+                .object_("metering")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
@@ -43,8 +43,8 @@ internal class MeteringResponseResourceTest {
                 .build()
 
         assertThat(meteringResponseResource.id()).isEqualTo("abc123")
-        assertThat(meteringResponseResource.label()).isEqualTo("metered-event")
-        assertThat(meteringResponseResource.resourceType()).isEqualTo("metered-event")
+        assertThat(meteringResponseResource.label()).isEqualTo("Metering Response")
+        assertThat(meteringResponseResource.object_()).isEqualTo("metering")
         assertThat(meteringResponseResource.signature()).isEqualTo("signature123")
         assertThat(meteringResponseResource._links())
             .contains(
@@ -77,8 +77,8 @@ internal class MeteringResponseResourceTest {
         val meteringResponseResource =
             MeteringResponseResource.builder()
                 .id("abc123")
-                .label("metered-event")
-                .resourceType("metered-event")
+                .label("Metering Response")
+                .object_("metering")
                 .signature("signature123")
                 ._links(
                     MeteringResponseResource._Links
