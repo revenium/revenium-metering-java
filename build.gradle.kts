@@ -8,7 +8,7 @@ repositories {
 }
 
 allprojects {
-    group = "com.revenium_metering.api"
+    group = "io.revenium.metering"
     version = "0.1.0-alpha.1" // x-release-please-version
 }
 
