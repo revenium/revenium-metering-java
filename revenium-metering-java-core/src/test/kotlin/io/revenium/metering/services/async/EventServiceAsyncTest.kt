@@ -2,24 +2,17 @@
 
 package io.revenium.metering.services.async
 
-import io.revenium.metering.TestServerExtension
 import io.revenium.metering.client.okhttp.ReveniumMeteringOkHttpClientAsync
 import io.revenium.metering.models.events.EventCreateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class EventServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun create() {
-        val client =
-            ReveniumMeteringOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = ReveniumMeteringOkHttpClientAsync.builder().apiKey("My API Key").build()
         val eventServiceAsync = client.events()
 
         val meteringResponseResourceFuture =

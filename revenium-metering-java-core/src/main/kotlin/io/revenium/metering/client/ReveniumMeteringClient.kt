@@ -44,10 +44,13 @@ interface ReveniumMeteringClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ReveniumMeteringClient
 
+    /** Event Metering Operations */
     fun events(): EventService
 
+    /** API Metering Operations */
     fun apis(): ApiService
 
+    /** AI Metering Operations */
     fun ai(): AiService
 
     /**
@@ -78,10 +81,13 @@ interface ReveniumMeteringClient {
             modifier: Consumer<ClientOptions.Builder>
         ): ReveniumMeteringClient.WithRawResponse
 
+        /** Event Metering Operations */
         fun events(): EventService.WithRawResponse
 
+        /** API Metering Operations */
         fun apis(): ApiService.WithRawResponse
 
+        /** AI Metering Operations */
         fun ai(): AiService.WithRawResponse
     }
 }

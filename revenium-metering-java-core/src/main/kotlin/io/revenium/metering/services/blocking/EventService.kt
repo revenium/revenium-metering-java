@@ -10,6 +10,7 @@ import io.revenium.metering.models.events.EventCreateParams
 import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.function.Consumer
 
+/** Event Metering Operations */
 interface EventService {
 
     /**

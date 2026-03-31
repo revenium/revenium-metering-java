@@ -45,10 +45,13 @@ class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ReveniumMeteringClient =
         ReveniumMeteringClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Event Metering Operations */
     override fun events(): EventService = events
 
+    /** API Metering Operations */
     override fun apis(): ApiService = apis
 
+    /** AI Metering Operations */
     override fun ai(): AiService = ai
 
     override fun close() = clientOptions.close()
@@ -75,10 +78,13 @@ class ReveniumMeteringClientImpl(private val clientOptions: ClientOptions) :
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Event Metering Operations */
         override fun events(): EventService.WithRawResponse = events
 
+        /** API Metering Operations */
         override fun apis(): ApiService.WithRawResponse = apis
 
+        /** AI Metering Operations */
         override fun ai(): AiService.WithRawResponse = ai
     }
 }

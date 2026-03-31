@@ -20,6 +20,7 @@ import io.revenium.metering.models.apis.ApiMeterResponseParams
 import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.function.Consumer
 
+/** API Metering Operations */
 class ApiServiceImpl internal constructor(private val clientOptions: ClientOptions) : ApiService {
 
     private val withRawResponse: ApiService.WithRawResponse by lazy {
