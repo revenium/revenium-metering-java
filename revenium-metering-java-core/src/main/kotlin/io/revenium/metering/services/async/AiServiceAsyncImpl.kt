@@ -20,6 +20,7 @@ import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** AI Metering Operations */
 class AiServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AiServiceAsync {
 

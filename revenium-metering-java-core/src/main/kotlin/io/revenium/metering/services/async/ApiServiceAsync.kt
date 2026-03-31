@@ -11,6 +11,7 @@ import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** API Metering Operations */
 interface ApiServiceAsync {
 
     /**

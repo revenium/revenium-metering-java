@@ -11,6 +11,7 @@ import io.revenium.metering.models.apis.ApiMeterResponseParams
 import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.function.Consumer
 
+/** API Metering Operations */
 interface ApiService {
 
     /**

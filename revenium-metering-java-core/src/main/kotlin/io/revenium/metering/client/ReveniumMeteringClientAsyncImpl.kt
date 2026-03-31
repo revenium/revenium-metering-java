@@ -47,10 +47,13 @@ class ReveniumMeteringClientAsyncImpl(private val clientOptions: ClientOptions) 
     ): ReveniumMeteringClientAsync =
         ReveniumMeteringClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Event Metering Operations */
     override fun events(): EventServiceAsync = events
 
+    /** API Metering Operations */
     override fun apis(): ApiServiceAsync = apis
 
+    /** AI Metering Operations */
     override fun ai(): AiServiceAsync = ai
 
     override fun close() = clientOptions.close()
@@ -77,10 +80,13 @@ class ReveniumMeteringClientAsyncImpl(private val clientOptions: ClientOptions) 
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Event Metering Operations */
         override fun events(): EventServiceAsync.WithRawResponse = events
 
+        /** API Metering Operations */
         override fun apis(): ApiServiceAsync.WithRawResponse = apis
 
+        /** AI Metering Operations */
         override fun ai(): AiServiceAsync.WithRawResponse = ai
     }
 }

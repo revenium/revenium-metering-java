@@ -10,6 +10,7 @@ import io.revenium.metering.models.ai.AiCreateCompletionParams
 import io.revenium.metering.models.events.MeteringResponseResource
 import java.util.function.Consumer
 
+/** AI Metering Operations */
 interface AiService {
 
     /**

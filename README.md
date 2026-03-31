@@ -395,6 +395,25 @@ ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
     .build();
 ```
 
+### Connection pooling
+
+To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
+
+```java
+import io.revenium.metering.client.ReveniumMeteringClient;
+import io.revenium.metering.client.okhttp.ReveniumMeteringOkHttpClient;
+import java.time.Duration;
+
+ReveniumMeteringClient client = ReveniumMeteringOkHttpClient.builder()
+    .fromEnv()
+    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.
+    .maxIdleConnections(10)
+    .keepAliveDuration(Duration.ofMinutes(2))
+    .build();
+```
+
+If both options are unset, OkHttp's default connection pool settings are used.
+
 ### HTTPS
 
 > [!NOTE]
