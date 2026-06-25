@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2026-06-25)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/revenium/revenium-metering-java/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** api update ([9414545](https://github.com/revenium/revenium-metering-java/commit/94145457257509cc35a7ab1b00238b261401570d))
+* **api:** api update ([99780ed](https://github.com/revenium/revenium-metering-java/commit/99780edffff64fd243cae3f7eb9fa0f5c247e6b6))
+* **api:** manual updates ([8063ff6](https://github.com/revenium/revenium-metering-java/commit/8063ff696a8e5c4aee1e78129a5d3105810dc3f6))
+* **api:** manual updates ([fde7c81](https://github.com/revenium/revenium-metering-java/commit/fde7c817c3033faaea5c3d360aaa0752b1d59a77))
+* **client:** add `HttpRequest#url()` method ([d521b8a](https://github.com/revenium/revenium-metering-java/commit/d521b8a87e1ccf8e8c88743aa5a9a81be5595fc1))
+* **client:** allow configuring dispatcher executor service ([098d4e1](https://github.com/revenium/revenium-metering-java/commit/098d4e16d1ff3115ce11e49854a3d7eb95738b93))
+* **client:** send `X-Stainless-Kotlin-Version` header ([1d269fb](https://github.com/revenium/revenium-metering-java/commit/1d269fb8b4eace62a90c66194b0f127143a062ec))
+
+
+### Bug Fixes
+
+* **client:** cancel okhttp call when future cancelled ([f9a0f61](https://github.com/revenium/revenium-metering-java/commit/f9a0f6113808e014a6ffc4ba68eea12050a8c64e))
+* **client:** disallow coercion from float to int ([36f9033](https://github.com/revenium/revenium-metering-java/commit/36f903345f51b32267070d6eb5540b3ed73d4aa4))
+* **client:** fully respect max retries ([7210f49](https://github.com/revenium/revenium-metering-java/commit/7210f494427b116689fb55f47289f4407a85ca6d))
+* **client:** preserve time zone in lenient date-time parsing ([f42d8ff](https://github.com/revenium/revenium-metering-java/commit/f42d8ff916a6fe569c33d73c8c99e48c7485bb13))
+* **client:** send retry count header for max retries 0 ([7210f49](https://github.com/revenium/revenium-metering-java/commit/7210f494427b116689fb55f47289f4407a85ca6d))
+* date time deserialization leniency ([7d5866d](https://github.com/revenium/revenium-metering-java/commit/7d5866d4e7a009686bb9d0ca7d3bfb2d89d2e89a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/setup-java` ([7471c8e](https://github.com/revenium/revenium-metering-java/commit/7471c8e94f9f475a0200940d31e1b10b361d7f45))
+* **internal:** clean up maven repo artifact script and add html documentation to repo root ([2b22651](https://github.com/revenium/revenium-metering-java/commit/2b226513ddbc28f64e6cb55e4cf29ae929fb93b7))
+* **internal:** codegen related update ([47340ab](https://github.com/revenium/revenium-metering-java/commit/47340abb008686f476b4030f9ea65c31e6da7a43))
+* **internal:** codegen related update ([38bb9b4](https://github.com/revenium/revenium-metering-java/commit/38bb9b40479e341c2f0254bd67b573b22de6bb6d))
+* **internal:** correct cache invalidation for `SKIP_MOCK_TESTS` ([b51f188](https://github.com/revenium/revenium-metering-java/commit/b51f188ab3cc7c7768ea255a6f561c30d0f18d3b))
+* **internal:** depend on packages directly in example ([7210f49](https://github.com/revenium/revenium-metering-java/commit/7210f494427b116689fb55f47289f4407a85ca6d))
+* **internal:** improve maven repo docs ([333d663](https://github.com/revenium/revenium-metering-java/commit/333d663094b653ac7459a94c9aa12eac18ddb1cc))
+* **internal:** support uploading Maven repo artifacts to stainless package server ([f31fc84](https://github.com/revenium/revenium-metering-java/commit/f31fc845a1190399943fb8ca4faec5e08c22d1c5))
+* **internal:** update `actions/checkout` version ([8504678](https://github.com/revenium/revenium-metering-java/commit/85046781f2e1cd4040d8180fd87b0683deb9cc51))
+* **internal:** update maven repo doc to include authentication ([b14c237](https://github.com/revenium/revenium-metering-java/commit/b14c2371a57987c6dd94aef201b50a1ec05b003f))
+* **security:** add gitleaks secret scanning (report-only) ([#3](https://github.com/revenium/revenium-metering-java/issues/3)) ([5282e8c](https://github.com/revenium/revenium-metering-java/commit/5282e8cb5cd631c13f579a229d04161ed1f297ea))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/revenium/revenium-metering-java/issues/3240) in tests ([7d5866d](https://github.com/revenium/revenium-metering-java/commit/7d5866d4e7a009686bb9d0ca7d3bfb2d89d2e89a))
+
+
+### Documentation
+
+* mark no longer actively maintained — point to revenium.ai ([3cae70d](https://github.com/revenium/revenium-metering-java/commit/3cae70d0fbdebc89a81ed44802352e970dfae4d1))
+* remove `$` for better copy-pasteabality ([7adc11c](https://github.com/revenium/revenium-metering-java/commit/7adc11c306024d778b5a250c071a5b1546fb724c))
+
 ## 0.1.0-alpha.1 (2025-11-19)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/revenium/revenium-metering-java/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)

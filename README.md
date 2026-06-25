@@ -5,8 +5,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.revenium.metering/revenium-metering-java)](https://central.sonatype.com/artifact/io.revenium.metering/revenium-metering-java/0.1.0-alpha.1)
-[![javadoc](https://javadoc.io/badge2/io.revenium.metering/revenium-metering-java/0.1.0-alpha.1/javadoc.svg)](https://javadoc.io/doc/io.revenium.metering/revenium-metering-java/0.1.0-alpha.1)
+[![Maven Central](https://img.shields.io/maven-central/v/io.revenium.metering/revenium-metering-java)](https://central.sonatype.com/artifact/io.revenium.metering/revenium-metering-java/0.1.0-alpha.2)
+[![javadoc](https://javadoc.io/badge2/io.revenium.metering/revenium-metering-java/0.1.0-alpha.2/javadoc.svg)](https://javadoc.io/doc/io.revenium.metering/revenium-metering-java/0.1.0-alpha.2)
 
 <!-- x-release-please-end -->
 
@@ -16,7 +16,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [revenium.io](https://revenium.io). Javadocs are available on [javadoc.io](https://javadoc.io/doc/io.revenium.metering/revenium-metering-java/0.1.0-alpha.1).
+The REST API documentation can be found on [revenium.io](https://revenium.io). Javadocs are available on [javadoc.io](https://javadoc.io/doc/io.revenium.metering/revenium-metering-java/0.1.0-alpha.2).
 
 <!-- x-release-please-end -->
 
@@ -27,7 +27,7 @@ The REST API documentation can be found on [revenium.io](https://revenium.io). J
 ### Gradle
 
 ```kotlin
-implementation("io.revenium.metering:revenium-metering-java:0.1.0-alpha.1")
+implementation("io.revenium.metering:revenium-metering-java:0.1.0-alpha.2")
 ```
 
 ### Maven
@@ -36,7 +36,7 @@ implementation("io.revenium.metering:revenium-metering-java:0.1.0-alpha.1")
 <dependency>
   <groupId>io.revenium.metering</groupId>
   <artifactId>revenium-metering-java</artifactId>
-  <version>0.1.0-alpha.1</version>
+  <version>0.1.0-alpha.2</version>
 </dependency>
 ```
 
