@@ -8,7 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":revenium-metering-java"))
+    implementation(project(":revenium-metering-java-core"))
+    implementation(project(":revenium-metering-java-client-okhttp"))
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -19,7 +20,7 @@ tasks.withType<JavaCompile>().configureEach {
 application {
     // Use `./gradlew :revenium-metering-java-example:run` to run `Main`
     // Use `./gradlew :revenium-metering-java-example:run -Pexample=Something` to run `SomethingExample`
-    mainClass = "com.revenium_metering.api.example.${
+    mainClass = "io.revenium.metering.example.${
         if (project.hasProperty("example"))
             "${project.property("example")}Example"
         else
