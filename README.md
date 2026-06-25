@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This library is no longer actively maintained.** For current Revenium integration options, see https://revenium.ai . Existing installations and published Maven artifacts continue to function.
+
 # Revenium Metering Java API Library
 
 <!-- x-release-please-start-version -->
